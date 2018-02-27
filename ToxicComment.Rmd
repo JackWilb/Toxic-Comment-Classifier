@@ -1,0 +1,69 @@
+---
+title: "Toxic Comment Classifier"
+output: html_notebook
+---
+
+### Libraries
+
+```{r, message = FALSE, warning = FALSE}
+library(readr)
+library(stringi)
+library(quanteda)
+library(dplyr)
+library(caret)
+library(glmnet)
+library(doParallel)
+registerDoParallel(2)
+```
+
+### Importing and Cleaning
+
+```{r, warning = FALSE, message = FALSE}
+train = read_csv("~/Programming/Rstudio/Kaggles/ToxicComment/train.csv")
+train = train[1:100000,]
+sample = sample(nrow(train), nrow(train)/2)
+test = train[-sample,]
+train = train[sample,]
+#test = read_csv("~/Programming/Rstudio/Kaggles/ToxicComment/test.csv")
+#swear <- read_csv("~/Programming/Rstudio/Kaggles/ToxicComment/swear.csv", col_names = "word")
+
+train$id2 = rep(1:nrow(train))
+test$id2 = rep(1:nrow(test))
+
+idtrain = 1:nrow(train)
+idtest = (nrow(train)+1):(nrow(train) + nrow(test))
+traintest = rbind(train[,1:2], test[1:2])
+gc()
+```
+
+### Variable Creation
+
+```{r}
+traintest = rbind(train[,1:2], test[1:2])
+ttcorp = corpus(traintest$comment_text)
+traintest = mutate(traintest,
+       length = stri_length(comment_text),
+       ncap = stri_count_charclass(comment_text, "[A-Z]"),
+       ncap_len = ncap / length,
+       nexcl = stri_count_fixed(comment_text, "!"),
+       nquest = stri_count_fixed(comment_text, "?"),
+       npunct = stri_count_charclass(comment_text, "[[:punct:]]"),
+       npunct_len = npunct / length,
+       nsent = stri_count_boundaries(comment_text, "sentence"),
+       nsymb = stri_count_regex(comment_text, "&|@|#|\\$|%|\\*|\\^"),
+       nsmile = stri_count_regex(comment_text, "((?::|;|=)(?:-)?(?:\\)|D|P))"),
+       nwords = stri_count_words(comment_text),
+       ntokens = count(unique(stri_split_fixed(comment_text, pattern = " "))),
+       ntokens_nwords = ntokens / nwords
+       )
+train = cbind(train, traintest[idtrain,3:ncol(traintest)])
+test = cbind(test, traintest[idtest,3:ncol(traintest)])
+
+## quanteda
+traintestcorpus = corpus(traintest$comment_text)
+ttdfm = dfm(traintestcorpus, remove = stopwords("english"))
+
+
+
+```
+

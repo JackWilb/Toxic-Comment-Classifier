@@ -13,14 +13,16 @@ library(dplyr)
 library(caret)
 library(glmnet)
 library(doParallel)
-registerDoParallel(4)
+#registerDoParallel(4)
+registerDoParallel(2)
 ```
 
 ### Importing and Cleaning
 
 ```{r, warning = FALSE, message = FALSE}
 set.seed(999)
-train = read_csv("E:/Rstudio/Toxic-Comment_Classifier/train.csv")
+#train = read_csv("E:/Rstudio/Toxic-Comment-Classifier/train.csv")
+train = read_csv("~/Programming/Rstudio/Toxic-Comment-Classifier/train.csv")
 train = train[1:100000,]
 sample = sample(nrow(train), nrow(train)/2)
 test = train[-sample,]
@@ -61,8 +63,8 @@ train = cbind(train, traintest[idtrain,3:ncol(traintest)])
 test = cbind(test, traintest[idtest,3:ncol(traintest)])
 
 ## quanteda
-traintestcorpus = corpus(traintest$comment_text)
-ttdfm = dfm(traintestcorpus, remove = stopwords("english"))
+#traintestcorpus = corpus(traintest$comment_text)
+#ttdfm = dfm(traintestcorpus, remove = stopwords("english"))
 
 
 
@@ -72,6 +74,58 @@ ttdfm = dfm(traintestcorpus, remove = stopwords("english"))
 ### Testing
 
 ```{r}
+toxicglm = cv.glmnet(as.matrix(train[10:20]), 
+                     train$toxic, 
+                     alpha = 0, 
+                     family = "binomial", 
+                     type.measure = "auc",
+                     parallel = T,
+                     nfolds = 4,
+                     standardize = T,
+                     nlambda = 50)
+toxicpreds = predict(toxicglm, as.matrix(test[10:20]))
+toxicpreds = ifelse(toxicpreds > 0.5, 1 ,0)
+confusionMatrix(toxicpreds, test$toxic)
+
+severe_toxicglm = cv.glmnet(as.matrix(train[10:20]), 
+                     train$severe_toxic, 
+                     alpha = 0, 
+                     family = "binomial", 
+                     type.measure = "auc",
+                     parallel = T,
+                     nfolds = 4,
+                     standardize = T,
+                     nlambda = 50)
+severe_toxicpreds = predict(severe_toxicglm, as.matrix(test[10:20]))
+severe_toxicpreds = ifelse(severe_toxicpreds > 0.5, 1 ,0)
+confusionMatrix(severe_toxicpreds, test$severe_toxic)
+
+insultglm = cv.glmnet(as.matrix(train[10:20]), 
+                     train$insult, 
+                     alpha = 0, 
+                     family = "binomial", 
+                     type.measure = "auc",
+                     parallel = T,
+                     nfolds = 4,
+                     standardize = T,
+                     nlambda = 50)
+insultpreds = predict(insultglm, as.matrix(test[10:20]))
+insultpreds = ifelse(insultpreds > 0.5, 1 ,0)
+confusionMatrix(insultpreds, test$insult)
+
+obsceneglm = cv.glmnet(as.matrix(train[10:20]), 
+                     train$obscene, 
+                     alpha = 0, 
+                     family = "binomial", 
+                     type.measure = "auc",
+                     parallel = T,
+                     nfolds = 4,
+                     standardize = T,
+                     nlambda = 50)
+obscenepreds = predict(obsceneglm, as.matrix(test[10:20]))
+obscenepreds = ifelse(obscenepreds > 0.5, 1 ,0)
+confusionMatrix(obscenepreds, test$obscene)
+
 threatglm = cv.glmnet(as.matrix(train[10:20]), 
                      train$threat, 
                      alpha = 0, 
@@ -84,5 +138,18 @@ threatglm = cv.glmnet(as.matrix(train[10:20]),
 threatpreds = predict(threatglm, as.matrix(test[10:20]))
 threatpreds = ifelse(threatpreds > 0.5, 1 ,0)
 confusionMatrix(threatpreds, test$threat)
+
+identity_hateglm = cv.glmnet(as.matrix(train[10:20]), 
+                     train$identity_hate, 
+                     alpha = 0, 
+                     family = "binomial", 
+                     type.measure = "auc",
+                     parallel = T,
+                     nfolds = 4,
+                     standardize = T,
+                     nlambda = 50)
+identity_hatepreds = predict(identity_hateglm, as.matrix(test[10:20]))
+identity_hatepreds = ifelse(identity_hatepreds > 0.5, 1 ,0)
+confusionMatrix(identity_hatepreds, test$identity_hate)
 ```
 

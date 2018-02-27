@@ -19,6 +19,7 @@ registerDoParallel(4)
 ### Importing and Cleaning
 
 ```{r, warning = FALSE, message = FALSE}
+set.seed(999)
 train = read_csv("E:/Rstudio/Toxic-Comment_Classifier/train.csv")
 train = train[1:100000,]
 sample = sample(nrow(train), nrow(train)/2)
@@ -65,5 +66,23 @@ ttdfm = dfm(traintestcorpus, remove = stopwords("english"))
 
 
 
+```
+
+
+### Testing
+
+```{r}
+threatglm = cv.glmnet(as.matrix(train[10:20]), 
+                     train$threat, 
+                     alpha = 0, 
+                     family = "binomial", 
+                     type.measure = "auc",
+                     parallel = T,
+                     nfolds = 4,
+                     standardize = T,
+                     nlambda = 50)
+threatpreds = predict(threatglm, as.matrix(test[10:20]))
+threatpreds = ifelse(threatpreds > 0.5, 1 ,0)
+confusionMatrix(threatpreds, test$threat)
 ```
 

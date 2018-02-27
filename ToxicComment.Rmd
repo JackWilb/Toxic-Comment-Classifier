@@ -13,13 +13,13 @@ library(dplyr)
 library(caret)
 library(glmnet)
 library(doParallel)
-registerDoParallel(2)
+registerDoParallel(4)
 ```
 
 ### Importing and Cleaning
 
 ```{r, warning = FALSE, message = FALSE}
-train = read_csv("~/Programming/Rstudio/Kaggles/ToxicComment/train.csv")
+train = read_csv("E:/Rstudio/Toxic-Comment_Classifier/train.csv")
 train = train[1:100000,]
 sample = sample(nrow(train), nrow(train)/2)
 test = train[-sample,]
@@ -53,7 +53,7 @@ traintest = mutate(traintest,
        nsymb = stri_count_regex(comment_text, "&|@|#|\\$|%|\\*|\\^"),
        nsmile = stri_count_regex(comment_text, "((?::|;|=)(?:-)?(?:\\)|D|P))"),
        nwords = stri_count_words(comment_text),
-       ntokens = count(unique(stri_split_fixed(comment_text, pattern = " "))),
+       ntokens = 1,
        ntokens_nwords = ntokens / nwords
        )
 train = cbind(train, traintest[idtrain,3:ncol(traintest)])

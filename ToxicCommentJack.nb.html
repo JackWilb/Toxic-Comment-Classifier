@@ -142,7 +142,7 @@ $(document).ready(function () {
 </style>
 <script>
 $(document).ready(function () {
-  window.initializeSourceEmbed("ToxicComment.Rmd");
+  window.initializeSourceEmbed("ToxicCommentJack.Rmd");
   window.initializeCodeFolding("show" === "show");
 });
 </script>
@@ -194,7 +194,7 @@ registerDoParallel(2)</code></pre>
 <h3>Importing and Cleaning</h3>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc2V0LnNlZWQoOTk5KVxuI3RyYWluID0gcmVhZF9jc3YoXCJFOi9Sc3R1ZGlvL1RveGljLUNvbW1lbnQtQ2xhc3NpZmllci90cmFpbi5jc3ZcIilcbnRyYWluID0gcmVhZF9jc3YoXCJ+L1Byb2dyYW1taW5nL1JzdHVkaW8vVG94aWMtQ29tbWVudC1DbGFzc2lmaWVyL3RyYWluLmNzdlwiKVxudHJhaW4gPSB0cmFpblsxOjEwMDAwMCxdXG5zYW1wbGUgPSBzYW1wbGUobnJvdyh0cmFpbiksIG5yb3codHJhaW4pLzIpXG50ZXN0ID0gdHJhaW5bLXNhbXBsZSxdXG50cmFpbiA9IHRyYWluW3NhbXBsZSxdXG4jdGVzdCA9IHJlYWRfY3N2KFwifi9Qcm9ncmFtbWluZy9Sc3R1ZGlvL0thZ2dsZXMvVG94aWNDb21tZW50L3Rlc3QuY3N2XCIpXG4jc3dlYXIgPC0gcmVhZF9jc3YoXCJ+L1Byb2dyYW1taW5nL1JzdHVkaW8vS2FnZ2xlcy9Ub3hpY0NvbW1lbnQvc3dlYXIuY3N2XCIsIGNvbF9uYW1lcyA9IFwid29yZFwiKVxudHJhaW4kaWQyID0gcmVwKDE6bnJvdyh0cmFpbikpXG50ZXN0JGlkMiA9IHJlcCgxOm5yb3codGVzdCkpXG5pZHRyYWluID0gMTpucm93KHRyYWluKVxuaWR0ZXN0ID0gKG5yb3codHJhaW4pKzEpOihucm93KHRyYWluKSArIG5yb3codGVzdCkpXG50cmFpbnRlc3QgPSByYmluZCh0cmFpblssMToyXSwgdGVzdFsxOjJdKVxuZ2MoKVxuYGBgIn0= -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc2V0LnNlZWQoOTk5KVxuI3RyYWluID0gcmVhZF9jc3YoXCJFOi9Sc3R1ZGlvL1RveGljLUNvbW1lbnQtQ2xhc3NpZmllci90cmFpbi5jc3ZcIilcbnRyYWluID0gcmVhZF9jc3YoXCJ+L1Byb2dyYW1taW5nL1JzdHVkaW8vVG94aWMtQ29tbWVudC1DbGFzc2lmaWVyL3RyYWluLmNzdlwiKVxudHJhaW4gPSB0cmFpblsxOjEwMDAwMCxdXG5zYW1wbGUgPSBzYW1wbGUobnJvdyh0cmFpbiksIG5yb3codHJhaW4pLzIpXG50ZXN0ID0gdHJhaW5bLXNhbXBsZSxdXG50cmFpbiA9IHRyYWluW3NhbXBsZSxdXG4jdGVzdCA9IHJlYWRfY3N2KFwifi9Qcm9ncmFtbWluZy9Sc3R1ZGlvL0thZ2dsZXMvVG94aWNDb21tZW50L3Rlc3QuY3N2XCIpXG4jc3dlYXIgPC0gcmVhZF9jc3YoXCJ+L1Byb2dyYW1taW5nL1JzdHVkaW8vS2FnZ2xlcy9Ub3hpY0NvbW1lbnQvc3dlYXIuY3N2XCIsIGNvbF9uYW1lcyA9IFwid29yZFwiKVxuXG50cmFpbiRpZDIgPSByZXAoMTpucm93KHRyYWluKSlcbnRlc3QkaWQyID0gcmVwKDE6bnJvdyh0ZXN0KSlcblxuaWR0cmFpbiA9IDE6bnJvdyh0cmFpbilcbmlkdGVzdCA9IChucm93KHRyYWluKSsxKToobnJvdyh0cmFpbikgKyBucm93KHRlc3QpKVxudHJhaW50ZXN0ID0gcmJpbmQodHJhaW5bLDE6Ml0sIHRlc3RbMToyXSlcbmdjKClcbmBgYCJ9 -->
 <pre class="r"><code>set.seed(999)
 #train = read_csv(&quot;E:/Rstudio/Toxic-Comment-Classifier/train.csv&quot;)
 train = read_csv(&quot;~/Programming/Rstudio/Toxic-Comment-Classifier/train.csv&quot;)
@@ -204,18 +204,15 @@ test = train[-sample,]
 train = train[sample,]
 #test = read_csv(&quot;~/Programming/Rstudio/Kaggles/ToxicComment/test.csv&quot;)
 #swear &lt;- read_csv(&quot;~/Programming/Rstudio/Kaggles/ToxicComment/swear.csv&quot;, col_names = &quot;word&quot;)
+
 train$id2 = rep(1:nrow(train))
 test$id2 = rep(1:nrow(test))
+
 idtrain = 1:nrow(train)
 idtest = (nrow(train)+1):(nrow(train) + nrow(test))
 traintest = rbind(train[,1:2], test[1:2])
 gc()</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiICAgICAgICAgICB1c2VkICAoTWIpIGdjIHRyaWdnZXIgIChNYikgbWF4IHVzZWQgIChNYilcbk5jZWxscyAgMjYwMzU4NSAxMzkuMSAgICA0NzAzODUwIDI1MS4zICAzMzk3MTkxIDE4MS41XG5WY2VsbHMgMTAwMTMzNjcgIDc2LjQgICAxODk3ODIyNCAxNDQuOCAxODk1OTk5NCAxNDQuN1xuIn0= -->
-<pre><code>           used  (Mb) gc trigger  (Mb) max used  (Mb)
-Ncells  2603585 139.1    4703850 251.3  3397191 181.5
-Vcells 10013367  76.4   18978224 144.8 18959994 144.7</code></pre>
-<!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 </div>
@@ -223,7 +220,7 @@ Vcells 10013367  76.4   18978224 144.8 18959994 144.7</code></pre>
 <h3>Variable Creation</h3>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxudHJhaW50ZXN0ID0gcmJpbmQodHJhaW5bLDE6Ml0sIHRlc3RbMToyXSlcbnR0Y29ycCA9IGNvcnB1cyh0cmFpbnRlc3QkY29tbWVudF90ZXh0KVxudHJhaW50ZXN0ID0gbXV0YXRlKHRyYWludGVzdCxcbiAgICAgICBsZW5ndGggPSBzdHJpX2xlbmd0aChjb21tZW50X3RleHQpLFxuICAgICAgIG5jYXAgPSBzdHJpX2NvdW50X2NoYXJjbGFzcyhjb21tZW50X3RleHQsIFwiW0EtWl1cIiksXG4gICAgICAgbmNhcF9sZW4gPSBuY2FwIC8gbGVuZ3RoLFxuICAgICAgIG5leGNsID0gc3RyaV9jb3VudF9maXhlZChjb21tZW50X3RleHQsIFwiIVwiKSxcbiAgICAgICBucXVlc3QgPSBzdHJpX2NvdW50X2ZpeGVkKGNvbW1lbnRfdGV4dCwgXCI/XCIpLFxuICAgICAgIG5wdW5jdCA9IHN0cmlfY291bnRfY2hhcmNsYXNzKGNvbW1lbnRfdGV4dCwgXCJbWzpwdW5jdDpdXVwiKSxcbiAgICAgICBucHVuY3RfbGVuID0gbnB1bmN0IC8gbGVuZ3RoLFxuICAgICAgIG5zZW50ID0gc3RyaV9jb3VudF9ib3VuZGFyaWVzKGNvbW1lbnRfdGV4dCwgXCJzZW50ZW5jZVwiKSxcbiAgICAgICBuc3ltYiA9IHN0cmlfY291bnRfcmVnZXgoY29tbWVudF90ZXh0LCBcIiZ8QHwjfFxcXFwkfCV8XFxcXCp8XFxcXF5cIiksXG4gICAgICAgbnNtaWxlID0gc3RyaV9jb3VudF9yZWdleChjb21tZW50X3RleHQsIFwiKCg/Ojp8O3w9KSg/Oi0pPyg/OlxcXFwpfER8UCkpXCIpLFxuICAgICAgIG53b3JkcyA9IHN0cmlfY291bnRfd29yZHMoY29tbWVudF90ZXh0KSxcbiAgICAgICBudG9rZW5zID0gMSxcbiAgICAgICBudG9rZW5zX253b3JkcyA9IG50b2tlbnMgLyBud29yZHNcbiAgICAgICApXG50cmFpbiA9IGNiaW5kKHRyYWluLCB0cmFpbnRlc3RbaWR0cmFpbiwzOm5jb2wodHJhaW50ZXN0KV0pXG50ZXN0ID0gY2JpbmQodGVzdCwgdHJhaW50ZXN0W2lkdGVzdCwzOm5jb2wodHJhaW50ZXN0KV0pXG4jIyBxdWFudGVkYVxudHJhaW50ZXN0Y29ycHVzID0gY29ycHVzKHRyYWludGVzdCRjb21tZW50X3RleHQpXG50dGRmbSA9IGRmbSh0cmFpbnRlc3Rjb3JwdXMsIHJlbW92ZSA9IHN0b3B3b3JkcyhcImVuZ2xpc2hcIikpXG5gYGAifQ== -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxudHJhaW50ZXN0ID0gcmJpbmQodHJhaW5bLDE6Ml0sIHRlc3RbMToyXSlcbnR0Y29ycCA9IGNvcnB1cyh0cmFpbnRlc3QkY29tbWVudF90ZXh0KVxudHJhaW50ZXN0ID0gbXV0YXRlKHRyYWludGVzdCxcbiAgICAgICBsZW5ndGggPSBzdHJpX2xlbmd0aChjb21tZW50X3RleHQpLFxuICAgICAgIG5jYXAgPSBzdHJpX2NvdW50X2NoYXJjbGFzcyhjb21tZW50X3RleHQsIFwiW0EtWl1cIiksXG4gICAgICAgbmNhcF9sZW4gPSBuY2FwIC8gbGVuZ3RoLFxuICAgICAgIG5leGNsID0gc3RyaV9jb3VudF9maXhlZChjb21tZW50X3RleHQsIFwiIVwiKSxcbiAgICAgICBucXVlc3QgPSBzdHJpX2NvdW50X2ZpeGVkKGNvbW1lbnRfdGV4dCwgXCI/XCIpLFxuICAgICAgIG5wdW5jdCA9IHN0cmlfY291bnRfY2hhcmNsYXNzKGNvbW1lbnRfdGV4dCwgXCJbWzpwdW5jdDpdXVwiKSxcbiAgICAgICBucHVuY3RfbGVuID0gbnB1bmN0IC8gbGVuZ3RoLFxuICAgICAgIG5zZW50ID0gc3RyaV9jb3VudF9ib3VuZGFyaWVzKGNvbW1lbnRfdGV4dCwgXCJzZW50ZW5jZVwiKSxcbiAgICAgICBuc3ltYiA9IHN0cmlfY291bnRfcmVnZXgoY29tbWVudF90ZXh0LCBcIiZ8QHwjfFxcXFwkfCV8XFxcXCp8XFxcXF5cIiksXG4gICAgICAgbnNtaWxlID0gc3RyaV9jb3VudF9yZWdleChjb21tZW50X3RleHQsIFwiKCg/Ojp8O3w9KSg/Oi0pPyg/OlxcXFwpfER8UCkpXCIpLFxuICAgICAgIG53b3JkcyA9IHN0cmlfY291bnRfd29yZHMoY29tbWVudF90ZXh0KSxcbiAgICAgICBudG9rZW5zID0gMSxcbiAgICAgICBudG9rZW5zX253b3JkcyA9IG50b2tlbnMgLyBud29yZHNcbiAgICAgICApXG50cmFpbiA9IGNiaW5kKHRyYWluLCB0cmFpbnRlc3RbaWR0cmFpbiwzOm5jb2wodHJhaW50ZXN0KV0pXG50ZXN0ID0gY2JpbmQodGVzdCwgdHJhaW50ZXN0W2lkdGVzdCwzOm5jb2wodHJhaW50ZXN0KV0pXG5cbiMjIHF1YW50ZWRhXG4jdHJhaW50ZXN0Y29ycHVzID0gY29ycHVzKHRyYWludGVzdCRjb21tZW50X3RleHQpXG4jdHRkZm0gPSBkZm0odHJhaW50ZXN0Y29ycHVzLCByZW1vdmUgPSBzdG9wd29yZHMoXCJlbmdsaXNoXCIpKVxuXG5cblxuYGBgIn0= -->
 <pre class="r"><code>traintest = rbind(train[,1:2], test[1:2])
 ttcorp = corpus(traintest$comment_text)
 traintest = mutate(traintest,
@@ -243,9 +240,11 @@ traintest = mutate(traintest,
        )
 train = cbind(train, traintest[idtrain,3:ncol(traintest)])
 test = cbind(test, traintest[idtest,3:ncol(traintest)])
+
 ## quanteda
-traintestcorpus = corpus(traintest$comment_text)
-ttdfm = dfm(traintestcorpus, remove = stopwords(&quot;english&quot;))</code></pre>
+#traintestcorpus = corpus(traintest$comment_text)
+#ttdfm = dfm(traintestcorpus, remove = stopwords(&quot;english&quot;))
+</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
@@ -254,8 +253,21 @@ ttdfm = dfm(traintestcorpus, remove = stopwords(&quot;english&quot;))</code></pr
 <h3>Testing</h3>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc2V2ZXJlX3RveGljZ2xtID0gY3YuZ2xtbmV0KGFzLm1hdHJpeCh0cmFpblsxMDoyMF0pLCBcbiAgICAgICAgICAgICAgICAgICAgIHRyYWluJHNldmVyZV90b3hpYywgXG4gICAgICAgICAgICAgICAgICAgICBhbHBoYSA9IDAsIFxuICAgICAgICAgICAgICAgICAgICAgZmFtaWx5ID0gXCJiaW5vbWlhbFwiLCBcbiAgICAgICAgICAgICAgICAgICAgIHR5cGUubWVhc3VyZSA9IFwiYXVjXCIsXG4gICAgICAgICAgICAgICAgICAgICBwYXJhbGxlbCA9IFQsXG4gICAgICAgICAgICAgICAgICAgICBuZm9sZHMgPSA0LFxuICAgICAgICAgICAgICAgICAgICAgc3RhbmRhcmRpemUgPSBULFxuICAgICAgICAgICAgICAgICAgICAgbmxhbWJkYSA9IDUwKVxuYGBgIn0= -->
-<pre class="r"><code>severe_toxicglm = cv.glmnet(as.matrix(train[10:20]), 
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxudG94aWNnbG0gPSBjdi5nbG1uZXQoYXMubWF0cml4KHRyYWluWzEwOjIwXSksIFxuICAgICAgICAgICAgICAgICAgICAgdHJhaW4kdG94aWMsIFxuICAgICAgICAgICAgICAgICAgICAgYWxwaGEgPSAwLCBcbiAgICAgICAgICAgICAgICAgICAgIGZhbWlseSA9IFwiYmlub21pYWxcIiwgXG4gICAgICAgICAgICAgICAgICAgICB0eXBlLm1lYXN1cmUgPSBcImF1Y1wiLFxuICAgICAgICAgICAgICAgICAgICAgcGFyYWxsZWwgPSBULFxuICAgICAgICAgICAgICAgICAgICAgbmZvbGRzID0gNCxcbiAgICAgICAgICAgICAgICAgICAgIHN0YW5kYXJkaXplID0gVCxcbiAgICAgICAgICAgICAgICAgICAgIG5sYW1iZGEgPSA1MClcbnRveGljcHJlZHMgPSBwcmVkaWN0KHRveGljZ2xtLCBhcy5tYXRyaXgodGVzdFsxMDoyMF0pKVxudG94aWNwcmVkcyA9IGlmZWxzZSh0b3hpY3ByZWRzID4gMC41LCAxICwwKVxuY29uZnVzaW9uTWF0cml4KHRveGljcHJlZHMsIHRlc3QkdG94aWMpXG5cbnNldmVyZV90b3hpY2dsbSA9IGN2LmdsbW5ldChhcy5tYXRyaXgodHJhaW5bMTA6MjBdKSwgXG4gICAgICAgICAgICAgICAgICAgICB0cmFpbiRzZXZlcmVfdG94aWMsIFxuICAgICAgICAgICAgICAgICAgICAgYWxwaGEgPSAwLCBcbiAgICAgICAgICAgICAgICAgICAgIGZhbWlseSA9IFwiYmlub21pYWxcIiwgXG4gICAgICAgICAgICAgICAgICAgICB0eXBlLm1lYXN1cmUgPSBcImF1Y1wiLFxuICAgICAgICAgICAgICAgICAgICAgcGFyYWxsZWwgPSBULFxuICAgICAgICAgICAgICAgICAgICAgbmZvbGRzID0gNCxcbiAgICAgICAgICAgICAgICAgICAgIHN0YW5kYXJkaXplID0gVCxcbiAgICAgICAgICAgICAgICAgICAgIG5sYW1iZGEgPSA1MClcbnNldmVyZV90b3hpY3ByZWRzID0gcHJlZGljdChzZXZlcmVfdG94aWNnbG0sIGFzLm1hdHJpeCh0ZXN0WzEwOjIwXSkpXG5zZXZlcmVfdG94aWNwcmVkcyA9IGlmZWxzZShzZXZlcmVfdG94aWNwcmVkcyA+IDAuNSwgMSAsMClcbmNvbmZ1c2lvbk1hdHJpeChzZXZlcmVfdG94aWNwcmVkcywgdGVzdCRzZXZlcmVfdG94aWMpXG5cbmluc3VsdGdsbSA9IGN2LmdsbW5ldChhcy5tYXRyaXgodHJhaW5bMTA6MjBdKSwgXG4gICAgICAgICAgICAgICAgICAgICB0cmFpbiRpbnN1bHQsIFxuICAgICAgICAgICAgICAgICAgICAgYWxwaGEgPSAwLCBcbiAgICAgICAgICAgICAgICAgICAgIGZhbWlseSA9IFwiYmlub21pYWxcIiwgXG4gICAgICAgICAgICAgICAgICAgICB0eXBlLm1lYXN1cmUgPSBcImF1Y1wiLFxuICAgICAgICAgICAgICAgICAgICAgcGFyYWxsZWwgPSBULFxuICAgICAgICAgICAgICAgICAgICAgbmZvbGRzID0gNCxcbiAgICAgICAgICAgICAgICAgICAgIHN0YW5kYXJkaXplID0gVCxcbiAgICAgICAgICAgICAgICAgICAgIG5sYW1iZGEgPSA1MClcbmluc3VsdHByZWRzID0gcHJlZGljdChpbnN1bHRnbG0sIGFzLm1hdHJpeCh0ZXN0WzEwOjIwXSkpXG5pbnN1bHRwcmVkcyA9IGlmZWxzZShpbnN1bHRwcmVkcyA+IDAuNSwgMSAsMClcbmNvbmZ1c2lvbk1hdHJpeChpbnN1bHRwcmVkcywgdGVzdCRpbnN1bHQpXG5cbm9ic2NlbmVnbG0gPSBjdi5nbG1uZXQoYXMubWF0cml4KHRyYWluWzEwOjIwXSksIFxuICAgICAgICAgICAgICAgICAgICAgdHJhaW4kb2JzY2VuZSwgXG4gICAgICAgICAgICAgICAgICAgICBhbHBoYSA9IDAsIFxuICAgICAgICAgICAgICAgICAgICAgZmFtaWx5ID0gXCJiaW5vbWlhbFwiLCBcbiAgICAgICAgICAgICAgICAgICAgIHR5cGUubWVhc3VyZSA9IFwiYXVjXCIsXG4gICAgICAgICAgICAgICAgICAgICBwYXJhbGxlbCA9IFQsXG4gICAgICAgICAgICAgICAgICAgICBuZm9sZHMgPSA0LFxuICAgICAgICAgICAgICAgICAgICAgc3RhbmRhcmRpemUgPSBULFxuICAgICAgICAgICAgICAgICAgICAgbmxhbWJkYSA9IDUwKVxub2JzY2VuZXByZWRzID0gcHJlZGljdChvYnNjZW5lZ2xtLCBhcy5tYXRyaXgodGVzdFsxMDoyMF0pKVxub2JzY2VuZXByZWRzID0gaWZlbHNlKG9ic2NlbmVwcmVkcyA+IDAuNSwgMSAsMClcbmNvbmZ1c2lvbk1hdHJpeChvYnNjZW5lcHJlZHMsIHRlc3Qkb2JzY2VuZSlcblxudGhyZWF0Z2xtID0gY3YuZ2xtbmV0KGFzLm1hdHJpeCh0cmFpblsxMDoyMF0pLCBcbiAgICAgICAgICAgICAgICAgICAgIHRyYWluJHRocmVhdCwgXG4gICAgICAgICAgICAgICAgICAgICBhbHBoYSA9IDAsIFxuICAgICAgICAgICAgICAgICAgICAgZmFtaWx5ID0gXCJiaW5vbWlhbFwiLCBcbiAgICAgICAgICAgICAgICAgICAgIHR5cGUubWVhc3VyZSA9IFwiYXVjXCIsXG4gICAgICAgICAgICAgICAgICAgICBwYXJhbGxlbCA9IFQsXG4gICAgICAgICAgICAgICAgICAgICBuZm9sZHMgPSA0LFxuICAgICAgICAgICAgICAgICAgICAgc3RhbmRhcmRpemUgPSBULFxuICAgICAgICAgICAgICAgICAgICAgbmxhbWJkYSA9IDUwKVxudGhyZWF0cHJlZHMgPSBwcmVkaWN0KHRocmVhdGdsbSwgYXMubWF0cml4KHRlc3RbMTA6MjBdKSlcbnRocmVhdHByZWRzID0gaWZlbHNlKHRocmVhdHByZWRzID4gMC41LCAxICwwKVxuY29uZnVzaW9uTWF0cml4KHRocmVhdHByZWRzLCB0ZXN0JHRocmVhdClcblxuaWRlbnRpdHlfaGF0ZWdsbSA9IGN2LmdsbW5ldChhcy5tYXRyaXgodHJhaW5bMTA6MjBdKSwgXG4gICAgICAgICAgICAgICAgICAgICB0cmFpbiRpZGVudGl0eV9oYXRlLCBcbiAgICAgICAgICAgICAgICAgICAgIGFscGhhID0gMCwgXG4gICAgICAgICAgICAgICAgICAgICBmYW1pbHkgPSBcImJpbm9taWFsXCIsIFxuICAgICAgICAgICAgICAgICAgICAgdHlwZS5tZWFzdXJlID0gXCJhdWNcIixcbiAgICAgICAgICAgICAgICAgICAgIHBhcmFsbGVsID0gVCxcbiAgICAgICAgICAgICAgICAgICAgIG5mb2xkcyA9IDQsXG4gICAgICAgICAgICAgICAgICAgICBzdGFuZGFyZGl6ZSA9IFQsXG4gICAgICAgICAgICAgICAgICAgICBubGFtYmRhID0gNTApXG5pZGVudGl0eV9oYXRlcHJlZHMgPSBwcmVkaWN0KGlkZW50aXR5X2hhdGVnbG0sIGFzLm1hdHJpeCh0ZXN0WzEwOjIwXSkpXG5pZGVudGl0eV9oYXRlcHJlZHMgPSBpZmVsc2UoaWRlbnRpdHlfaGF0ZXByZWRzID4gMC41LCAxICwwKVxuY29uZnVzaW9uTWF0cml4KGlkZW50aXR5X2hhdGVwcmVkcywgdGVzdCRpZGVudGl0eV9oYXRlKVxuYGBgIn0= -->
+<pre class="r"><code>toxicglm = cv.glmnet(as.matrix(train[10:20]), 
+                     train$toxic, 
+                     alpha = 0, 
+                     family = &quot;binomial&quot;, 
+                     type.measure = &quot;auc&quot;,
+                     parallel = T,
+                     nfolds = 4,
+                     standardize = T,
+                     nlambda = 50)
+toxicpreds = predict(toxicglm, as.matrix(test[10:20]))
+toxicpreds = ifelse(toxicpreds &gt; 0.5, 1 ,0)
+confusionMatrix(toxicpreds, test$toxic)
+
+severe_toxicglm = cv.glmnet(as.matrix(train[10:20]), 
                      train$severe_toxic, 
                      alpha = 0, 
                      family = &quot;binomial&quot;, 
@@ -263,7 +275,62 @@ ttdfm = dfm(traintestcorpus, remove = stopwords(&quot;english&quot;))</code></pr
                      parallel = T,
                      nfolds = 4,
                      standardize = T,
-                     nlambda = 50)</code></pre>
+                     nlambda = 50)
+severe_toxicpreds = predict(severe_toxicglm, as.matrix(test[10:20]))
+severe_toxicpreds = ifelse(severe_toxicpreds &gt; 0.5, 1 ,0)
+confusionMatrix(severe_toxicpreds, test$severe_toxic)
+
+insultglm = cv.glmnet(as.matrix(train[10:20]), 
+                     train$insult, 
+                     alpha = 0, 
+                     family = &quot;binomial&quot;, 
+                     type.measure = &quot;auc&quot;,
+                     parallel = T,
+                     nfolds = 4,
+                     standardize = T,
+                     nlambda = 50)
+insultpreds = predict(insultglm, as.matrix(test[10:20]))
+insultpreds = ifelse(insultpreds &gt; 0.5, 1 ,0)
+confusionMatrix(insultpreds, test$insult)
+
+obsceneglm = cv.glmnet(as.matrix(train[10:20]), 
+                     train$obscene, 
+                     alpha = 0, 
+                     family = &quot;binomial&quot;, 
+                     type.measure = &quot;auc&quot;,
+                     parallel = T,
+                     nfolds = 4,
+                     standardize = T,
+                     nlambda = 50)
+obscenepreds = predict(obsceneglm, as.matrix(test[10:20]))
+obscenepreds = ifelse(obscenepreds &gt; 0.5, 1 ,0)
+confusionMatrix(obscenepreds, test$obscene)
+
+threatglm = cv.glmnet(as.matrix(train[10:20]), 
+                     train$threat, 
+                     alpha = 0, 
+                     family = &quot;binomial&quot;, 
+                     type.measure = &quot;auc&quot;,
+                     parallel = T,
+                     nfolds = 4,
+                     standardize = T,
+                     nlambda = 50)
+threatpreds = predict(threatglm, as.matrix(test[10:20]))
+threatpreds = ifelse(threatpreds &gt; 0.5, 1 ,0)
+confusionMatrix(threatpreds, test$threat)
+
+identity_hateglm = cv.glmnet(as.matrix(train[10:20]), 
+                     train$identity_hate, 
+                     alpha = 0, 
+                     family = &quot;binomial&quot;, 
+                     type.measure = &quot;auc&quot;,
+                     parallel = T,
+                     nfolds = 4,
+                     standardize = T,
+                     nlambda = 50)
+identity_hatepreds = predict(identity_hateglm, as.matrix(test[10:20]))
+identity_hatepreds = ifelse(identity_hatepreds &gt; 0.5, 1 ,0)
+confusionMatrix(identity_hatepreds, test$identity_hate)</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->

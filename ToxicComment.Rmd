@@ -13,14 +13,16 @@ library(dplyr)
 library(caret)
 library(glmnet)
 library(doParallel)
-registerDoParallel(4)
+#registerDoParallel(4)
+registerDoParallel(2)
 ```
 
 ### Importing and Cleaning
 
 ```{r, warning = FALSE, message = FALSE}
 set.seed(999)
-train = read_csv("E:/Rstudio/Toxic-Comment_Classifier/train.csv")
+#train = read_csv("E:/Rstudio/Toxic-Comment-Classifier/train.csv")
+train = read_csv("~/Programming/Rstudio/Toxic-Comment-Classifier/train.csv")
 train = train[1:100000,]
 sample = sample(nrow(train), nrow(train)/2)
 test = train[-sample,]
@@ -61,8 +63,8 @@ train = cbind(train, traintest[idtrain,3:ncol(traintest)])
 test = cbind(test, traintest[idtest,3:ncol(traintest)])
 
 ## quanteda
-traintestcorpus = corpus(traintest$comment_text)
-ttdfm = dfm(traintestcorpus, remove = stopwords("english"))
+#traintestcorpus = corpus(traintest$comment_text)
+#ttdfm = dfm(traintestcorpus, remove = stopwords("english"))
 
 
 
@@ -72,8 +74,8 @@ ttdfm = dfm(traintestcorpus, remove = stopwords("english"))
 ### Testing
 
 ```{r}
-threatglm = cv.glmnet(as.matrix(train[10:20]), 
-                     train$threat, 
+severe_toxicglm = cv.glmnet(as.matrix(train[10:20]), 
+                     train$severe_toxic, 
                      alpha = 0, 
                      family = "binomial", 
                      type.measure = "auc",
@@ -81,8 +83,8 @@ threatglm = cv.glmnet(as.matrix(train[10:20]),
                      nfolds = 4,
                      standardize = T,
                      nlambda = 50)
-threatpreds = predict(threatglm, as.matrix(test[10:20]))
-threatpreds = ifelse(threatpreds > 0.5, 1 ,0)
-confusionMatrix(threatpreds, test$threat)
+severe_toxicpreds = predict(severe_toxicglm, as.matrix(test[10:20]))
+severe_toxicpreds = ifelse(severe_toxicpreds > 0.5, 1 ,0)
+confusionMatrix(severe_toxicpreds, test$severe_toxic)
 ```
 

@@ -1,0 +1,136 @@
+---
+title: "toxic_counts"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(knitr)
+library(stringi)
+library(stringr)
+library(readr)
+library(quanteda)
+library(dplyr)
+#library(glmnet)
+library(caret)
+#library(doParallel)
+#library(ngram)
+library(readr)
+library(mosaic)
+library(broom)
+library(dplyr)
+library(cleanNLP)
+library(stringi)
+library(tm)
+library(tidytext)
+library(sentimentr)
+library(data.table)
+library(magrittr)
+library(tm)
+library(quanteda)
+library(dplyr)
+library(randomForest)
+library(class)
+library(e1071)
+library(nnet)
+library(neuralnet)
+library(randomForest)
+library(ranger)
+library(ISLR)
+library(caret)
+library(boot)
+library(syuzhet)
+```
+
+
+```{r}
+toxic.train<-fread("~/Documents/Rstudio/train.csv", sep=',')
+set.seed(1)
+#sample = sample(nrow(toxic.train), nrow(toxic.train)*.99)
+toxic_test = toxic.train[1:20000]
+toxic_train = toxic.train[20001:40000]
+#traintest = rbind(toxic_train[,1:2], toxic_test[1:2])
+
+stopWords = c(stop_words$word, "of", "or", "on")
+stopWords=stopWords[!(stopWords %in% c("new","used","small","large","thanks","greetings","works"))]
+
+
+swears<-fread("~/Documents/Rstudio/swears.csv", sep = ",")
+hatewords<-fread("~/Documents/Rstudio/hatebase_dict.csv",sep=",")
+
+
+swears<-unique( swears[ , 1:2 ] )
+swears$x <- gsub(",","",swears$x)
+swears
+mykey.swear <- update_key(swears)
+
+hatewords<-unique(hatewords[,1:2])
+hatewords$words<-gsub(",","",hatewords$words)
+hatewords$words<-gsub("'"," ",hatewords$words)
+hatewords$words<-tolower(hatewords$words)
+colnames(hatewords)[1] <- "x"
+colnames(hatewords)[2]<-"y"
+
+
+
+
+cmmnt = toxic_train$comment_text
+cmmnt = unlist(cmmnt)[!(unlist(cmmnt) %in% stopWords)]
+cmmnt = stri_replace_all_charclass(cmmnt, "[^[:alnum:]]", " ")
+id = rep(1:nrow(toxic_train))
+cmmnt_df = data.frame(id = id, comments = cmmnt)
+cmmnt_df$comments = as.character(cmmnt_df$comments)
+cmmnt
+#uniquecommnt<-unique(toxic_train$comment_text)
+swearslist<-swears$x
+traintest = mutate(toxic_train,
+       length = stri_length(comment_text),
+       ncap = stri_count_charclass(comment_text, "[A-Z]"),
+       ncap_len = ncap / length,
+       nexcl = stri_count_fixed(comment_text, "!"),
+       nquest = stri_count_fixed(comment_text, "?"),
+       npunct = stri_count_charclass(comment_text, "[[:punct:]]"),
+       npunct_len = npunct / length,
+       nsent = stri_count_boundaries(comment_text, "sentence"),
+       nsymb = stri_count_regex(comment_text, "&|@|#|\\$|%|\\*|\\^"),
+       nsmile = stri_count_regex(comment_text, "((?::|;|=)(?:-)?(?:\\)|D|P))"),
+       nwords = stri_count_words(comment_text),
+       hate=stri_count_fixed(comment_text,c("nigger","fag")),
+       nhate=stri_count_regex(comment_text, "[[hatewords$x]]")
+       #ntokens=length(!duplicated(comment_text)),
+       #ntokens_nwords = ntokens / nwords
+       )
+
+
+traintest.t = mutate(toxic_test,
+       length = stri_length(comment_text),
+       ncap = stri_count_charclass(comment_text, "[A-Z]"),
+       ncap_len = ncap / length,
+       nexcl = stri_count_fixed(comment_text, "!"),
+       nquest = stri_count_fixed(comment_text, "?"),
+       npunct = stri_count_charclass(comment_text, "[[:punct:]]"),
+       npunct_len = npunct / length,
+       nsent = stri_count_boundaries(comment_text, "sentence"),
+       nsymb = stri_count_regex(comment_text, "&|@|#|\\$|%|\\*|\\^"),
+       nsmile = stri_count_regex(comment_text, "((?::|;|=)(?:-)?(?:\\)|D|P))"),
+       nwords = stri_count_words(comment_text),
+       hate=stri_count_fixed(comment_text,c("niggers","fag")),
+       nhate=stri_count_regex(comment_text, "[[hatewords$x]]")
+       #ntokens=length(!duplicated(comment_text)),
+       #ntokens_nwords = ntokens / nwords
+       )
+#str_extract_all(string, pattern, simplify = FALSE)
+#ntokens = ntoken(comment_text, remove_numbers = TRUE, remove_punct = TRUE, remove_symbols = TRUE,
+                        #remove_separators = TRUE, remove_hyphens = TRUE)
+
+hate.lr <-glm(identity_hate~hate, data=traintest, family= binomial)
+
+hate.prob<-predict(hate.lr, newdata=traintest.t,type="response")
+
+hate.pred<-ifelse(hate.prob>.9,"1","0")
+
+confusionMatrix(hate.pred, traintest.t$identity_hate, positive = "1")
+```

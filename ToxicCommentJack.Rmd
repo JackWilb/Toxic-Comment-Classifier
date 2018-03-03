@@ -21,14 +21,13 @@ registerDoParallel(2)
 
 ```{r, warning = FALSE, message = FALSE}
 set.seed(999)
-#train = read_csv("E:/Rstudio/Toxic-Comment-Classifier/train.csv")
-train = read_csv("~/Programming/Rstudio/Toxic-Comment-Classifier/train.csv")
+train = read_csv("train.csv")
 train = train[1:100000,]
 sample = sample(nrow(train), nrow(train)/2)
 test = train[-sample,]
 train = train[sample,]
-#test = read_csv("~/Programming/Rstudio/Kaggles/ToxicComment/test.csv")
-#swear <- read_csv("~/Programming/Rstudio/Kaggles/ToxicComment/swear.csv", col_names = "word")
+#test = read_csv("test.csv")
+#swear <- read_csv("swear.csv", col_names = "word")
 
 train$id2 = rep(1:nrow(train))
 test$id2 = rep(1:nrow(test))

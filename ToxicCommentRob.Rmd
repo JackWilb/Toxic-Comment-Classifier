@@ -47,7 +47,7 @@ library(syuzhet)
 
 
 ```{r}
-toxic.train<-fread("~/Documents/Rstudio/Data 470/train.csv", sep=',')
+toxic.train<-fread("train.csv", sep=',')
 set.seed(1)
 #sample = sample(nrow(toxic.train), nrow(toxic.train)*.99)
 toxic_test = toxic.train[1:20000]
@@ -58,13 +58,13 @@ stopWords = c(stop_words$word, "of", "or", "on")
 stopWords=stopWords[!(stopWords %in% c("new","used","small","large","thanks","greetings","works"))]
 
 
-swears<-fread("~/Documents/Rstudio/Data 470/swears.csv", sep = ",")
-hatewords<-fread("~/Documents/Rstudio/Data 470/hatebase_dict.csv",sep=",")
-swears2 <-fread("~/Documents/Rstudio/Data 470/swearlistcscmu.csv",sep=",")
+swears<-fread("swears.csv", sep = ",")
+hatewords<-fread("hatebase_dict.csv",sep=",")
+#swears2 <-fread("swearlistcscmu.csv",sep=",")
 
 swears<-unique( swears[ , 1:2 ] )
 swears$x <- gsub(",","",swears$x)
-swears<-rbind(swears,swears2)
+#swears<-rbind(swears,swears2)
 swears<-unique(swears[,1:2])
 mykey.swear<-update_key(swears)
 
@@ -77,6 +77,10 @@ hatewords
 colnames(hatewords)[1] <- "x"
 colnames(hatewords)[2]<-"y"
 key.hatewords <- update_key(hatewords)
+
+
+####clean comment_text
+
 
 cmmnt = toxic_train$comment_text
 cmmnt = unlist(cmmnt)[!(unlist(cmmnt) %in% stopWords)]
@@ -95,8 +99,8 @@ cmmnt_df.t = data.frame(id = id, comments = cmmnt.t)
 cmmnt_df.t$comments = as.character(cmmnt_df.t$comments)
 
 
-#uniquecommnt<-unique(toxic_train$comment_text)
-swearslist<-swears$x
+##create traintest/.t dfm
+
 traintest = mutate(toxic_train,
        length = stri_length(comment_text),
        ncap = stri_count_charclass(comment_text, "[A-Z]"),
@@ -142,12 +146,7 @@ traintest.t = mutate(toxic_test,
 traintest
 
 
-
-#mykey.swear.hate<-rbind(mykey.swear,key.hatewords)
-#mykey.swear.hate<-unique(mykey.swear.hate[,1:2])
-#mykey.swear.hate<-sort(mykey.swear.hate$x,decreasing=FALSE)
-#mykey.swear <- update_key(mykey.swear,x=hatewords$x,y=hatewords$y)
-
+###sentiment values based on swears  added on onto DFM
 swear.sent.train<-sentiment_by(cmmnt_df$comments,list(id), polarity_dt=mykey.swear)
 swear.sent.test<-sentiment_by(cmmnt_df.t$comments,list(id),polarity_dt=mykey.swear)
 
@@ -167,12 +166,14 @@ toxic_train<-cbind(toxic_train,hate.sent.train[,4])
 toxic_test<-cbind(toxic_test,hate.sent.test[,4])
 
 
-toxic_test<-cbind(toxic_test,traintest.t[,9:21])
-toxic_train<-cbind(toxic_train,traintest[,9:21])
+toxic_test<-cbind(toxic_test,traintest.t[,9:22])
+toxic_train<-cbind(toxic_train,traintest[,9:22])
 
+
+####GLM models
 
 ##obscene--- goood,.9628swear sent  9643 +hate_sent
-obscene.lr <-glm(obscene~swear_sent+hate_sent+ncap+ncap_len+nquest+npunct_len+nsent+nsymb+nwords+hate+nhate, data=toxic_train, family= binomial)
+obscene.lr <-glm(obscene~swear_sent+hate_sent+ncap+ncap_len+nquest+nsent+nsymb+nwords+hate+nhate, data=toxic_train, family= binomial)
 
 summary(obscene.lr)
 

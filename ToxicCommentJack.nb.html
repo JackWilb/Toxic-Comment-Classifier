@@ -210,10 +210,10 @@ idtest = (nrow(train)+1):(nrow(train) + nrow(test))
 traintest = rbind(train[,1:2], test[1:2])
 gc()</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiICAgICAgICAgICB1c2VkICAoTWIpIGdjIHRyaWdnZXIgIChNYikgbWF4IHVzZWQgIChNYilcbk5jZWxscyAgMjY1ODMxOSAxNDIuMCAgICA1Njg0NjIwIDMwMy42ICA0NzAzODUwIDI1MS4zXG5WY2VsbHMgMTE3OTk4NTIgIDkwLjEgICAzNzE0NTUyOCAyODMuNCA1ODAwMzU4NSA0NDIuNlxuIn0= -->
-<pre><code>           used  (Mb) gc trigger  (Mb) max used  (Mb)
-Ncells  2658319 142.0    5684620 303.6  4703850 251.3
-Vcells 11799852  90.1   37145528 283.4 58003585 442.6</code></pre>
+<!-- rnb-output-begin eyJkYXRhIjoiICAgICAgICAgICAgdXNlZCAgIChNYikgZ2MgdHJpZ2dlciAgIChNYikgIG1heCB1c2VkICAgKE1iKVxuTmNlbGxzICAgMzE4MTY2NCAgMTcwLjAgICAgNTY4NDYyMCAgMzAzLjYgICA1Njg0NjIwICAzMDMuNlxuVmNlbGxzIDE3MDY0MDMzMyAxMzAxLjkgIDY2MTA0MzEyMCA1MDQzLjQgODI2MjUxNTUwIDYzMDMuOFxuIn0= -->
+<pre><code>            used   (Mb) gc trigger   (Mb)  max used   (Mb)
+Ncells   3181664  170.0    5684620  303.6   5684620  303.6
+Vcells 170640333 1301.9  661043120 5043.4 826251550 6303.8</code></pre>
 <!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
@@ -222,9 +222,8 @@ Vcells 11799852  90.1   37145528 283.4 58003585 442.6</code></pre>
 <h3>Variable Creation</h3>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxudHJhaW50ZXN0ID0gcmJpbmQodHJhaW5bLDE6Ml0sIHRlc3RbMToyXSlcbnR0Y29ycCA9IGNvcnB1cyh0cmFpbnRlc3QkY29tbWVudF90ZXh0KVxudHJhaW50ZXN0ID0gbXV0YXRlKHRyYWludGVzdCxcbiAgICAgICBsZW5ndGggPSBzdHJpX2xlbmd0aChjb21tZW50X3RleHQpLFxuICAgICAgIG5jYXAgPSBzdHJpX2NvdW50X2NoYXJjbGFzcyhjb21tZW50X3RleHQsIFwiW0EtWl1cIiksXG4gICAgICAgbm51bSA9IHN0cmlfY291bnRfY2hhcmNsYXNzKGNvbW1lbnRfdGV4dCwgXCJbMC05XVwiKSxcbiAgICAgICBuY2FwX2xlbiA9IG5jYXAgLyBsZW5ndGgsXG4gICAgICAgbm51bV9sZW4gPSBubnVtIC8gbGVuZ3RoLFxuICAgICAgIG5leGNsID0gc3RyaV9jb3VudF9maXhlZChjb21tZW50X3RleHQsIFwiIVwiKSxcbiAgICAgICBucXVlc3QgPSBzdHJpX2NvdW50X2ZpeGVkKGNvbW1lbnRfdGV4dCwgXCI/XCIpLFxuICAgICAgIG5wdW5jdCA9IHN0cmlfY291bnRfY2hhcmNsYXNzKGNvbW1lbnRfdGV4dCwgXCJbWzpwdW5jdDpdXVwiKSxcbiAgICAgICBucHVuY3RfbGVuID0gbnB1bmN0IC8gbGVuZ3RoLFxuICAgICAgIG5zZW50ID0gc3RyaV9jb3VudF9ib3VuZGFyaWVzKGNvbW1lbnRfdGV4dCwgXCJzZW50ZW5jZVwiKSxcbiAgICAgICBuc3ltYiA9IHN0cmlfY291bnRfcmVnZXgoY29tbWVudF90ZXh0LCBcIiZ8QHwjfFxcXFwkfCV8XFxcXCp8XFxcXF5cIiksXG4gICAgICAgbnNtaWxlID0gc3RyaV9jb3VudF9yZWdleChjb21tZW50X3RleHQsIFwiKCg/Ojp8O3w9KSg/Oi0pPyg/OlxcXFwpfER8UCkpXCIpLFxuICAgICAgIG53b3JkcyA9IHN0cmlfY291bnRfd29yZHMoY29tbWVudF90ZXh0KSxcbiAgICAgICBudG9rZW5zID0gMSxcbiAgICAgICBudG9rZW5zX253b3JkcyA9IG50b2tlbnMgLyBud29yZHNcbiAgICAgICApXG50cmFpbiA9IGNiaW5kKHRyYWluLCB0cmFpbnRlc3RbaWR0cmFpbiwzOm5jb2wodHJhaW50ZXN0KV0pXG50ZXN0ID0gY2JpbmQodGVzdCwgdHJhaW50ZXN0W2lkdGVzdCwzOm5jb2wodHJhaW50ZXN0KV0pXG4jIyBxdWFudGVkYVxudHJhaW50ZXN0Y29ycHVzID0gY29ycHVzKHRyYWludGVzdCRjb21tZW50X3RleHQpXG50dGRmbSA9IGRmbSh0cmFpbnRlc3Rjb3JwdXMsIHJlbW92ZSA9IHN0b3B3b3JkcyhcImVuZ2xpc2hcIikpXG4jdHJhaW50ZXN0ID0gY2JpbmQodHJhaW50ZXN0LCB0dGRmbSlcbmBgYCJ9 -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxudHJhaW50ZXN0ID0gcmJpbmQodHJhaW5bLDE6Ml0sIHRlc3RbMToyXSlcbnRyYWludGVzdCA9IG11dGF0ZSh0cmFpbnRlc3QsXG4gICAgICAgbGVuZ3RoID0gc3RyaV9sZW5ndGgoY29tbWVudF90ZXh0KSxcbiAgICAgICBuY2FwID0gc3RyaV9jb3VudF9jaGFyY2xhc3MoY29tbWVudF90ZXh0LCBcIltBLVpdXCIpLFxuICAgICAgIG5udW0gPSBzdHJpX2NvdW50X2NoYXJjbGFzcyhjb21tZW50X3RleHQsIFwiWzAtOV1cIiksXG4gICAgICAgbmNhcF9sZW4gPSBuY2FwIC8gbGVuZ3RoLFxuICAgICAgIG5udW1fbGVuID0gbm51bSAvIGxlbmd0aCxcbiAgICAgICBuZXhjbCA9IHN0cmlfY291bnRfZml4ZWQoY29tbWVudF90ZXh0LCBcIiFcIiksXG4gICAgICAgbnF1ZXN0ID0gc3RyaV9jb3VudF9maXhlZChjb21tZW50X3RleHQsIFwiP1wiKSxcbiAgICAgICBucHVuY3QgPSBzdHJpX2NvdW50X2NoYXJjbGFzcyhjb21tZW50X3RleHQsIFwiW1s6cHVuY3Q6XV1cIiksXG4gICAgICAgbnB1bmN0X2xlbiA9IG5wdW5jdCAvIGxlbmd0aCxcbiAgICAgICBuc2VudCA9IHN0cmlfY291bnRfYm91bmRhcmllcyhjb21tZW50X3RleHQsIFwic2VudGVuY2VcIiksXG4gICAgICAgbnN5bWIgPSBzdHJpX2NvdW50X3JlZ2V4KGNvbW1lbnRfdGV4dCwgXCImfEB8I3xcXFxcJHwlfFxcXFwqfFxcXFxeXCIpLFxuICAgICAgIG5zbWlsZSA9IHN0cmlfY291bnRfcmVnZXgoY29tbWVudF90ZXh0LCBcIigoPzo6fDt8PSkoPzotKT8oPzpcXFxcKXxEfFApKVwiKSxcbiAgICAgICBud29yZHMgPSBzdHJpX2NvdW50X3dvcmRzKGNvbW1lbnRfdGV4dCksXG4gICAgICAgbnRva2VucyA9IDEsXG4gICAgICAgbnRva2Vuc19ud29yZHMgPSBudG9rZW5zIC8gbndvcmRzXG4gICAgICAgKVxudHJhaW4gPSBjYmluZCh0cmFpbiwgdHJhaW50ZXN0W2lkdHJhaW4sMzpuY29sKHRyYWludGVzdCldKVxudGVzdCA9IGNiaW5kKHRlc3QsIHRyYWludGVzdFtpZHRlc3QsMzpuY29sKHRyYWludGVzdCldKVxuXG4jIyBxdWFudGVkYVxudHRjb3JwID0gY29ycHVzKHRyYWludGVzdCRjb21tZW50X3RleHQpXG50dGRmbSA9IGRmbSh0dGNvcnAsIHJlbW92ZSA9IHN0b3B3b3JkcyhcImVuZ2xpc2hcIikpXG50dGRmbSA9IGRmbV90cmltKHR0ZGZtLCBtaW5fZG9jZnJlcSA9IDMwMCwgbWF4X2RvY2ZyZXEgPSAxMDAwMDApXG50dGRmbSA9IGRmbV9zb3J0KHR0ZGZtKVxuXG4jIHNwYXJzZSBtYXRyaXhcbnN1bXR0ZGZtID0gc3VtbWFyeSh0dGRmbSlcbnNwYXJzZXR0ZGZtID0gc3BhcnNlTWF0cml4KGkgPSBzdW10dGRmbSRpLCBqID0gc3VtdHRkZm0kaiwgeCA9IHN1bXR0ZGZtJHgpXG5cbnNwYXJzZXRyYWluID0gTWF0cml4KGFzLm1hdHJpeCh0cmFpblszOjI0XSksIHNwYXJzZSA9IFRSVUUpXG5zcGFyc2V0ZXN0ID0gTWF0cml4KGFzLm1hdHJpeCh0ZXN0WzM6MjRdKSwgc3BhcnNlID0gVFJVRSlcbnRyYWluID0gY2JpbmQoc3BhcnNldHJhaW4sIHNwYXJzZXR0ZGZtWzE6bnJvdyh0cmFpbiksXSlcbnRlc3QgPSBjYmluZChzcGFyc2V0ZXN0LCBzcGFyc2V0dGRmbVtucm93KHRyYWluKSsxIDogbnJvdyh0cmFpbikgKyBucm93KHRlc3QpXSlcblxuXG5cbmBgYCJ9 -->
 <pre class="r"><code>traintest = rbind(train[,1:2], test[1:2])
-ttcorp = corpus(traintest$comment_text)
 traintest = mutate(traintest,
        length = stri_length(comment_text),
        ncap = stri_count_charclass(comment_text, &quot;[A-Z]&quot;),
@@ -244,10 +243,22 @@ traintest = mutate(traintest,
        )
 train = cbind(train, traintest[idtrain,3:ncol(traintest)])
 test = cbind(test, traintest[idtest,3:ncol(traintest)])
+
 ## quanteda
-traintestcorpus = corpus(traintest$comment_text)
-ttdfm = dfm(traintestcorpus, remove = stopwords(&quot;english&quot;))
-#traintest = cbind(traintest, ttdfm)</code></pre>
+ttcorp = corpus(traintest$comment_text)
+ttdfm = dfm(ttcorp, remove = stopwords(&quot;english&quot;))
+ttdfm = dfm_trim(ttdfm, min_docfreq = 300, max_docfreq = 100000)
+ttdfm = dfm_sort(ttdfm)
+
+# sparse matrix
+sumttdfm = summary(ttdfm)
+sparsettdfm = sparseMatrix(i = sumttdfm$i, j = sumttdfm$j, x = sumttdfm$x)
+
+sparsetrain = Matrix(as.matrix(train[3:24]), sparse = TRUE)
+sparsetest = Matrix(as.matrix(test[3:24]), sparse = TRUE)
+train = cbind(sparsetrain, sparsettdfm[1:nrow(train),])
+test = cbind(sparsetest, sparsettdfm[nrow(train)+1 : nrow(train) + nrow(test)])
+</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
@@ -256,9 +267,9 @@ ttdfm = dfm(traintestcorpus, remove = stopwords(&quot;english&quot;))
 <h3>Testing</h3>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxudG94aWNnbG0gPSBjdi5nbG1uZXQoYXMubWF0cml4KHRyYWluW2MoMTA6MjIsMjQpXSksIFxuICAgICAgICAgICAgICAgICAgICAgdHJhaW4kdG94aWMsIFxuICAgICAgICAgICAgICAgICAgICAgYWxwaGEgPSAwLCBcbiAgICAgICAgICAgICAgICAgICAgIGZhbWlseSA9IFwiYmlub21pYWxcIiwgXG4gICAgICAgICAgICAgICAgICAgICB0eXBlLm1lYXN1cmUgPSBcImF1Y1wiLFxuICAgICAgICAgICAgICAgICAgICAgcGFyYWxsZWwgPSBULFxuICAgICAgICAgICAgICAgICAgICAgbmZvbGRzID0gNCxcbiAgICAgICAgICAgICAgICAgICAgIHN0YW5kYXJkaXplID0gVCxcbiAgICAgICAgICAgICAgICAgICAgIG5sYW1iZGEgPSA1MClcbnRveGljcHJlZHMgPSBwcmVkaWN0KHRveGljZ2xtLCBhcy5tYXRyaXgodGVzdFtjKDEwOjIyLDI0KV0pKVxudG94aWNwcmVkcyA9IGlmZWxzZSh0b3hpY3ByZWRzID4gMC41LCAxICwwKVxuY29uZnVzaW9uTWF0cml4KHRveGljcHJlZHMsIHRlc3QkdG94aWMpXG5gYGAifQ== -->
-<pre class="r"><code>toxicglm = cv.glmnet(as.matrix(train[c(10:22,24)]), 
-                     train$toxic, 
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxudG94aWNnbG0gPSBjdi5nbG1uZXQoYXMubWF0cml4KHRyYWluWyw4OmRpbSh0cmFpbilbMl1dKSwgXG4gICAgICAgICAgICAgICAgICAgICB0cmFpbnNwYXJzZVssMV0sIFxuICAgICAgICAgICAgICAgICAgICAgYWxwaGEgPSAwLCBcbiAgICAgICAgICAgICAgICAgICAgIGZhbWlseSA9IFwiYmlub21pYWxcIiwgXG4gICAgICAgICAgICAgICAgICAgICB0eXBlLm1lYXN1cmUgPSBcImF1Y1wiLFxuICAgICAgICAgICAgICAgICAgICAgcGFyYWxsZWwgPSBULFxuICAgICAgICAgICAgICAgICAgICAgbmZvbGRzID0gNCxcbiAgICAgICAgICAgICAgICAgICAgIHN0YW5kYXJkaXplID0gVCxcbiAgICAgICAgICAgICAgICAgICAgIG5sYW1iZGEgPSA1MClcblxuYGBgIn0= -->
+<pre class="r"><code>toxicglm = cv.glmnet(as.matrix(train[,8:dim(train)[2]]), 
+                     trainsparse[,1], 
                      alpha = 0, 
                      family = &quot;binomial&quot;, 
                      type.measure = &quot;auc&quot;,
@@ -266,260 +277,17 @@ ttdfm = dfm(traintestcorpus, remove = stopwords(&quot;english&quot;))
                      nfolds = 4,
                      standardize = T,
                      nlambda = 50)
-toxicpreds = predict(toxicglm, as.matrix(test[c(10:22,24)]))
-toxicpreds = ifelse(toxicpreds &gt; 0.5, 1 ,0)
-confusionMatrix(toxicpreds, test$toxic)</code></pre>
+</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiQ29uZnVzaW9uIE1hdHJpeCBhbmQgU3RhdGlzdGljc1xuXG4gICAgICAgICAgUmVmZXJlbmNlXG5QcmVkaWN0aW9uICAgICAwICAgICAxXG4gICAgICAgICAwIDQ1MTExICA0NzcwXG4gICAgICAgICAxICAgIDMzICAgIDg2XG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBcbiAgICAgICAgICAgICAgIEFjY3VyYWN5IDogMC45MDM5ICAgICAgICAgIFxuICAgICAgICAgICAgICAgICA5NSUgQ0kgOiAoMC45MDEzLCAwLjkwNjUpXG4gICAgTm8gSW5mb3JtYXRpb24gUmF0ZSA6IDAuOTAyOSAgICAgICAgICBcbiAgICBQLVZhbHVlIFtBY2MgPiBOSVJdIDogMC4yMTQxICAgICAgICAgIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgXG4gICAgICAgICAgICAgICAgICBLYXBwYSA6IDAuMDMwMSAgICAgICAgICBcbiBNY25lbWFyJ3MgVGVzdCBQLVZhbHVlIDogPDJlLTE2ICAgICAgICAgIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgXG4gICAgICAgICAgICBTZW5zaXRpdml0eSA6IDAuOTk5MjcgICAgICAgICBcbiAgICAgICAgICAgIFNwZWNpZmljaXR5IDogMC4wMTc3MSAgICAgICAgIFxuICAgICAgICAgUG9zIFByZWQgVmFsdWUgOiAwLjkwNDM3ICAgICAgICAgXG4gICAgICAgICBOZWcgUHJlZCBWYWx1ZSA6IDAuNzIyNjkgICAgICAgICBcbiAgICAgICAgICAgICBQcmV2YWxlbmNlIDogMC45MDI4OCAgICAgICAgIFxuICAgICAgICAgRGV0ZWN0aW9uIFJhdGUgOiAwLjkwMjIyICAgICAgICAgXG4gICBEZXRlY3Rpb24gUHJldmFsZW5jZSA6IDAuOTk3NjIgICAgICAgICBcbiAgICAgIEJhbGFuY2VkIEFjY3VyYWN5IDogMC41MDg0OSAgICAgICAgIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgXG4gICAgICAgJ1Bvc2l0aXZlJyBDbGFzcyA6IDAgICAgICAgICAgICAgICBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIFxuIn0= -->
-<pre><code>Confusion Matrix and Statistics
-
-          Reference
-Prediction     0     1
-         0 45111  4770
-         1    33    86
-                                          
-               Accuracy : 0.9039          
-                 95% CI : (0.9013, 0.9065)
-    No Information Rate : 0.9029          
-    P-Value [Acc &gt; NIR] : 0.2141          
-                                          
-                  Kappa : 0.0301          
- Mcnemar's Test P-Value : &lt;2e-16          
-                                          
-            Sensitivity : 0.99927         
-            Specificity : 0.01771         
-         Pos Pred Value : 0.90437         
-         Neg Pred Value : 0.72269         
-             Prevalence : 0.90288         
-         Detection Rate : 0.90222         
-   Detection Prevalence : 0.99762         
-      Balanced Accuracy : 0.50849         
-                                          
-       'Positive' Class : 0               
-                                          </code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc2V2ZXJlX3RveGljZ2xtID0gY3YuZ2xtbmV0KGFzLm1hdHJpeCh0cmFpbltjKDEwOjIyLDI0KV0pLCBcbiAgICAgICAgICAgICAgICAgICAgIHRyYWluJHNldmVyZV90b3hpYywgXG4gICAgICAgICAgICAgICAgICAgICBhbHBoYSA9IDAsIFxuICAgICAgICAgICAgICAgICAgICAgZmFtaWx5ID0gXCJiaW5vbWlhbFwiLCBcbiAgICAgICAgICAgICAgICAgICAgIHR5cGUubWVhc3VyZSA9IFwiYXVjXCIsXG4gICAgICAgICAgICAgICAgICAgICBwYXJhbGxlbCA9IFQsXG4gICAgICAgICAgICAgICAgICAgICBuZm9sZHMgPSA0LFxuICAgICAgICAgICAgICAgICAgICAgc3RhbmRhcmRpemUgPSBULFxuICAgICAgICAgICAgICAgICAgICAgbmxhbWJkYSA9IDUwKVxuc2V2ZXJlX3RveGljcHJlZHMgPSBwcmVkaWN0KHNldmVyZV90b3hpY2dsbSwgYXMubWF0cml4KHRlc3RbYygxMDoyMiwyNCldKSlcbnNldmVyZV90b3hpY3ByZWRzID0gaWZlbHNlKHNldmVyZV90b3hpY3ByZWRzID4gMC41LCAxICwwKVxuY29uZnVzaW9uTWF0cml4KHNldmVyZV90b3hpY3ByZWRzLCB0ZXN0JHNldmVyZV90b3hpYylcbmBgYCJ9 -->
-<pre class="r"><code>severe_toxicglm = cv.glmnet(as.matrix(train[c(10:22,24)]), 
-                     train$severe_toxic, 
-                     alpha = 0, 
-                     family = &quot;binomial&quot;, 
-                     type.measure = &quot;auc&quot;,
-                     parallel = T,
-                     nfolds = 4,
-                     standardize = T,
-                     nlambda = 50)
-severe_toxicpreds = predict(severe_toxicglm, as.matrix(test[c(10:22,24)]))
-severe_toxicpreds = ifelse(severe_toxicpreds &gt; 0.5, 1 ,0)
-confusionMatrix(severe_toxicpreds, test$severe_toxic)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiQ29uZnVzaW9uIE1hdHJpeCBhbmQgU3RhdGlzdGljc1xuXG4gICAgICAgICAgUmVmZXJlbmNlXG5QcmVkaWN0aW9uICAgICAwICAgICAxXG4gICAgICAgICAwIDQ5NDgxICAgNTEyXG4gICAgICAgICAxICAgICAxICAgICA2XG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBcbiAgICAgICAgICAgICAgIEFjY3VyYWN5IDogMC45ODk3ICAgICAgICAgIFxuICAgICAgICAgICAgICAgICA5NSUgQ0kgOiAoMC45ODg4LCAwLjk5MDYpXG4gICAgTm8gSW5mb3JtYXRpb24gUmF0ZSA6IDAuOTg5NiAgICAgICAgICBcbiAgICBQLVZhbHVlIFtBY2MgPiBOSVJdIDogMC40MjM5ICAgICAgICAgIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgXG4gICAgICAgICAgICAgICAgICBLYXBwYSA6IDAuMDIyNiAgICAgICAgICBcbiBNY25lbWFyJ3MgVGVzdCBQLVZhbHVlIDogPDJlLTE2ICAgICAgICAgIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgXG4gICAgICAgICAgICBTZW5zaXRpdml0eSA6IDAuOTk5OTggICAgICAgICBcbiAgICAgICAgICAgIFNwZWNpZmljaXR5IDogMC4wMTE1OCAgICAgICAgIFxuICAgICAgICAgUG9zIFByZWQgVmFsdWUgOiAwLjk4OTc2ICAgICAgICAgXG4gICAgICAgICBOZWcgUHJlZCBWYWx1ZSA6IDAuODU3MTQgICAgICAgICBcbiAgICAgICAgICAgICBQcmV2YWxlbmNlIDogMC45ODk2NCAgICAgICAgIFxuICAgICAgICAgRGV0ZWN0aW9uIFJhdGUgOiAwLjk4OTYyICAgICAgICAgXG4gICBEZXRlY3Rpb24gUHJldmFsZW5jZSA6IDAuOTk5ODYgICAgICAgICBcbiAgICAgIEJhbGFuY2VkIEFjY3VyYWN5IDogMC41MDU3OCAgICAgICAgIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgXG4gICAgICAgJ1Bvc2l0aXZlJyBDbGFzcyA6IDAgICAgICAgICAgICAgICBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIFxuIn0= -->
-<pre><code>Confusion Matrix and Statistics
-
-          Reference
-Prediction     0     1
-         0 49481   512
-         1     1     6
-                                          
-               Accuracy : 0.9897          
-                 95% CI : (0.9888, 0.9906)
-    No Information Rate : 0.9896          
-    P-Value [Acc &gt; NIR] : 0.4239          
-                                          
-                  Kappa : 0.0226          
- Mcnemar's Test P-Value : &lt;2e-16          
-                                          
-            Sensitivity : 0.99998         
-            Specificity : 0.01158         
-         Pos Pred Value : 0.98976         
-         Neg Pred Value : 0.85714         
-             Prevalence : 0.98964         
-         Detection Rate : 0.98962         
-   Detection Prevalence : 0.99986         
-      Balanced Accuracy : 0.50578         
-                                          
-       'Positive' Class : 0               
-                                          </code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuaW5zdWx0Z2xtID0gY3YuZ2xtbmV0KGFzLm1hdHJpeCh0cmFpbltjKDEwOjIyLDI0KV0pLCBcbiAgICAgICAgICAgICAgICAgICAgIHRyYWluJGluc3VsdCwgXG4gICAgICAgICAgICAgICAgICAgICBhbHBoYSA9IDAsIFxuICAgICAgICAgICAgICAgICAgICAgZmFtaWx5ID0gXCJiaW5vbWlhbFwiLCBcbiAgICAgICAgICAgICAgICAgICAgIHR5cGUubWVhc3VyZSA9IFwiYXVjXCIsXG4gICAgICAgICAgICAgICAgICAgICBwYXJhbGxlbCA9IFQsXG4gICAgICAgICAgICAgICAgICAgICBuZm9sZHMgPSA0LFxuICAgICAgICAgICAgICAgICAgICAgc3RhbmRhcmRpemUgPSBULFxuICAgICAgICAgICAgICAgICAgICAgbmxhbWJkYSA9IDUwKVxuaW5zdWx0cHJlZHMgPSBwcmVkaWN0KGluc3VsdGdsbSwgYXMubWF0cml4KHRlc3RbYygxMDoyMiwyNCldKSlcbmluc3VsdHByZWRzID0gaWZlbHNlKGluc3VsdHByZWRzID4gMC41LCAxICwwKVxuY29uZnVzaW9uTWF0cml4KGluc3VsdHByZWRzLCB0ZXN0JGluc3VsdClcbmBgYCJ9 -->
-<pre class="r"><code>insultglm = cv.glmnet(as.matrix(train[c(10:22,24)]), 
-                     train$insult, 
-                     alpha = 0, 
-                     family = &quot;binomial&quot;, 
-                     type.measure = &quot;auc&quot;,
-                     parallel = T,
-                     nfolds = 4,
-                     standardize = T,
-                     nlambda = 50)
-insultpreds = predict(insultglm, as.matrix(test[c(10:22,24)]))
-insultpreds = ifelse(insultpreds &gt; 0.5, 1 ,0)
-confusionMatrix(insultpreds, test$insult)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiQ29uZnVzaW9uIE1hdHJpeCBhbmQgU3RhdGlzdGljc1xuXG4gICAgICAgICAgUmVmZXJlbmNlXG5QcmVkaWN0aW9uICAgICAwICAgICAxXG4gICAgICAgICAwIDQ3NTExICAyNDg0XG4gICAgICAgICAxICAgICAzICAgICAyXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBcbiAgICAgICAgICAgICAgIEFjY3VyYWN5IDogMC45NTAzICAgICAgICAgIFxuICAgICAgICAgICAgICAgICA5NSUgQ0kgOiAoMC45NDgzLCAwLjk1MjEpXG4gICAgTm8gSW5mb3JtYXRpb24gUmF0ZSA6IDAuOTUwMyAgICAgICAgICBcbiAgICBQLVZhbHVlIFtBY2MgPiBOSVJdIDogMC41MTM1ICAgICAgICAgIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgXG4gICAgICAgICAgICAgICAgICBLYXBwYSA6IDAuMDAxNCAgICAgICAgICBcbiBNY25lbWFyJ3MgVGVzdCBQLVZhbHVlIDogPDJlLTE2ICAgICAgICAgIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgXG4gICAgICAgICAgICBTZW5zaXRpdml0eSA6IDAuOTk5OTM2OSAgICAgICBcbiAgICAgICAgICAgIFNwZWNpZmljaXR5IDogMC4wMDA4MDQ1ICAgICAgIFxuICAgICAgICAgUG9zIFByZWQgVmFsdWUgOiAwLjk1MDMxNTAgICAgICAgXG4gICAgICAgICBOZWcgUHJlZCBWYWx1ZSA6IDAuNDAwMDAwMCAgICAgICBcbiAgICAgICAgICAgICBQcmV2YWxlbmNlIDogMC45NTAyODAwICAgICAgIFxuICAgICAgICAgRGV0ZWN0aW9uIFJhdGUgOiAwLjk1MDIyMDAgICAgICAgXG4gICBEZXRlY3Rpb24gUHJldmFsZW5jZSA6IDAuOTk5OTAwMCAgICAgICBcbiAgICAgIEJhbGFuY2VkIEFjY3VyYWN5IDogMC41MDAzNzA3ICAgICAgIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgXG4gICAgICAgJ1Bvc2l0aXZlJyBDbGFzcyA6IDAgICAgICAgICAgICAgICBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIFxuIn0= -->
-<pre><code>Confusion Matrix and Statistics
-
-          Reference
-Prediction     0     1
-         0 47511  2484
-         1     3     2
-                                          
-               Accuracy : 0.9503          
-                 95% CI : (0.9483, 0.9521)
-    No Information Rate : 0.9503          
-    P-Value [Acc &gt; NIR] : 0.5135          
-                                          
-                  Kappa : 0.0014          
- Mcnemar's Test P-Value : &lt;2e-16          
-                                          
-            Sensitivity : 0.9999369       
-            Specificity : 0.0008045       
-         Pos Pred Value : 0.9503150       
-         Neg Pred Value : 0.4000000       
-             Prevalence : 0.9502800       
-         Detection Rate : 0.9502200       
-   Detection Prevalence : 0.9999000       
-      Balanced Accuracy : 0.5003707       
-                                          
-       'Positive' Class : 0               
-                                          </code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxub2JzY2VuZWdsbSA9IGN2LmdsbW5ldChhcy5tYXRyaXgodHJhaW5bYygxMDoyMiwyNCldKSwgXG4gICAgICAgICAgICAgICAgICAgICB0cmFpbiRvYnNjZW5lLCBcbiAgICAgICAgICAgICAgICAgICAgIGFscGhhID0gMCwgXG4gICAgICAgICAgICAgICAgICAgICBmYW1pbHkgPSBcImJpbm9taWFsXCIsIFxuICAgICAgICAgICAgICAgICAgICAgdHlwZS5tZWFzdXJlID0gXCJhdWNcIixcbiAgICAgICAgICAgICAgICAgICAgIHBhcmFsbGVsID0gVCxcbiAgICAgICAgICAgICAgICAgICAgIG5mb2xkcyA9IDQsXG4gICAgICAgICAgICAgICAgICAgICBzdGFuZGFyZGl6ZSA9IFQsXG4gICAgICAgICAgICAgICAgICAgICBubGFtYmRhID0gNTApXG5vYnNjZW5lcHJlZHMgPSBwcmVkaWN0KG9ic2NlbmVnbG0sIGFzLm1hdHJpeCh0ZXN0W2MoMTA6MjIsMjQpXSkpXG5vYnNjZW5lcHJlZHMgPSBpZmVsc2Uob2JzY2VuZXByZWRzID4gMC41LCAxICwwKVxuY29uZnVzaW9uTWF0cml4KG9ic2NlbmVwcmVkcywgdGVzdCRvYnNjZW5lKVxuYGBgIn0= -->
-<pre class="r"><code>obsceneglm = cv.glmnet(as.matrix(train[c(10:22,24)]), 
-                     train$obscene, 
-                     alpha = 0, 
-                     family = &quot;binomial&quot;, 
-                     type.measure = &quot;auc&quot;,
-                     parallel = T,
-                     nfolds = 4,
-                     standardize = T,
-                     nlambda = 50)
-obscenepreds = predict(obsceneglm, as.matrix(test[c(10:22,24)]))
-obscenepreds = ifelse(obscenepreds &gt; 0.5, 1 ,0)
-confusionMatrix(obscenepreds, test$obscene)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiQ29uZnVzaW9uIE1hdHJpeCBhbmQgU3RhdGlzdGljc1xuXG4gICAgICAgICAgUmVmZXJlbmNlXG5QcmVkaWN0aW9uICAgICAwICAgICAxXG4gICAgICAgICAwIDQ3MzAwICAyNjgxXG4gICAgICAgICAxICAgICA1ICAgIDE0XG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBcbiAgICAgICAgICAgICAgIEFjY3VyYWN5IDogMC45NDYzICAgICAgICAgIFxuICAgICAgICAgICAgICAgICA5NSUgQ0kgOiAoMC45NDQzLCAwLjk0ODIpXG4gICAgTm8gSW5mb3JtYXRpb24gUmF0ZSA6IDAuOTQ2MSAgICAgICAgICBcbiAgICBQLVZhbHVlIFtBY2MgPiBOSVJdIDogMC40MzQzICAgICAgICAgIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgXG4gICAgICAgICAgICAgICAgICBLYXBwYSA6IDAuMDA5NiAgICAgICAgICBcbiBNY25lbWFyJ3MgVGVzdCBQLVZhbHVlIDogPDJlLTE2ICAgICAgICAgIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgXG4gICAgICAgICAgICBTZW5zaXRpdml0eSA6IDAuOTk5ODk0ICAgICAgICBcbiAgICAgICAgICAgIFNwZWNpZmljaXR5IDogMC4wMDUxOTUgICAgICAgIFxuICAgICAgICAgUG9zIFByZWQgVmFsdWUgOiAwLjk0NjM2MCAgICAgICAgXG4gICAgICAgICBOZWcgUHJlZCBWYWx1ZSA6IDAuNzM2ODQyICAgICAgICBcbiAgICAgICAgICAgICBQcmV2YWxlbmNlIDogMC45NDYxMDAgICAgICAgIFxuICAgICAgICAgRGV0ZWN0aW9uIFJhdGUgOiAwLjk0NjAwMCAgICAgICAgXG4gICBEZXRlY3Rpb24gUHJldmFsZW5jZSA6IDAuOTk5NjIwICAgICAgICBcbiAgICAgIEJhbGFuY2VkIEFjY3VyYWN5IDogMC41MDI1NDUgICAgICAgIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgXG4gICAgICAgJ1Bvc2l0aXZlJyBDbGFzcyA6IDAgICAgICAgICAgICAgICBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIFxuIn0= -->
-<pre><code>Confusion Matrix and Statistics
-
-          Reference
-Prediction     0     1
-         0 47300  2681
-         1     5    14
-                                          
-               Accuracy : 0.9463          
-                 95% CI : (0.9443, 0.9482)
-    No Information Rate : 0.9461          
-    P-Value [Acc &gt; NIR] : 0.4343          
-                                          
-                  Kappa : 0.0096          
- Mcnemar's Test P-Value : &lt;2e-16          
-                                          
-            Sensitivity : 0.999894        
-            Specificity : 0.005195        
-         Pos Pred Value : 0.946360        
-         Neg Pred Value : 0.736842        
-             Prevalence : 0.946100        
-         Detection Rate : 0.946000        
-   Detection Prevalence : 0.999620        
-      Balanced Accuracy : 0.502545        
-                                          
-       'Positive' Class : 0               
-                                          </code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxudGhyZWF0Z2xtID0gY3YuZ2xtbmV0KGFzLm1hdHJpeCh0cmFpbltjKDEwOjIyLDI0KV0pLCBcbiAgICAgICAgICAgICAgICAgICAgIHRyYWluJHRocmVhdCwgXG4gICAgICAgICAgICAgICAgICAgICBhbHBoYSA9IDAsIFxuICAgICAgICAgICAgICAgICAgICAgZmFtaWx5ID0gXCJiaW5vbWlhbFwiLCBcbiAgICAgICAgICAgICAgICAgICAgIHR5cGUubWVhc3VyZSA9IFwiYXVjXCIsXG4gICAgICAgICAgICAgICAgICAgICBwYXJhbGxlbCA9IFQsXG4gICAgICAgICAgICAgICAgICAgICBuZm9sZHMgPSA0LFxuICAgICAgICAgICAgICAgICAgICAgc3RhbmRhcmRpemUgPSBULFxuICAgICAgICAgICAgICAgICAgICAgbmxhbWJkYSA9IDUwKVxudGhyZWF0cHJlZHMgPSBwcmVkaWN0KHRocmVhdGdsbSwgYXMubWF0cml4KHRlc3RbYygxMDoyMiwyNCldKSlcbnRocmVhdHByZWRzID0gaWZlbHNlKHRocmVhdHByZWRzID4gMC41LCAxICwwKVxuY29uZnVzaW9uTWF0cml4KHRocmVhdHByZWRzLCB0ZXN0JHRocmVhdClcbmBgYCJ9 -->
-<pre class="r"><code>threatglm = cv.glmnet(as.matrix(train[c(10:22,24)]), 
-                     train$threat, 
-                     alpha = 0, 
-                     family = &quot;binomial&quot;, 
-                     type.measure = &quot;auc&quot;,
-                     parallel = T,
-                     nfolds = 4,
-                     standardize = T,
-                     nlambda = 50)
-threatpreds = predict(threatglm, as.matrix(test[c(10:22,24)]))
-threatpreds = ifelse(threatpreds &gt; 0.5, 1 ,0)
-confusionMatrix(threatpreds, test$threat)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiTGV2ZWxzIGFyZSBub3QgaW4gdGhlIHNhbWUgb3JkZXIgZm9yIHJlZmVyZW5jZSBhbmQgZGF0YS4gUmVmYWN0b3JpbmcgZGF0YSB0byBtYXRjaC5cbiJ9 -->
-<pre><code>Levels are not in the same order for reference and data. Refactoring data to match.</code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiQ29uZnVzaW9uIE1hdHJpeCBhbmQgU3RhdGlzdGljc1xuXG4gICAgICAgICAgUmVmZXJlbmNlXG5QcmVkaWN0aW9uICAgICAwICAgICAxXG4gICAgICAgICAwIDQ5ODQ4ICAgMTUyXG4gICAgICAgICAxICAgICAwICAgICAwXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBcbiAgICAgICAgICAgICAgIEFjY3VyYWN5IDogMC45OTcgICAgICAgICAgIFxuICAgICAgICAgICAgICAgICA5NSUgQ0kgOiAoMC45OTY0LCAwLjk5NzQpXG4gICAgTm8gSW5mb3JtYXRpb24gUmF0ZSA6IDAuOTk3ICAgICAgICAgICBcbiAgICBQLVZhbHVlIFtBY2MgPiBOSVJdIDogMC41MjE2ICAgICAgICAgIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgXG4gICAgICAgICAgICAgICAgICBLYXBwYSA6IDAgICAgICAgICAgICAgICBcbiBNY25lbWFyJ3MgVGVzdCBQLVZhbHVlIDogPDJlLTE2ICAgICAgICAgIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgXG4gICAgICAgICAgICBTZW5zaXRpdml0eSA6IDEuMDAwICAgICAgICAgICBcbiAgICAgICAgICAgIFNwZWNpZmljaXR5IDogMC4wMDAgICAgICAgICAgIFxuICAgICAgICAgUG9zIFByZWQgVmFsdWUgOiAwLjk5NyAgICAgICAgICAgXG4gICAgICAgICBOZWcgUHJlZCBWYWx1ZSA6ICAgTmFOICAgICAgICAgICBcbiAgICAgICAgICAgICBQcmV2YWxlbmNlIDogMC45OTcgICAgICAgICAgIFxuICAgICAgICAgRGV0ZWN0aW9uIFJhdGUgOiAwLjk5NyAgICAgICAgICAgXG4gICBEZXRlY3Rpb24gUHJldmFsZW5jZSA6IDEuMDAwICAgICAgICAgICBcbiAgICAgIEJhbGFuY2VkIEFjY3VyYWN5IDogMC41MDAgICAgICAgICAgIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgXG4gICAgICAgJ1Bvc2l0aXZlJyBDbGFzcyA6IDAgICAgICAgICAgICAgICBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIFxuIn0= -->
-<pre><code>Confusion Matrix and Statistics
-
-          Reference
-Prediction     0     1
-         0 49848   152
-         1     0     0
-                                          
-               Accuracy : 0.997           
-                 95% CI : (0.9964, 0.9974)
-    No Information Rate : 0.997           
-    P-Value [Acc &gt; NIR] : 0.5216          
-                                          
-                  Kappa : 0               
- Mcnemar's Test P-Value : &lt;2e-16          
-                                          
-            Sensitivity : 1.000           
-            Specificity : 0.000           
-         Pos Pred Value : 0.997           
-         Neg Pred Value :   NaN           
-             Prevalence : 0.997           
-         Detection Rate : 0.997           
-   Detection Prevalence : 1.000           
-      Balanced Accuracy : 0.500           
-                                          
-       'Positive' Class : 0               
-                                          </code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuaWRlbnRpdHlfaGF0ZWdsbSA9IGN2LmdsbW5ldChhcy5tYXRyaXgodHJhaW5bYygxMDoyMiwyNCldKSwgXG4gICAgICAgICAgICAgICAgICAgICB0cmFpbiRpZGVudGl0eV9oYXRlLCBcbiAgICAgICAgICAgICAgICAgICAgIGFscGhhID0gMCwgXG4gICAgICAgICAgICAgICAgICAgICBmYW1pbHkgPSBcImJpbm9taWFsXCIsIFxuICAgICAgICAgICAgICAgICAgICAgdHlwZS5tZWFzdXJlID0gXCJhdWNcIixcbiAgICAgICAgICAgICAgICAgICAgIHBhcmFsbGVsID0gVCxcbiAgICAgICAgICAgICAgICAgICAgIG5mb2xkcyA9IDQsXG4gICAgICAgICAgICAgICAgICAgICBzdGFuZGFyZGl6ZSA9IFQsXG4gICAgICAgICAgICAgICAgICAgICBubGFtYmRhID0gNTApXG5pZGVudGl0eV9oYXRlcHJlZHMgPSBwcmVkaWN0KGlkZW50aXR5X2hhdGVnbG0sIGFzLm1hdHJpeCh0ZXN0W2MoMTA6MjIsMjQpXSkpXG5pZGVudGl0eV9oYXRlcHJlZHMgPSBpZmVsc2UoaWRlbnRpdHlfaGF0ZXByZWRzID4gMC41LCAxICwwKVxuY29uZnVzaW9uTWF0cml4KGlkZW50aXR5X2hhdGVwcmVkcywgdGVzdCRpZGVudGl0eV9oYXRlKVxuYGBgIn0= -->
-<pre class="r"><code>identity_hateglm = cv.glmnet(as.matrix(train[c(10:22,24)]), 
-                     train$identity_hate, 
-                     alpha = 0, 
-                     family = &quot;binomial&quot;, 
-                     type.measure = &quot;auc&quot;,
-                     parallel = T,
-                     nfolds = 4,
-                     standardize = T,
-                     nlambda = 50)
-identity_hatepreds = predict(identity_hateglm, as.matrix(test[c(10:22,24)]))
-identity_hatepreds = ifelse(identity_hatepreds &gt; 0.5, 1 ,0)
-confusionMatrix(identity_hatepreds, test$identity_hate)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiTGV2ZWxzIGFyZSBub3QgaW4gdGhlIHNhbWUgb3JkZXIgZm9yIHJlZmVyZW5jZSBhbmQgZGF0YS4gUmVmYWN0b3JpbmcgZGF0YSB0byBtYXRjaC5cbiJ9 -->
-<pre><code>Levels are not in the same order for reference and data. Refactoring data to match.</code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiQ29uZnVzaW9uIE1hdHJpeCBhbmQgU3RhdGlzdGljc1xuXG4gICAgICAgICAgUmVmZXJlbmNlXG5QcmVkaWN0aW9uICAgICAwICAgICAxXG4gICAgICAgICAwIDQ5NTc0ICAgNDI2XG4gICAgICAgICAxICAgICAwICAgICAwXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBcbiAgICAgICAgICAgICAgIEFjY3VyYWN5IDogMC45OTE1ICAgICAgICAgIFxuICAgICAgICAgICAgICAgICA5NSUgQ0kgOiAoMC45OTA2LCAwLjk5MjMpXG4gICAgTm8gSW5mb3JtYXRpb24gUmF0ZSA6IDAuOTkxNSAgICAgICAgICBcbiAgICBQLVZhbHVlIFtBY2MgPiBOSVJdIDogMC41MTI5ICAgICAgICAgIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgXG4gICAgICAgICAgICAgICAgICBLYXBwYSA6IDAgICAgICAgICAgICAgICBcbiBNY25lbWFyJ3MgVGVzdCBQLVZhbHVlIDogPDJlLTE2ICAgICAgICAgIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgXG4gICAgICAgICAgICBTZW5zaXRpdml0eSA6IDEuMDAwMCAgICAgICAgICBcbiAgICAgICAgICAgIFNwZWNpZmljaXR5IDogMC4wMDAwICAgICAgICAgIFxuICAgICAgICAgUG9zIFByZWQgVmFsdWUgOiAwLjk5MTUgICAgICAgICAgXG4gICAgICAgICBOZWcgUHJlZCBWYWx1ZSA6ICAgIE5hTiAgICAgICAgICBcbiAgICAgICAgICAgICBQcmV2YWxlbmNlIDogMC45OTE1ICAgICAgICAgIFxuICAgICAgICAgRGV0ZWN0aW9uIFJhdGUgOiAwLjk5MTUgICAgICAgICAgXG4gICBEZXRlY3Rpb24gUHJldmFsZW5jZSA6IDEuMDAwMCAgICAgICAgICBcbiAgICAgIEJhbGFuY2VkIEFjY3VyYWN5IDogMC41MDAwICAgICAgICAgIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgXG4gICAgICAgJ1Bvc2l0aXZlJyBDbGFzcyA6IDAgICAgICAgICAgICAgICBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIFxuIn0= -->
-<pre><code>Confusion Matrix and Statistics
-
-          Reference
-Prediction     0     1
-         0 49574   426
-         1     0     0
-                                          
-               Accuracy : 0.9915          
-                 95% CI : (0.9906, 0.9923)
-    No Information Rate : 0.9915          
-    P-Value [Acc &gt; NIR] : 0.5129          
-                                          
-                  Kappa : 0               
- Mcnemar's Test P-Value : &lt;2e-16          
-                                          
-            Sensitivity : 1.0000          
-            Specificity : 0.0000          
-         Pos Pred Value : 0.9915          
-         Neg Pred Value :    NaN          
-             Prevalence : 0.9915          
-         Detection Rate : 0.9915          
-   Detection Prevalence : 1.0000          
-      Balanced Accuracy : 0.5000          
-                                          
-       'Positive' Class : 0               
-                                          </code></pre>
+<!-- rnb-output-begin eyJkYXRhIjoiRXJyb3IgaW4gZHJvcCh5KSA6IG9iamVjdCAndHJhaW5zcGFyc2UnIG5vdCBmb3VuZFxuIn0= -->
+<pre><code>Error in drop(y) : object 'trainsparse' not found</code></pre>
 <!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
 </div>
 
-<div id="rmd-source-code">LS0tCnRpdGxlOiAiVG94aWMgQ29tbWVudCBDbGFzc2lmaWVyIgpvdXRwdXQ6IGh0bWxfbm90ZWJvb2sKLS0tCgojIyMgTGlicmFyaWVzCgpgYGB7ciwgbWVzc2FnZSA9IEZBTFNFLCB3YXJuaW5nID0gRkFMU0V9CmxpYnJhcnkocmVhZHIpCmxpYnJhcnkoc3RyaW5naSkKbGlicmFyeShxdWFudGVkYSkKbGlicmFyeShkcGx5cikKbGlicmFyeShjYXJldCkKbGlicmFyeShnbG1uZXQpCmxpYnJhcnkoZG9QYXJhbGxlbCkKI3JlZ2lzdGVyRG9QYXJhbGxlbCg0KQpyZWdpc3RlckRvUGFyYWxsZWwoMikKYGBgCgojIyMgSW1wb3J0aW5nIGFuZCBDbGVhbmluZwoKYGBge3IsIHdhcm5pbmcgPSBGQUxTRSwgbWVzc2FnZSA9IEZBTFNFfQpzZXQuc2VlZCg5OTkpCnRyYWluID0gcmVhZF9jc3YoInRyYWluLmNzdiIpCnRyYWluID0gdHJhaW5bMToxMDAwMDAsXQpzYW1wbGUgPSBzYW1wbGUobnJvdyh0cmFpbiksIG5yb3codHJhaW4pLzIpCnRlc3QgPSB0cmFpblstc2FtcGxlLF0KdHJhaW4gPSB0cmFpbltzYW1wbGUsXQojdGVzdCA9IHJlYWRfY3N2KCJ0ZXN0LmNzdiIpCiNzd2VhciA8LSByZWFkX2Nzdigic3dlYXIuY3N2IiwgY29sX25hbWVzID0gIndvcmQiKQoKdHJhaW4kaWQyID0gcmVwKDE6bnJvdyh0cmFpbikpCnRlc3QkaWQyID0gcmVwKDE6bnJvdyh0ZXN0KSkKCmlkdHJhaW4gPSAxOm5yb3codHJhaW4pCmlkdGVzdCA9IChucm93KHRyYWluKSsxKToobnJvdyh0cmFpbikgKyBucm93KHRlc3QpKQp0cmFpbnRlc3QgPSByYmluZCh0cmFpblssMToyXSwgdGVzdFsxOjJdKQpnYygpCmBgYAoKIyMjIFZhcmlhYmxlIENyZWF0aW9uCgpgYGB7cn0KdHJhaW50ZXN0ID0gcmJpbmQodHJhaW5bLDE6Ml0sIHRlc3RbMToyXSkKdHRjb3JwID0gY29ycHVzKHRyYWludGVzdCRjb21tZW50X3RleHQpCnRyYWludGVzdCA9IG11dGF0ZSh0cmFpbnRlc3QsCiAgICAgICBsZW5ndGggPSBzdHJpX2xlbmd0aChjb21tZW50X3RleHQpLAogICAgICAgbmNhcCA9IHN0cmlfY291bnRfY2hhcmNsYXNzKGNvbW1lbnRfdGV4dCwgIltBLVpdIiksCiAgICAgICBubnVtID0gc3RyaV9jb3VudF9jaGFyY2xhc3MoY29tbWVudF90ZXh0LCAiWzAtOV0iKSwKICAgICAgIG5jYXBfbGVuID0gbmNhcCAvIGxlbmd0aCwKICAgICAgIG5udW1fbGVuID0gbm51bSAvIGxlbmd0aCwKICAgICAgIG5leGNsID0gc3RyaV9jb3VudF9maXhlZChjb21tZW50X3RleHQsICIhIiksCiAgICAgICBucXVlc3QgPSBzdHJpX2NvdW50X2ZpeGVkKGNvbW1lbnRfdGV4dCwgIj8iKSwKICAgICAgIG5wdW5jdCA9IHN0cmlfY291bnRfY2hhcmNsYXNzKGNvbW1lbnRfdGV4dCwgIltbOnB1bmN0Ol1dIiksCiAgICAgICBucHVuY3RfbGVuID0gbnB1bmN0IC8gbGVuZ3RoLAogICAgICAgbnNlbnQgPSBzdHJpX2NvdW50X2JvdW5kYXJpZXMoY29tbWVudF90ZXh0LCAic2VudGVuY2UiKSwKICAgICAgIG5zeW1iID0gc3RyaV9jb3VudF9yZWdleChjb21tZW50X3RleHQsICImfEB8I3xcXCR8JXxcXCp8XFxeIiksCiAgICAgICBuc21pbGUgPSBzdHJpX2NvdW50X3JlZ2V4KGNvbW1lbnRfdGV4dCwgIigoPzo6fDt8PSkoPzotKT8oPzpcXCl8RHxQKSkiKSwKICAgICAgIG53b3JkcyA9IHN0cmlfY291bnRfd29yZHMoY29tbWVudF90ZXh0KSwKICAgICAgIG50b2tlbnMgPSAxLAogICAgICAgbnRva2Vuc19ud29yZHMgPSBudG9rZW5zIC8gbndvcmRzCiAgICAgICApCnRyYWluID0gY2JpbmQodHJhaW4sIHRyYWludGVzdFtpZHRyYWluLDM6bmNvbCh0cmFpbnRlc3QpXSkKdGVzdCA9IGNiaW5kKHRlc3QsIHRyYWludGVzdFtpZHRlc3QsMzpuY29sKHRyYWludGVzdCldKQoKIyMgcXVhbnRlZGEKdHJhaW50ZXN0Y29ycHVzID0gY29ycHVzKHRyYWludGVzdCRjb21tZW50X3RleHQpCnR0ZGZtID0gZGZtKHRyYWludGVzdGNvcnB1cywgcmVtb3ZlID0gc3RvcHdvcmRzKCJlbmdsaXNoIikpCgojdHJhaW50ZXN0ID0gY2JpbmQodHJhaW50ZXN0LCB0dGRmbSkKCgpgYGAKCgojIyMgVGVzdGluZwoKYGBge3J9CnRveGljZ2xtID0gY3YuZ2xtbmV0KGFzLm1hdHJpeCh0cmFpbltjKDEwOjIyLDI0KV0pLCAKICAgICAgICAgICAgICAgICAgICAgdHJhaW4kdG94aWMsIAogICAgICAgICAgICAgICAgICAgICBhbHBoYSA9IDAsIAogICAgICAgICAgICAgICAgICAgICBmYW1pbHkgPSAiYmlub21pYWwiLCAKICAgICAgICAgICAgICAgICAgICAgdHlwZS5tZWFzdXJlID0gImF1YyIsCiAgICAgICAgICAgICAgICAgICAgIHBhcmFsbGVsID0gVCwKICAgICAgICAgICAgICAgICAgICAgbmZvbGRzID0gNCwKICAgICAgICAgICAgICAgICAgICAgc3RhbmRhcmRpemUgPSBULAogICAgICAgICAgICAgICAgICAgICBubGFtYmRhID0gNTApCnRveGljcHJlZHMgPSBwcmVkaWN0KHRveGljZ2xtLCBhcy5tYXRyaXgodGVzdFtjKDEwOjIyLDI0KV0pKQp0b3hpY3ByZWRzID0gaWZlbHNlKHRveGljcHJlZHMgPiAwLjUsIDEgLDApCmNvbmZ1c2lvbk1hdHJpeCh0b3hpY3ByZWRzLCB0ZXN0JHRveGljKQoKc2V2ZXJlX3RveGljZ2xtID0gY3YuZ2xtbmV0KGFzLm1hdHJpeCh0cmFpbltjKDEwOjIyLDI0KV0pLCAKICAgICAgICAgICAgICAgICAgICAgdHJhaW4kc2V2ZXJlX3RveGljLCAKICAgICAgICAgICAgICAgICAgICAgYWxwaGEgPSAwLCAKICAgICAgICAgICAgICAgICAgICAgZmFtaWx5ID0gImJpbm9taWFsIiwgCiAgICAgICAgICAgICAgICAgICAgIHR5cGUubWVhc3VyZSA9ICJhdWMiLAogICAgICAgICAgICAgICAgICAgICBwYXJhbGxlbCA9IFQsCiAgICAgICAgICAgICAgICAgICAgIG5mb2xkcyA9IDQsCiAgICAgICAgICAgICAgICAgICAgIHN0YW5kYXJkaXplID0gVCwKICAgICAgICAgICAgICAgICAgICAgbmxhbWJkYSA9IDUwKQpzZXZlcmVfdG94aWNwcmVkcyA9IHByZWRpY3Qoc2V2ZXJlX3RveGljZ2xtLCBhcy5tYXRyaXgodGVzdFtjKDEwOjIyLDI0KV0pKQpzZXZlcmVfdG94aWNwcmVkcyA9IGlmZWxzZShzZXZlcmVfdG94aWNwcmVkcyA+IDAuNSwgMSAsMCkKY29uZnVzaW9uTWF0cml4KHNldmVyZV90b3hpY3ByZWRzLCB0ZXN0JHNldmVyZV90b3hpYykKCmluc3VsdGdsbSA9IGN2LmdsbW5ldChhcy5tYXRyaXgodHJhaW5bYygxMDoyMiwyNCldKSwgCiAgICAgICAgICAgICAgICAgICAgIHRyYWluJGluc3VsdCwgCiAgICAgICAgICAgICAgICAgICAgIGFscGhhID0gMCwgCiAgICAgICAgICAgICAgICAgICAgIGZhbWlseSA9ICJiaW5vbWlhbCIsIAogICAgICAgICAgICAgICAgICAgICB0eXBlLm1lYXN1cmUgPSAiYXVjIiwKICAgICAgICAgICAgICAgICAgICAgcGFyYWxsZWwgPSBULAogICAgICAgICAgICAgICAgICAgICBuZm9sZHMgPSA0LAogICAgICAgICAgICAgICAgICAgICBzdGFuZGFyZGl6ZSA9IFQsCiAgICAgICAgICAgICAgICAgICAgIG5sYW1iZGEgPSA1MCkKaW5zdWx0cHJlZHMgPSBwcmVkaWN0KGluc3VsdGdsbSwgYXMubWF0cml4KHRlc3RbYygxMDoyMiwyNCldKSkKaW5zdWx0cHJlZHMgPSBpZmVsc2UoaW5zdWx0cHJlZHMgPiAwLjUsIDEgLDApCmNvbmZ1c2lvbk1hdHJpeChpbnN1bHRwcmVkcywgdGVzdCRpbnN1bHQpCgpvYnNjZW5lZ2xtID0gY3YuZ2xtbmV0KGFzLm1hdHJpeCh0cmFpbltjKDEwOjIyLDI0KV0pLCAKICAgICAgICAgICAgICAgICAgICAgdHJhaW4kb2JzY2VuZSwgCiAgICAgICAgICAgICAgICAgICAgIGFscGhhID0gMCwgCiAgICAgICAgICAgICAgICAgICAgIGZhbWlseSA9ICJiaW5vbWlhbCIsIAogICAgICAgICAgICAgICAgICAgICB0eXBlLm1lYXN1cmUgPSAiYXVjIiwKICAgICAgICAgICAgICAgICAgICAgcGFyYWxsZWwgPSBULAogICAgICAgICAgICAgICAgICAgICBuZm9sZHMgPSA0LAogICAgICAgICAgICAgICAgICAgICBzdGFuZGFyZGl6ZSA9IFQsCiAgICAgICAgICAgICAgICAgICAgIG5sYW1iZGEgPSA1MCkKb2JzY2VuZXByZWRzID0gcHJlZGljdChvYnNjZW5lZ2xtLCBhcy5tYXRyaXgodGVzdFtjKDEwOjIyLDI0KV0pKQpvYnNjZW5lcHJlZHMgPSBpZmVsc2Uob2JzY2VuZXByZWRzID4gMC41LCAxICwwKQpjb25mdXNpb25NYXRyaXgob2JzY2VuZXByZWRzLCB0ZXN0JG9ic2NlbmUpCgp0aHJlYXRnbG0gPSBjdi5nbG1uZXQoYXMubWF0cml4KHRyYWluW2MoMTA6MjIsMjQpXSksIAogICAgICAgICAgICAgICAgICAgICB0cmFpbiR0aHJlYXQsIAogICAgICAgICAgICAgICAgICAgICBhbHBoYSA9IDAsIAogICAgICAgICAgICAgICAgICAgICBmYW1pbHkgPSAiYmlub21pYWwiLCAKICAgICAgICAgICAgICAgICAgICAgdHlwZS5tZWFzdXJlID0gImF1YyIsCiAgICAgICAgICAgICAgICAgICAgIHBhcmFsbGVsID0gVCwKICAgICAgICAgICAgICAgICAgICAgbmZvbGRzID0gNCwKICAgICAgICAgICAgICAgICAgICAgc3RhbmRhcmRpemUgPSBULAogICAgICAgICAgICAgICAgICAgICBubGFtYmRhID0gNTApCnRocmVhdHByZWRzID0gcHJlZGljdCh0aHJlYXRnbG0sIGFzLm1hdHJpeCh0ZXN0W2MoMTA6MjIsMjQpXSkpCnRocmVhdHByZWRzID0gaWZlbHNlKHRocmVhdHByZWRzID4gMC41LCAxICwwKQpjb25mdXNpb25NYXRyaXgodGhyZWF0cHJlZHMsIHRlc3QkdGhyZWF0KQoKaWRlbnRpdHlfaGF0ZWdsbSA9IGN2LmdsbW5ldChhcy5tYXRyaXgodHJhaW5bYygxMDoyMiwyNCldKSwgCiAgICAgICAgICAgICAgICAgICAgIHRyYWluJGlkZW50aXR5X2hhdGUsIAogICAgICAgICAgICAgICAgICAgICBhbHBoYSA9IDAsIAogICAgICAgICAgICAgICAgICAgICBmYW1pbHkgPSAiYmlub21pYWwiLCAKICAgICAgICAgICAgICAgICAgICAgdHlwZS5tZWFzdXJlID0gImF1YyIsCiAgICAgICAgICAgICAgICAgICAgIHBhcmFsbGVsID0gVCwKICAgICAgICAgICAgICAgICAgICAgbmZvbGRzID0gNCwKICAgICAgICAgICAgICAgICAgICAgc3RhbmRhcmRpemUgPSBULAogICAgICAgICAgICAgICAgICAgICBubGFtYmRhID0gNTApCmlkZW50aXR5X2hhdGVwcmVkcyA9IHByZWRpY3QoaWRlbnRpdHlfaGF0ZWdsbSwgYXMubWF0cml4KHRlc3RbYygxMDoyMiwyNCldKSkKaWRlbnRpdHlfaGF0ZXByZWRzID0gaWZlbHNlKGlkZW50aXR5X2hhdGVwcmVkcyA+IDAuNSwgMSAsMCkKY29uZnVzaW9uTWF0cml4KGlkZW50aXR5X2hhdGVwcmVkcywgdGVzdCRpZGVudGl0eV9oYXRlKQpgYGAKCg==</div>
+<div id="rmd-source-code">LS0tCnRpdGxlOiAiVG94aWMgQ29tbWVudCBDbGFzc2lmaWVyIgpvdXRwdXQ6IGh0bWxfbm90ZWJvb2sKLS0tCgojIyMgTGlicmFyaWVzCgpgYGB7ciwgbWVzc2FnZSA9IEZBTFNFLCB3YXJuaW5nID0gRkFMU0V9CmxpYnJhcnkocmVhZHIpCmxpYnJhcnkoc3RyaW5naSkKbGlicmFyeShxdWFudGVkYSkKbGlicmFyeShkcGx5cikKbGlicmFyeShjYXJldCkKbGlicmFyeShnbG1uZXQpCmxpYnJhcnkoZG9QYXJhbGxlbCkKI3JlZ2lzdGVyRG9QYXJhbGxlbCg0KQpyZWdpc3RlckRvUGFyYWxsZWwoMikKYGBgCgojIyMgSW1wb3J0aW5nIGFuZCBDbGVhbmluZwoKYGBge3IsIHdhcm5pbmcgPSBGQUxTRSwgbWVzc2FnZSA9IEZBTFNFfQpzZXQuc2VlZCg5OTkpCnRyYWluID0gcmVhZF9jc3YoInRyYWluLmNzdiIpCnRyYWluID0gdHJhaW5bMToxMDAwMDAsXQpzYW1wbGUgPSBzYW1wbGUobnJvdyh0cmFpbiksIG5yb3codHJhaW4pLzIpCnRlc3QgPSB0cmFpblstc2FtcGxlLF0KdHJhaW4gPSB0cmFpbltzYW1wbGUsXQojdGVzdCA9IHJlYWRfY3N2KCJ0ZXN0LmNzdiIpCiNzd2VhciA8LSByZWFkX2Nzdigic3dlYXIuY3N2IiwgY29sX25hbWVzID0gIndvcmQiKQoKdHJhaW4kaWQyID0gcmVwKDE6bnJvdyh0cmFpbikpCnRlc3QkaWQyID0gcmVwKDE6bnJvdyh0ZXN0KSkKCmlkdHJhaW4gPSAxOm5yb3codHJhaW4pCmlkdGVzdCA9IChucm93KHRyYWluKSsxKToobnJvdyh0cmFpbikgKyBucm93KHRlc3QpKQp0cmFpbnRlc3QgPSByYmluZCh0cmFpblssMToyXSwgdGVzdFsxOjJdKQpnYygpCmBgYAoKIyMjIFZhcmlhYmxlIENyZWF0aW9uCgpgYGB7cn0KdHJhaW50ZXN0ID0gcmJpbmQodHJhaW5bLDE6Ml0sIHRlc3RbMToyXSkKdHJhaW50ZXN0ID0gbXV0YXRlKHRyYWludGVzdCwKICAgICAgIGxlbmd0aCA9IHN0cmlfbGVuZ3RoKGNvbW1lbnRfdGV4dCksCiAgICAgICBuY2FwID0gc3RyaV9jb3VudF9jaGFyY2xhc3MoY29tbWVudF90ZXh0LCAiW0EtWl0iKSwKICAgICAgIG5udW0gPSBzdHJpX2NvdW50X2NoYXJjbGFzcyhjb21tZW50X3RleHQsICJbMC05XSIpLAogICAgICAgbmNhcF9sZW4gPSBuY2FwIC8gbGVuZ3RoLAogICAgICAgbm51bV9sZW4gPSBubnVtIC8gbGVuZ3RoLAogICAgICAgbmV4Y2wgPSBzdHJpX2NvdW50X2ZpeGVkKGNvbW1lbnRfdGV4dCwgIiEiKSwKICAgICAgIG5xdWVzdCA9IHN0cmlfY291bnRfZml4ZWQoY29tbWVudF90ZXh0LCAiPyIpLAogICAgICAgbnB1bmN0ID0gc3RyaV9jb3VudF9jaGFyY2xhc3MoY29tbWVudF90ZXh0LCAiW1s6cHVuY3Q6XV0iKSwKICAgICAgIG5wdW5jdF9sZW4gPSBucHVuY3QgLyBsZW5ndGgsCiAgICAgICBuc2VudCA9IHN0cmlfY291bnRfYm91bmRhcmllcyhjb21tZW50X3RleHQsICJzZW50ZW5jZSIpLAogICAgICAgbnN5bWIgPSBzdHJpX2NvdW50X3JlZ2V4KGNvbW1lbnRfdGV4dCwgIiZ8QHwjfFxcJHwlfFxcKnxcXF4iKSwKICAgICAgIG5zbWlsZSA9IHN0cmlfY291bnRfcmVnZXgoY29tbWVudF90ZXh0LCAiKCg/Ojp8O3w9KSg/Oi0pPyg/OlxcKXxEfFApKSIpLAogICAgICAgbndvcmRzID0gc3RyaV9jb3VudF93b3Jkcyhjb21tZW50X3RleHQpLAogICAgICAgbnRva2VucyA9IDEsCiAgICAgICBudG9rZW5zX253b3JkcyA9IG50b2tlbnMgLyBud29yZHMKICAgICAgICkKdHJhaW4gPSBjYmluZCh0cmFpbiwgdHJhaW50ZXN0W2lkdHJhaW4sMzpuY29sKHRyYWludGVzdCldKQp0ZXN0ID0gY2JpbmQodGVzdCwgdHJhaW50ZXN0W2lkdGVzdCwzOm5jb2wodHJhaW50ZXN0KV0pCgojIyBxdWFudGVkYQp0dGNvcnAgPSBjb3JwdXModHJhaW50ZXN0JGNvbW1lbnRfdGV4dCkKdHRkZm0gPSBkZm0odHRjb3JwLCByZW1vdmUgPSBzdG9wd29yZHMoImVuZ2xpc2giKSkKdHRkZm0gPSBkZm1fdHJpbSh0dGRmbSwgbWluX2RvY2ZyZXEgPSAzMDAsIG1heF9kb2NmcmVxID0gMTAwMDAwKQp0dGRmbSA9IGRmbV9zb3J0KHR0ZGZtKQoKIyBzcGFyc2UgbWF0cml4CnN1bXR0ZGZtID0gc3VtbWFyeSh0dGRmbSkKc3BhcnNldHRkZm0gPSBzcGFyc2VNYXRyaXgoaSA9IHN1bXR0ZGZtJGksIGogPSBzdW10dGRmbSRqLCB4ID0gc3VtdHRkZm0keCkKCnNwYXJzZXRyYWluID0gTWF0cml4KGFzLm1hdHJpeCh0cmFpblszOjI0XSksIHNwYXJzZSA9IFRSVUUpCnNwYXJzZXRlc3QgPSBNYXRyaXgoYXMubWF0cml4KHRlc3RbMzoyNF0pLCBzcGFyc2UgPSBUUlVFKQp0cmFpbiA9IGNiaW5kKHNwYXJzZXRyYWluLCBzcGFyc2V0dGRmbVsxOm5yb3codHJhaW4pLF0pCnRlc3QgPSBjYmluZChzcGFyc2V0ZXN0LCBzcGFyc2V0dGRmbVtucm93KHRyYWluKSsxIDogbnJvdyh0cmFpbikgKyBucm93KHRlc3QpXSkKCgoKYGBgCgoKIyMjIFRlc3RpbmcKCmBgYHtyfQp0b3hpY2dsbSA9IGN2LmdsbW5ldChhcy5tYXRyaXgodHJhaW5bLDg6ZGltKHRyYWluKVsyXV0pLCAKICAgICAgICAgICAgICAgICAgICAgdHJhaW5bLDFdLCAKICAgICAgICAgICAgICAgICAgICAgYWxwaGEgPSAwLCAKICAgICAgICAgICAgICAgICAgICAgZmFtaWx5ID0gImJpbm9taWFsIiwgCiAgICAgICAgICAgICAgICAgICAgIHR5cGUubWVhc3VyZSA9ICJhdWMiLAogICAgICAgICAgICAgICAgICAgICBwYXJhbGxlbCA9IFQsCiAgICAgICAgICAgICAgICAgICAgIG5mb2xkcyA9IDQsCiAgICAgICAgICAgICAgICAgICAgIHN0YW5kYXJkaXplID0gVCwKICAgICAgICAgICAgICAgICAgICAgbmxhbWJkYSA9IDUwKQp0b3hpY3ByZWRzID0gcHJlZGljdCh0b3hpY2dsbSwgdGVzdFssODpkaW0odGVzdClbMl1dKQp0b3hpY3ByZWRzID0gaWZlbHNlKHRveGljcHJlZHMgPiAwLjUsIDEgLDApCmNvbmZ1c2lvbk1hdHJpeCh0b3hpY3ByZWRzLCB0ZXN0JHRveGljKQoKc2V2ZXJlX3RveGljZ2xtID0gY3YuZ2xtbmV0KGFzLm1hdHJpeCh0cmFpbltjKDEwOjIyLDI0KV0pLCAKICAgICAgICAgICAgICAgICAgICAgdHJhaW4kc2V2ZXJlX3RveGljLCAKICAgICAgICAgICAgICAgICAgICAgYWxwaGEgPSAwLCAKICAgICAgICAgICAgICAgICAgICAgZmFtaWx5ID0gImJpbm9taWFsIiwgCiAgICAgICAgICAgICAgICAgICAgIHR5cGUubWVhc3VyZSA9ICJhdWMiLAogICAgICAgICAgICAgICAgICAgICBwYXJhbGxlbCA9IFQsCiAgICAgICAgICAgICAgICAgICAgIG5mb2xkcyA9IDQsCiAgICAgICAgICAgICAgICAgICAgIHN0YW5kYXJkaXplID0gVCwKICAgICAgICAgICAgICAgICAgICAgbmxhbWJkYSA9IDUwKQpzZXZlcmVfdG94aWNwcmVkcyA9IHByZWRpY3Qoc2V2ZXJlX3RveGljZ2xtLCBhcy5tYXRyaXgodGVzdFtjKDEwOjIyLDI0KV0pKQpzZXZlcmVfdG94aWNwcmVkcyA9IGlmZWxzZShzZXZlcmVfdG94aWNwcmVkcyA+IDAuNSwgMSAsMCkKY29uZnVzaW9uTWF0cml4KHNldmVyZV90b3hpY3ByZWRzLCB0ZXN0JHNldmVyZV90b3hpYykKCmluc3VsdGdsbSA9IGN2LmdsbW5ldChhcy5tYXRyaXgodHJhaW5bYygxMDoyMiwyNCldKSwgCiAgICAgICAgICAgICAgICAgICAgIHRyYWluJGluc3VsdCwgCiAgICAgICAgICAgICAgICAgICAgIGFscGhhID0gMCwgCiAgICAgICAgICAgICAgICAgICAgIGZhbWlseSA9ICJiaW5vbWlhbCIsIAogICAgICAgICAgICAgICAgICAgICB0eXBlLm1lYXN1cmUgPSAiYXVjIiwKICAgICAgICAgICAgICAgICAgICAgcGFyYWxsZWwgPSBULAogICAgICAgICAgICAgICAgICAgICBuZm9sZHMgPSA0LAogICAgICAgICAgICAgICAgICAgICBzdGFuZGFyZGl6ZSA9IFQsCiAgICAgICAgICAgICAgICAgICAgIG5sYW1iZGEgPSA1MCkKaW5zdWx0cHJlZHMgPSBwcmVkaWN0KGluc3VsdGdsbSwgYXMubWF0cml4KHRlc3RbYygxMDoyMiwyNCldKSkKaW5zdWx0cHJlZHMgPSBpZmVsc2UoaW5zdWx0cHJlZHMgPiAwLjUsIDEgLDApCmNvbmZ1c2lvbk1hdHJpeChpbnN1bHRwcmVkcywgdGVzdCRpbnN1bHQpCgpvYnNjZW5lZ2xtID0gY3YuZ2xtbmV0KGFzLm1hdHJpeCh0cmFpbltjKDEwOjIyLDI0KV0pLCAKICAgICAgICAgICAgICAgICAgICAgdHJhaW4kb2JzY2VuZSwgCiAgICAgICAgICAgICAgICAgICAgIGFscGhhID0gMCwgCiAgICAgICAgICAgICAgICAgICAgIGZhbWlseSA9ICJiaW5vbWlhbCIsIAogICAgICAgICAgICAgICAgICAgICB0eXBlLm1lYXN1cmUgPSAiYXVjIiwKICAgICAgICAgICAgICAgICAgICAgcGFyYWxsZWwgPSBULAogICAgICAgICAgICAgICAgICAgICBuZm9sZHMgPSA0LAogICAgICAgICAgICAgICAgICAgICBzdGFuZGFyZGl6ZSA9IFQsCiAgICAgICAgICAgICAgICAgICAgIG5sYW1iZGEgPSA1MCkKb2JzY2VuZXByZWRzID0gcHJlZGljdChvYnNjZW5lZ2xtLCBhcy5tYXRyaXgodGVzdFtjKDEwOjIyLDI0KV0pKQpvYnNjZW5lcHJlZHMgPSBpZmVsc2Uob2JzY2VuZXByZWRzID4gMC41LCAxICwwKQpjb25mdXNpb25NYXRyaXgob2JzY2VuZXByZWRzLCB0ZXN0JG9ic2NlbmUpCgp0aHJlYXRnbG0gPSBjdi5nbG1uZXQoYXMubWF0cml4KHRyYWluW2MoMTA6MjIsMjQpXSksIAogICAgICAgICAgICAgICAgICAgICB0cmFpbiR0aHJlYXQsIAogICAgICAgICAgICAgICAgICAgICBhbHBoYSA9IDAsIAogICAgICAgICAgICAgICAgICAgICBmYW1pbHkgPSAiYmlub21pYWwiLCAKICAgICAgICAgICAgICAgICAgICAgdHlwZS5tZWFzdXJlID0gImF1YyIsCiAgICAgICAgICAgICAgICAgICAgIHBhcmFsbGVsID0gVCwKICAgICAgICAgICAgICAgICAgICAgbmZvbGRzID0gNCwKICAgICAgICAgICAgICAgICAgICAgc3RhbmRhcmRpemUgPSBULAogICAgICAgICAgICAgICAgICAgICBubGFtYmRhID0gNTApCnRocmVhdHByZWRzID0gcHJlZGljdCh0aHJlYXRnbG0sIGFzLm1hdHJpeCh0ZXN0W2MoMTA6MjIsMjQpXSkpCnRocmVhdHByZWRzID0gaWZlbHNlKHRocmVhdHByZWRzID4gMC41LCAxICwwKQpjb25mdXNpb25NYXRyaXgodGhyZWF0cHJlZHMsIHRlc3QkdGhyZWF0KQoKaWRlbnRpdHlfaGF0ZWdsbSA9IGN2LmdsbW5ldChhcy5tYXRyaXgodHJhaW5bYygxMDoyMiwyNCldKSwgCiAgICAgICAgICAgICAgICAgICAgIHRyYWluJGlkZW50aXR5X2hhdGUsIAogICAgICAgICAgICAgICAgICAgICBhbHBoYSA9IDAsIAogICAgICAgICAgICAgICAgICAgICBmYW1pbHkgPSAiYmlub21pYWwiLCAKICAgICAgICAgICAgICAgICAgICAgdHlwZS5tZWFzdXJlID0gImF1YyIsCiAgICAgICAgICAgICAgICAgICAgIHBhcmFsbGVsID0gVCwKICAgICAgICAgICAgICAgICAgICAgbmZvbGRzID0gNCwKICAgICAgICAgICAgICAgICAgICAgc3RhbmRhcmRpemUgPSBULAogICAgICAgICAgICAgICAgICAgICBubGFtYmRhID0gNTApCmlkZW50aXR5X2hhdGVwcmVkcyA9IHByZWRpY3QoaWRlbnRpdHlfaGF0ZWdsbSwgYXMubWF0cml4KHRlc3RbYygxMDoyMiwyNCldKSkKaWRlbnRpdHlfaGF0ZXByZWRzID0gaWZlbHNlKGlkZW50aXR5X2hhdGVwcmVkcyA+IDAuNSwgMSAsMCkKY29uZnVzaW9uTWF0cml4KGlkZW50aXR5X2hhdGVwcmVkcywgdGVzdCRpZGVudGl0eV9oYXRlKQpgYGAKCg==</div>
 
 
 

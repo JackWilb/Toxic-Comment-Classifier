@@ -42,7 +42,6 @@ gc()
 
 ```{r}
 traintest = rbind(train[,1:2], test[1:2])
-ttcorp = corpus(traintest$comment_text)
 traintest = mutate(traintest,
        length = stri_length(comment_text),
        ncap = stri_count_charclass(comment_text, "[A-Z]"),
@@ -64,10 +63,20 @@ train = cbind(train, traintest[idtrain,3:ncol(traintest)])
 test = cbind(test, traintest[idtest,3:ncol(traintest)])
 
 ## quanteda
-traintestcorpus = corpus(traintest$comment_text)
-ttdfm = dfm(traintestcorpus, remove = stopwords("english"))
+ttcorp = corpus(traintest$comment_text)
+ttdfm = dfm(ttcorp, remove = stopwords("english"))
+ttdfm = dfm_trim(ttdfm, min_docfreq = 300, max_docfreq = 100000)
+ttdfm = dfm_sort(ttdfm)
 
-#traintest = cbind(traintest, ttdfm)
+# sparse matrix
+sumttdfm = summary(ttdfm)
+sparsettdfm = sparseMatrix(i = sumttdfm$i, j = sumttdfm$j, x = sumttdfm$x)
+
+sparsetrain = Matrix(as.matrix(train[3:24]), sparse = TRUE)
+sparsetest = Matrix(as.matrix(test[3:24]), sparse = TRUE)
+train = cbind(sparsetrain, sparsettdfm[1:nrow(train),])
+test = cbind(sparsetest, sparsettdfm[nrow(train)+1 : nrow(train) + nrow(test)])
+
 
 
 ```
@@ -76,8 +85,8 @@ ttdfm = dfm(traintestcorpus, remove = stopwords("english"))
 ### Testing
 
 ```{r}
-toxicglm = cv.glmnet(as.matrix(train[c(10:22,24)]), 
-                     train$toxic, 
+toxicglm = cv.glmnet(as.matrix(train[,8:dim(train)[2]]), 
+                     train[,1], 
                      alpha = 0, 
                      family = "binomial", 
                      type.measure = "auc",
@@ -85,7 +94,7 @@ toxicglm = cv.glmnet(as.matrix(train[c(10:22,24)]),
                      nfolds = 4,
                      standardize = T,
                      nlambda = 50)
-toxicpreds = predict(toxicglm, as.matrix(test[c(10:22,24)]))
+toxicpreds = predict(toxicglm, test[,8:dim(test)[2]])
 toxicpreds = ifelse(toxicpreds > 0.5, 1 ,0)
 confusionMatrix(toxicpreds, test$toxic)
 

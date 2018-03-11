@@ -183,6 +183,7 @@ toxic_test$non_threat<-ifelse(toxic_test$threat=="0","1","0")
 toxic_test$non_insult<-ifelse(toxic_test$insult=="0","1","0") 
 toxic_test$non_identity_hate<-ifelse(toxic_test$identity_hate=="0","1","0") 
 ```
+
 ```{r}
 ####GLM models
 #Non-toxic

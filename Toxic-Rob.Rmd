@@ -1,0 +1,260 @@
+---
+title: "Toxic-Rob"
+output: html_document
+---
+
+
+```{r}
+library(knitr)
+library(stringi)
+library(stringr)
+library(readr)
+library(quanteda)
+library(dplyr)
+library(glmnet)
+library(caret)
+#library(doParallel)
+#library(ngram)
+library(readr)
+library(mosaic)
+library(broom)
+library(cleanNLP)
+library(tm)
+library(tidytext)
+library(sentimentr)
+library(data.table)
+library(magrittr)
+library(randomForest)
+library(class)
+library(e1071)
+library(nnet)
+library(neuralnet)
+library(randomForest)
+library(ranger)
+library(ISLR)
+library(caret)
+library(boot)
+library(syuzhet)
+library(RTextTools)
+
+```
+
+
+
+```{r}
+toxic.train<-fread("train.csv", sep=',')
+set.seed(1)
+#sample = sample(nrow(toxic.train), nrow(toxic.train)*.99)
+toxic_test = toxic.train[1:20000]
+toxic_train = toxic.train[20001:40000]
+#traintest = rbind(toxic_train[,1:2], toxic_test[1:2])
+
+stopWords = c(stop_words$word, "of", "or", "on")
+stopWords=stopWords[!(stopWords %in% c("new","used","small","large","thanks","greetings","works"))]
+
+
+swears<-fread("swears.csv", sep = ",")
+hatewords<-fread("hatebase_dict.csv",sep=",")
+swears2 <-fread("swearlistcscmu.csv",sep=",")
+swears3<-fread("googleswear.csv",sep=",")
+
+
+swears<-unique( swears[ , 1:2 ] )
+swears$x <- gsub(",","",swears$x)
+swears<-rbind(swears,swears2)
+swears<-rbind(swears,swears3)
+swears<-unique(swears[,1:2])
+mykey.swear<-update_key(swears)
+
+
+hatewords<-unique(hatewords[,1:2])
+hatewords$words<-gsub(",","",hatewords$words)
+hatewords$words<-gsub("'"," ",hatewords$words)
+hatewords$words<-tolower(hatewords$words)
+hatewords
+colnames(hatewords)[1] <- "x"
+colnames(hatewords)[2]<-"y"
+key.hatewords <- update_key(hatewords)
+
+
+####clean comment_text
+
+
+cmmnt = toxic_train$comment_text
+cmmnt = unlist(cmmnt)[!(unlist(cmmnt) %in% stopWords)]
+cmmnt = stri_replace_all_charclass(cmmnt, "[^[:alnum:]]", " ")
+id = rep(1:nrow(toxic_train))
+cmmnt_df = data.frame(id = id, comments = cmmnt)
+cmmnt_df$comments = as.character(cmmnt_df$comments)
+cmmnt
+
+
+cmmnt.t = toxic_test$comment_text
+cmmnt.t = unlist(cmmnt.t)[!(unlist(cmmnt.t) %in% stopWords)]
+cmmnt.t = stri_replace_all_charclass(cmmnt.t, "[^[:alnum:]]", " ")
+id = rep(1:nrow(toxic_test))
+cmmnt_df.t = data.frame(id = id, comments = cmmnt.t)
+cmmnt_df.t$comments = as.character(cmmnt_df.t$comments)
+
+
+##create traintest/.t dfm
+traintest = mutate(toxic_train,
+       length = stri_length(comment_text),
+       ncap = stri_count_charclass(comment_text, "[A-Z]"),
+       nnum = stri_count_charclass(comment_text, "[0-9]"),
+       ncap_len = ncap / length,
+       nexcl = stri_count_fixed(comment_text, "!"),
+       nquest = stri_count_fixed(comment_text, "?"),
+       npunct = stri_count_charclass(comment_text, "[[:punct:]]"),
+       npunct_len = npunct / length,
+       nsent = stri_count_boundaries(comment_text, "sentence"),
+       nsymb = stri_count_regex(comment_text, "&|@|#|\\$|%|\\*|\\^"),
+       nsmile = stri_count_regex(comment_text, "((?::|;|=)(?:-)?(?:\\)|D|P))"),
+       nwords = stri_count_words(comment_text),
+       hate=stri_count_fixed(comment_text,c("nigger","fag")),
+       nhate=stri_count_regex(comment_text, "[[hatewords$x]]")
+       #ntokens=length(!duplicated(comment_text)),
+       #ntokens_nwords = ntokens / nwords
+       )
+
+
+traintest.t = mutate(toxic_test,
+       length = stri_length(comment_text),
+       ncap = stri_count_charclass(comment_text, "[A-Z]"),
+       nnum = stri_count_charclass(comment_text, "[0-9]"),
+       ncap_len = ncap / length,
+       nexcl = stri_count_fixed(comment_text, "!"),
+       nquest = stri_count_fixed(comment_text, "?"),
+       npunct = stri_count_charclass(comment_text, "[[:punct:]]"),
+       npunct_len = npunct / length,
+       nsent = stri_count_boundaries(comment_text, "sentence"),
+       nsymb = stri_count_regex(comment_text, "&|@|#|\\$|%|\\*|\\^"),
+       nsmile = stri_count_regex(comment_text, "((?::|;|=)(?:-)?(?:\\)|D|P))"),
+       nwords = stri_count_words(comment_text),
+       hate=stri_count_fixed(comment_text,c("niggers","fag")),
+       nhate=stri_count_regex(comment_text, "[[hatewords$x]]")
+       #ntokens=length(!duplicated(comment_text)),
+       #ntokens_nwords = ntokens / nwords
+       )
+
+toxic_test<-cbind(toxic_test,traintest.t[,9:22])
+toxic_train<-cbind(toxic_train,traintest[,9:22])
+```
+
+###Sentiment predictors, Custom-swears, afinn, nrc.
+```{r}
+###sentiment values based on swears  added on onto DFM
+swear.sent.train<-sentiment_by(cmmnt_df$comments,list(id), polarity_dt=mykey.swear)
+swear.sent.test<-sentiment_by(cmmnt_df.t$comments,list(id),polarity_dt=mykey.swear)
+
+swear.sent.test
+colnames(swear.sent.test)[4] <- "swear_sent"
+colnames(swear.sent.train)[4]<-"swear_sent"
+
+hate.sent.train<-sentiment_by(cmmnt_df$comments,list(id), polarity_dt=key.hatewords)
+hate.sent.test<-sentiment_by(cmmnt_df.t$comments,list(id),polarity_dt=key.hatewords)
+
+colnames(hate.sent.test)[4] <- "hate_sent"
+colnames(hate.sent.train)[4]<-"hate_sent"
+
+toxic_train<-cbind(toxic_train,swear.sent.train[,4])
+toxic_test<-cbind(toxic_test,swear.sent.test[,4])
+toxic_train<-cbind(toxic_train,hate.sent.train[,4])
+toxic_test<-cbind(toxic_test,hate.sent.test[,4])
+###positive sent- afinn
+pos.sent<-sentiment_by(cmmnt_df$comments, list(id), lexicon="afinn")
+pos.sent.t<-sentiment_by(cmmnt_df$comments, list(id), lexicon="afinn")
+
+colnames(pos.sent)[4] <- "afinn"
+colnames(pos.sent.t)[4]<-"afinn"
+
+toxic_train<-cbind(toxic_train,pos.sent[,4])
+toxic_test<-cbind(toxic_test,pos.sent.t[,4])
+
+### NRC
+
+nrc.sent<-get_sentences(sentiment_by(cmmnt_df$comments, list(id), lexicon="nrc"))
+nrc.sent.t<-get_sentences(sentiment_by(cmmnt_df$comments, list(id), lexicon="nrc"))
+
+colnames(nrc.sent)[4] <-"NRC"
+colnames(nrc.sent.t)[4]<-"NRC"
+
+toxic_train<-cbind(toxic_train,(nrc.sent[,4]))
+toxic_test<-cbind(toxic_test,(nrc.sent.t[,4]))
+```
+
+
+#GLM models.
+```{r}
+##toxic.---goood 9346. 9363+hate
+toxic.lr<-glm(toxic~swear_sent+hate_sent+length+ncap+ncap_len+nexcl+nquest+npunct_len+nsent+nsymb+nwords+nhate+afinn+NRC,data=toxic_train, family= binomial)
+
+summary(toxic.lr)
+
+toxic_prob<-predict(toxic.lr, newdata=toxic_test,type="response")
+
+toxic_pred<-ifelse(toxic_prob>.9,"1","0")
+
+confusionMatrix(toxic_pred, toxic_test$toxic, positive = "1")
+
+###severe toxic --- no good
+
+s.toxic.lr<-glm(severe_toxic~swear_sent+ncap+ncap_len+nexcl+nquest+npunct_len+nsent+nsymb+nwords+nhate+afinn, data=toxic_train, family= binomial)
+
+summary(s.toxic.lr)
+
+s.toxic_prob<-predict(s.toxic.lr, newdata=toxic_test,type="response")
+
+s.toxic_pred<-ifelse(s.toxic_prob>.7,"1","0")
+
+confusionMatrix(s.toxic_pred, toxic_test$severe_toxic, positive = "1")
+
+##obscene--- goood,.9628swear sent  9643 +hate_sent
+obscene.lr <-glm(obscene~swear_sent+hate_sent+ncap+ncap_len+nquest+nsent+nsymb+nwords+nhate+afinn, data=toxic_train, family= binomial)
+
+summary(obscene.lr)
+
+swear_prob<-predict(obscene.lr, newdata=toxic_test,type="response")
+
+obscene_pred<-ifelse(swear_prob>.3,"1","0")
+
+confusionMatrix(obscene_pred, toxic_test$obscene, positive = "1")
+
+###insult--good
+insult.lr<-glm(insult~swear_sent+hate_sent+ncap_len+nquest+npunct_len+nsymb+nwords+nhate+afinn, data=toxic_train, family= binomial)
+
+summary(insult.lr)
+
+insult_prob<-predict(insult.lr, newdata=toxic_test,type="response")
+
+insult_pred<-ifelse(insult_prob>.2,"1","0")
+
+confusionMatrix(insult_pred, toxic_test$insult, positive = "1")
+
+###threat---no good
+
+threat.lr<-glm(threat~swear_sent+ncap_len+npunct_len+nsent+nsymb+nwords+nhate+afinn, data=toxic_train, family=binomial)
+threat_prob<-predict(threat.lr, newdata=toxic_test,type="response")
+
+summary(threat.lr)
+
+threat_pred<-ifelse(threat_prob>.04,"1","0")
+
+confusionMatrix(threat_pred, toxic_test$threat, positive = "1")
+
+##hate
+
+hate.lr<-glm(identity_hate~ncap_len+npunct_len+nsent+nwords+nhate+afinn, data=toxic_train, family=binomial)
+
+summary(hate.lr)
+
+hate_prob<-predict(hate.lr, newdata=toxic_test,type="response")
+
+hate_pred<-ifelse(hate_prob>.4,"1","0")
+
+confusionMatrix(hate_pred, toxic_test$identity_hate, positive = "1")
+
+```
+
+
+

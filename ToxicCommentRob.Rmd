@@ -55,11 +55,14 @@ stopWords=stopWords[!(stopWords %in% c("new","used","small","large","thanks","gr
 
 swears<-fread("swears.csv", sep = ",")
 hatewords<-fread("hatebase_dict.csv",sep=",")
-#swears2 <-fread("swearlistcscmu.csv",sep=",")
+swears2 <-fread("swearlistcscmu.csv",sep=",")
+swears3<-fread("googleswear.csv",sep=",")
+
 
 swears<-unique( swears[ , 1:2 ] )
 swears$x <- gsub(",","",swears$x)
-#swears<-rbind(swears,swears2)
+swears<-rbind(swears,swears2)
+swears<-rbind(swears,swears3)
 swears<-unique(swears[,1:2])
 mykey.swear<-update_key(swears)
 
@@ -324,7 +327,7 @@ cv.toxic.lasso<-cv.glmnet(toxic.ridge,toxic.y.train, alpha=1)
 #autoplot(cv.crim.lasso)
 lasso.pred.toxic<- predict(cv.toxic.lasso, s=cv.toxic.lasso$lambda.min, newx=toxic.ridge.t)
 
-toxic_preds<-ifelse(lasso.pred.toxic>.4,"1","0")
+toxic_preds<-ifelse(lasso.pred.toxic>.2,"1","0")
 confusionMatrix(toxic_preds, toxic.y.test, positive="1")
 
 

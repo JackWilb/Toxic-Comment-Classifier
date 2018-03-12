@@ -210,10 +210,10 @@ idtest = (nrow(train)+1):(nrow(train) + nrow(test))
 traintest = rbind(train[,1:2], test[1:2])
 gc()</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiICAgICAgICAgIHVzZWQgIChNYikgZ2MgdHJpZ2dlciAgKE1iKSBtYXggdXNlZCAgKE1iKVxuTmNlbGxzIDI0MDA4NTkgMTI4LjMgICAgMzg4NjU0MiAyMDcuNiAgMjkzMjMyMiAxNTYuN1xuVmNlbGxzIDk4NjE5MDAgIDc1LjMgICAxNTkwOTkyOCAxMjEuNCAxNTkwNzM5NSAxMjEuNFxuIn0= -->
-<pre><code>          used  (Mb) gc trigger  (Mb) max used  (Mb)
-Ncells 2400859 128.3    3886542 207.6  2932322 156.7
-Vcells 9861900  75.3   15909928 121.4 15907395 121.4</code></pre>
+<!-- rnb-output-begin eyJkYXRhIjoiICAgICAgICAgICB1c2VkICAoTWIpIGdjIHRyaWdnZXIgIChNYikgbWF4IHVzZWQgIChNYilcbk5jZWxscyAgMjYyNTczOSAxNDAuMyAgICA0NzAzODUwIDI1MS4zICA0NTQ3NTg0IDI0Mi45XG5WY2VsbHMgMjM1ODE3MjQgMTgwLjAgICA1OTYxMDY3OCA0NTQuOCA1OTYxMDY2MyA0NTQuOFxuIn0= -->
+<pre><code>           used  (Mb) gc trigger  (Mb) max used  (Mb)
+Ncells  2625739 140.3    4703850 251.3  4547584 242.9
+Vcells 23581724 180.0   59610678 454.8 59610663 454.8</code></pre>
 <!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
@@ -306,7 +306,7 @@ Prediction     0     1
        'Positive' Class : 0               
                                           </code></pre>
 <!-- rnb-output-end -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc2V2ZXJlX3RveGljZ2xtID0gY3YuZ2xtbmV0KHRyYWluWyw4OmRpbSh0cmFpbilbMl1dLCBcbiAgICAgICAgICAgICAgICAgICAgIGZhY3Rvcih0cmFpblssMl0pLCBcbiAgICAgICAgICAgICAgICAgICAgIGFscGhhID0gMCwgXG4gICAgICAgICAgICAgICAgICAgICBmYW1pbHkgPSBcImJpbm9taWFsXCIsIFxuICAgICAgICAgICAgICAgICAgICAgdHlwZS5tZWFzdXJlID0gXCJhdWNcIixcbiAgICAgICAgICAgICAgICAgICAgIHBhcmFsbGVsID0gVCxcbiAgICAgICAgICAgICAgICAgICAgIG5mb2xkcyA9IDQsXG4gICAgICAgICAgICAgICAgICAgICBzdGFuZGFyZGl6ZSA9IFQsXG4gICAgICAgICAgICAgICAgICAgICBubGFtYmRhID0gNTApXG5gYGAifQ== -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc2V2ZXJlX3RveGljZ2xtID0gY3YuZ2xtbmV0KHRyYWluWyw4OmRpbSh0cmFpbilbMl1dLCBcbiAgICAgICAgICAgICAgICAgICAgIGZhY3Rvcih0cmFpblssMl0pLCBcbiAgICAgICAgICAgICAgICAgICAgIGFscGhhID0gMCwgXG4gICAgICAgICAgICAgICAgICAgICBmYW1pbHkgPSBcImJpbm9taWFsXCIsIFxuICAgICAgICAgICAgICAgICAgICAgdHlwZS5tZWFzdXJlID0gXCJhdWNcIixcbiAgICAgICAgICAgICAgICAgICAgIHBhcmFsbGVsID0gVCxcbiAgICAgICAgICAgICAgICAgICAgIG5mb2xkcyA9IDQsXG4gICAgICAgICAgICAgICAgICAgICBzdGFuZGFyZGl6ZSA9IFQsXG4gICAgICAgICAgICAgICAgICAgICBubGFtYmRhID0gNTApXG5zZXZlcmVfdG94aWNwcmVkcyA9IHByZWRpY3Qoc2V2ZXJlX3RveGljZ2xtLCBuZXd4ID0gdGVzdFssODpkaW0odGVzdClbMl1dLCB0eXBlID0gXCJyZXNwb25zZVwiLCBzID0gXCJsYW1iZGEubWluXCIpXG5zZXZlcmVfdG94aWNwcmVkcyA9IGlmZWxzZShzZXZlcmVfdG94aWNwcmVkcyA+IDAuNSwgMSAsMClcbmNvbmZ1c2lvbk1hdHJpeChzZXZlcmVfdG94aWNwcmVkcywgdGVzdFssMl0pXG5gYGAifQ== -->
 <pre class="r"><code>severe_toxicglm = cv.glmnet(train[,8:dim(train)[2]], 
                      factor(train[,2]), 
                      alpha = 0, 
@@ -315,8 +315,207 @@ Prediction     0     1
                      parallel = T,
                      nfolds = 4,
                      standardize = T,
-                     nlambda = 50)</code></pre>
+                     nlambda = 50)
+severe_toxicpreds = predict(severe_toxicglm, newx = test[,8:dim(test)[2]], type = &quot;response&quot;, s = &quot;lambda.min&quot;)
+severe_toxicpreds = ifelse(severe_toxicpreds &gt; 0.5, 1 ,0)
+confusionMatrix(severe_toxicpreds, test[,2])</code></pre>
 <!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiQ29uZnVzaW9uIE1hdHJpeCBhbmQgU3RhdGlzdGljc1xuXG4gICAgICAgICAgUmVmZXJlbmNlXG5QcmVkaWN0aW9uICAgICAwICAgICAxXG4gICAgICAgICAwIDQ5NDc5ICAgNTE1XG4gICAgICAgICAxICAgICAzICAgICAzXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBcbiAgICAgICAgICAgICAgIEFjY3VyYWN5IDogMC45ODk2ICAgICAgICAgIFxuICAgICAgICAgICAgICAgICA5NSUgQ0kgOiAoMC45ODg3LCAwLjk5MDUpXG4gICAgTm8gSW5mb3JtYXRpb24gUmF0ZSA6IDAuOTg5NiAgICAgICAgICBcbiAgICBQLVZhbHVlIFtBY2MgPiBOSVJdIDogMC41MTE3ICAgICAgICAgIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgXG4gICAgICAgICAgICAgICAgICBLYXBwYSA6IDAuMDExMiAgICAgICAgICBcbiBNY25lbWFyJ3MgVGVzdCBQLVZhbHVlIDogPDJlLTE2ICAgICAgICAgIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgXG4gICAgICAgICAgICBTZW5zaXRpdml0eSA6IDAuOTk5OTM5ICAgICAgICBcbiAgICAgICAgICAgIFNwZWNpZmljaXR5IDogMC4wMDU3OTIgICAgICAgIFxuICAgICAgICAgUG9zIFByZWQgVmFsdWUgOiAwLjk4OTY5OSAgICAgICAgXG4gICAgICAgICBOZWcgUHJlZCBWYWx1ZSA6IDAuNTAwMDAwICAgICAgICBcbiAgICAgICAgICAgICBQcmV2YWxlbmNlIDogMC45ODk2NDAgICAgICAgIFxuICAgICAgICAgRGV0ZWN0aW9uIFJhdGUgOiAwLjk4OTU4MCAgICAgICAgXG4gICBEZXRlY3Rpb24gUHJldmFsZW5jZSA6IDAuOTk5ODgwICAgICAgICBcbiAgICAgIEJhbGFuY2VkIEFjY3VyYWN5IDogMC41MDI4NjUgICAgICAgIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgXG4gICAgICAgJ1Bvc2l0aXZlJyBDbGFzcyA6IDAgICAgICAgICAgICAgICBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIFxuIn0= -->
+<pre><code>Confusion Matrix and Statistics
+
+          Reference
+Prediction     0     1
+         0 49479   515
+         1     3     3
+                                          
+               Accuracy : 0.9896          
+                 95% CI : (0.9887, 0.9905)
+    No Information Rate : 0.9896          
+    P-Value [Acc &gt; NIR] : 0.5117          
+                                          
+                  Kappa : 0.0112          
+ Mcnemar's Test P-Value : &lt;2e-16          
+                                          
+            Sensitivity : 0.999939        
+            Specificity : 0.005792        
+         Pos Pred Value : 0.989699        
+         Neg Pred Value : 0.500000        
+             Prevalence : 0.989640        
+         Detection Rate : 0.989580        
+   Detection Prevalence : 0.999880        
+      Balanced Accuracy : 0.502865        
+                                          
+       'Positive' Class : 0               
+                                          </code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxub2JzY2VuZWdsbSA9IGN2LmdsbW5ldCh0cmFpblssODpkaW0odHJhaW4pWzJdXSwgXG4gICAgICAgICAgICAgICAgICAgICBmYWN0b3IodHJhaW5bLDNdKSwgXG4gICAgICAgICAgICAgICAgICAgICBhbHBoYSA9IDAsIFxuICAgICAgICAgICAgICAgICAgICAgZmFtaWx5ID0gXCJiaW5vbWlhbFwiLCBcbiAgICAgICAgICAgICAgICAgICAgIHR5cGUubWVhc3VyZSA9IFwiYXVjXCIsXG4gICAgICAgICAgICAgICAgICAgICBwYXJhbGxlbCA9IFQsXG4gICAgICAgICAgICAgICAgICAgICBuZm9sZHMgPSA0LFxuICAgICAgICAgICAgICAgICAgICAgc3RhbmRhcmRpemUgPSBULFxuICAgICAgICAgICAgICAgICAgICAgbmxhbWJkYSA9IDUwKVxub2JzY2VuZXByZWRzID0gcHJlZGljdChvYnNjZW5lZ2xtLCBuZXd4ID0gdGVzdFssODpkaW0odGVzdClbMl1dLCB0eXBlID0gXCJyZXNwb25zZVwiLCBzID0gXCJsYW1iZGEubWluXCIpXG5vYnNjZW5lcHJlZHMgPSBpZmVsc2Uob2JzY2VuZXByZWRzID4gMC41LCAxICwwKVxuY29uZnVzaW9uTWF0cml4KG9ic2NlbmVwcmVkcywgdGVzdFssM10pXG5gYGAifQ== -->
+<pre class="r"><code>obsceneglm = cv.glmnet(train[,8:dim(train)[2]], 
+                     factor(train[,3]), 
+                     alpha = 0, 
+                     family = &quot;binomial&quot;, 
+                     type.measure = &quot;auc&quot;,
+                     parallel = T,
+                     nfolds = 4,
+                     standardize = T,
+                     nlambda = 50)
+obscenepreds = predict(obsceneglm, newx = test[,8:dim(test)[2]], type = &quot;response&quot;, s = &quot;lambda.min&quot;)
+obscenepreds = ifelse(obscenepreds &gt; 0.5, 1 ,0)
+confusionMatrix(obscenepreds, test[,3])</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiQ29uZnVzaW9uIE1hdHJpeCBhbmQgU3RhdGlzdGljc1xuXG4gICAgICAgICAgUmVmZXJlbmNlXG5QcmVkaWN0aW9uICAgICAwICAgICAxXG4gICAgICAgICAwIDQ3MTgxICAyMjQ2XG4gICAgICAgICAxICAgMTI0ICAgNDQ5XG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBcbiAgICAgICAgICAgICAgIEFjY3VyYWN5IDogMC45NTI2ICAgICAgICAgIFxuICAgICAgICAgICAgICAgICA5NSUgQ0kgOiAoMC45NTA3LCAwLjk1NDQpXG4gICAgTm8gSW5mb3JtYXRpb24gUmF0ZSA6IDAuOTQ2MSAgICAgICAgICBcbiAgICBQLVZhbHVlIFtBY2MgPiBOSVJdIDogMi44NDZlLTExICAgICAgIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgXG4gICAgICAgICAgICAgICAgICBLYXBwYSA6IDAuMjYwOCAgICAgICAgICBcbiBNY25lbWFyJ3MgVGVzdCBQLVZhbHVlIDogPCAyLjJlLTE2ICAgICAgIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgXG4gICAgICAgICAgICBTZW5zaXRpdml0eSA6IDAuOTk3NCAgICAgICAgICBcbiAgICAgICAgICAgIFNwZWNpZmljaXR5IDogMC4xNjY2ICAgICAgICAgIFxuICAgICAgICAgUG9zIFByZWQgVmFsdWUgOiAwLjk1NDYgICAgICAgICAgXG4gICAgICAgICBOZWcgUHJlZCBWYWx1ZSA6IDAuNzgzNiAgICAgICAgICBcbiAgICAgICAgICAgICBQcmV2YWxlbmNlIDogMC45NDYxICAgICAgICAgIFxuICAgICAgICAgRGV0ZWN0aW9uIFJhdGUgOiAwLjk0MzYgICAgICAgICAgXG4gICBEZXRlY3Rpb24gUHJldmFsZW5jZSA6IDAuOTg4NSAgICAgICAgICBcbiAgICAgIEJhbGFuY2VkIEFjY3VyYWN5IDogMC41ODIwICAgICAgICAgIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgXG4gICAgICAgJ1Bvc2l0aXZlJyBDbGFzcyA6IDAgICAgICAgICAgICAgICBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIFxuIn0= -->
+<pre><code>Confusion Matrix and Statistics
+
+          Reference
+Prediction     0     1
+         0 47181  2246
+         1   124   449
+                                          
+               Accuracy : 0.9526          
+                 95% CI : (0.9507, 0.9544)
+    No Information Rate : 0.9461          
+    P-Value [Acc &gt; NIR] : 2.846e-11       
+                                          
+                  Kappa : 0.2608          
+ Mcnemar's Test P-Value : &lt; 2.2e-16       
+                                          
+            Sensitivity : 0.9974          
+            Specificity : 0.1666          
+         Pos Pred Value : 0.9546          
+         Neg Pred Value : 0.7836          
+             Prevalence : 0.9461          
+         Detection Rate : 0.9436          
+   Detection Prevalence : 0.9885          
+      Balanced Accuracy : 0.5820          
+                                          
+       'Positive' Class : 0               
+                                          </code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxudGhyZWF0Z2xtID0gY3YuZ2xtbmV0KHRyYWluWyw4OmRpbSh0cmFpbilbMl1dLCBcbiAgICAgICAgICAgICAgICAgICAgIGZhY3Rvcih0cmFpblssNF0pLCBcbiAgICAgICAgICAgICAgICAgICAgIGFscGhhID0gMCwgXG4gICAgICAgICAgICAgICAgICAgICBmYW1pbHkgPSBcImJpbm9taWFsXCIsIFxuICAgICAgICAgICAgICAgICAgICAgdHlwZS5tZWFzdXJlID0gXCJhdWNcIixcbiAgICAgICAgICAgICAgICAgICAgIHBhcmFsbGVsID0gVCxcbiAgICAgICAgICAgICAgICAgICAgIG5mb2xkcyA9IDQsXG4gICAgICAgICAgICAgICAgICAgICBzdGFuZGFyZGl6ZSA9IFQsXG4gICAgICAgICAgICAgICAgICAgICBubGFtYmRhID0gNTApXG50aHJlYXRwcmVkcyA9IHByZWRpY3QodGhyZWF0Z2xtLCBuZXd4ID0gdGVzdFssODpkaW0odGVzdClbMl1dLCB0eXBlID0gXCJyZXNwb25zZVwiLCBzID0gXCJsYW1iZGEubWluXCIpXG50aHJlYXRwcmVkcyA9IGlmZWxzZSh0aHJlYXRwcmVkcyA+IDAuNSwgMSAsMClcbmNvbmZ1c2lvbk1hdHJpeCh0aHJlYXRwcmVkcywgdGVzdFssNF0pXG5gYGAifQ== -->
+<pre class="r"><code>threatglm = cv.glmnet(train[,8:dim(train)[2]], 
+                     factor(train[,4]), 
+                     alpha = 0, 
+                     family = &quot;binomial&quot;, 
+                     type.measure = &quot;auc&quot;,
+                     parallel = T,
+                     nfolds = 4,
+                     standardize = T,
+                     nlambda = 50)
+threatpreds = predict(threatglm, newx = test[,8:dim(test)[2]], type = &quot;response&quot;, s = &quot;lambda.min&quot;)
+threatpreds = ifelse(threatpreds &gt; 0.5, 1 ,0)
+confusionMatrix(threatpreds, test[,4])</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiQ29uZnVzaW9uIE1hdHJpeCBhbmQgU3RhdGlzdGljc1xuXG4gICAgICAgICAgUmVmZXJlbmNlXG5QcmVkaWN0aW9uICAgICAwICAgICAxXG4gICAgICAgICAwIDQ5ODQ0ICAgMTUwXG4gICAgICAgICAxICAgICA0ICAgICAyXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBcbiAgICAgICAgICAgICAgIEFjY3VyYWN5IDogMC45OTY5ICAgICAgICAgIFxuICAgICAgICAgICAgICAgICA5NSUgQ0kgOiAoMC45OTY0LCAwLjk5NzQpXG4gICAgTm8gSW5mb3JtYXRpb24gUmF0ZSA6IDAuOTk3ICAgICAgICAgICBcbiAgICBQLVZhbHVlIFtBY2MgPiBOSVJdIDogMC41ODU1ICAgICAgICAgIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgXG4gICAgICAgICAgICAgICAgICBLYXBwYSA6IDAuMDI1MSAgICAgICAgICBcbiBNY25lbWFyJ3MgVGVzdCBQLVZhbHVlIDogPDJlLTE2ICAgICAgICAgIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgXG4gICAgICAgICAgICBTZW5zaXRpdml0eSA6IDAuOTk5OTIgICAgICAgICBcbiAgICAgICAgICAgIFNwZWNpZmljaXR5IDogMC4wMTMxNiAgICAgICAgIFxuICAgICAgICAgUG9zIFByZWQgVmFsdWUgOiAwLjk5NzAwICAgICAgICAgXG4gICAgICAgICBOZWcgUHJlZCBWYWx1ZSA6IDAuMzMzMzMgICAgICAgICBcbiAgICAgICAgICAgICBQcmV2YWxlbmNlIDogMC45OTY5NiAgICAgICAgIFxuICAgICAgICAgRGV0ZWN0aW9uIFJhdGUgOiAwLjk5Njg4ICAgICAgICAgXG4gICBEZXRlY3Rpb24gUHJldmFsZW5jZSA6IDAuOTk5ODggICAgICAgICBcbiAgICAgIEJhbGFuY2VkIEFjY3VyYWN5IDogMC41MDY1NCAgICAgICAgIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgXG4gICAgICAgJ1Bvc2l0aXZlJyBDbGFzcyA6IDAgICAgICAgICAgICAgICBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIFxuIn0= -->
+<pre><code>Confusion Matrix and Statistics
+
+          Reference
+Prediction     0     1
+         0 49844   150
+         1     4     2
+                                          
+               Accuracy : 0.9969          
+                 95% CI : (0.9964, 0.9974)
+    No Information Rate : 0.997           
+    P-Value [Acc &gt; NIR] : 0.5855          
+                                          
+                  Kappa : 0.0251          
+ Mcnemar's Test P-Value : &lt;2e-16          
+                                          
+            Sensitivity : 0.99992         
+            Specificity : 0.01316         
+         Pos Pred Value : 0.99700         
+         Neg Pred Value : 0.33333         
+             Prevalence : 0.99696         
+         Detection Rate : 0.99688         
+   Detection Prevalence : 0.99988         
+      Balanced Accuracy : 0.50654         
+                                          
+       'Positive' Class : 0               
+                                          </code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuaW5zdWx0Z2xtID0gY3YuZ2xtbmV0KHRyYWluWyw4OmRpbSh0cmFpbilbMl1dLCBcbiAgICAgICAgICAgICAgICAgICAgIGZhY3Rvcih0cmFpblssNV0pLCBcbiAgICAgICAgICAgICAgICAgICAgIGFscGhhID0gMCwgXG4gICAgICAgICAgICAgICAgICAgICBmYW1pbHkgPSBcImJpbm9taWFsXCIsIFxuICAgICAgICAgICAgICAgICAgICAgdHlwZS5tZWFzdXJlID0gXCJhdWNcIixcbiAgICAgICAgICAgICAgICAgICAgIHBhcmFsbGVsID0gVCxcbiAgICAgICAgICAgICAgICAgICAgIG5mb2xkcyA9IDQsXG4gICAgICAgICAgICAgICAgICAgICBzdGFuZGFyZGl6ZSA9IFQsXG4gICAgICAgICAgICAgICAgICAgICBubGFtYmRhID0gNTApXG5pbnN1bHRwcmVkcyA9IHByZWRpY3QoaW5zdWx0Z2xtLCBuZXd4ID0gdGVzdFssODpkaW0odGVzdClbMl1dLCB0eXBlID0gXCJyZXNwb25zZVwiLCBzID0gXCJsYW1iZGEubWluXCIpXG5pbnN1bHRwcmVkcyA9IGlmZWxzZShpbnN1bHRwcmVkcyA+IDAuNSwgMSAsMClcbmNvbmZ1c2lvbk1hdHJpeChpbnN1bHRwcmVkcywgdGVzdFssNV0pXG5gYGAifQ== -->
+<pre class="r"><code>insultglm = cv.glmnet(train[,8:dim(train)[2]], 
+                     factor(train[,5]), 
+                     alpha = 0, 
+                     family = &quot;binomial&quot;, 
+                     type.measure = &quot;auc&quot;,
+                     parallel = T,
+                     nfolds = 4,
+                     standardize = T,
+                     nlambda = 50)
+insultpreds = predict(insultglm, newx = test[,8:dim(test)[2]], type = &quot;response&quot;, s = &quot;lambda.min&quot;)
+insultpreds = ifelse(insultpreds &gt; 0.5, 1 ,0)
+confusionMatrix(insultpreds, test[,5])</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiQ29uZnVzaW9uIE1hdHJpeCBhbmQgU3RhdGlzdGljc1xuXG4gICAgICAgICAgUmVmZXJlbmNlXG5QcmVkaWN0aW9uICAgICAwICAgICAxXG4gICAgICAgICAwIDQ3NDMwICAyMjI0XG4gICAgICAgICAxICAgIDg0ICAgMjYyXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIFxuICAgICAgICAgICAgICAgQWNjdXJhY3kgOiAwLjk1MzggICAgICAgICBcbiAgICAgICAgICAgICAgICAgOTUlIENJIDogKDAuOTUyLCAwLjk1NTcpXG4gICAgTm8gSW5mb3JtYXRpb24gUmF0ZSA6IDAuOTUwMyAgICAgICAgIFxuICAgIFAtVmFsdWUgW0FjYyA+IE5JUl0gOiAwLjAwMDExMTYgICAgICBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgXG4gICAgICAgICAgICAgICAgICBLYXBwYSA6IDAuMTc1ICAgICAgICAgIFxuIE1jbmVtYXIncyBUZXN0IFAtVmFsdWUgOiA8IDIuMmUtMTYgICAgICBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgXG4gICAgICAgICAgICBTZW5zaXRpdml0eSA6IDAuOTk4MiAgICAgICAgIFxuICAgICAgICAgICAgU3BlY2lmaWNpdHkgOiAwLjEwNTQgICAgICAgICBcbiAgICAgICAgIFBvcyBQcmVkIFZhbHVlIDogMC45NTUyICAgICAgICAgXG4gICAgICAgICBOZWcgUHJlZCBWYWx1ZSA6IDAuNzU3MiAgICAgICAgIFxuICAgICAgICAgICAgIFByZXZhbGVuY2UgOiAwLjk1MDMgICAgICAgICBcbiAgICAgICAgIERldGVjdGlvbiBSYXRlIDogMC45NDg2ICAgICAgICAgXG4gICBEZXRlY3Rpb24gUHJldmFsZW5jZSA6IDAuOTkzMSAgICAgICAgIFxuICAgICAgQmFsYW5jZWQgQWNjdXJhY3kgOiAwLjU1MTggICAgICAgICBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgXG4gICAgICAgJ1Bvc2l0aXZlJyBDbGFzcyA6IDAgICAgICAgICAgICAgIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBcbiJ9 -->
+<pre><code>Confusion Matrix and Statistics
+
+          Reference
+Prediction     0     1
+         0 47430  2224
+         1    84   262
+                                         
+               Accuracy : 0.9538         
+                 95% CI : (0.952, 0.9557)
+    No Information Rate : 0.9503         
+    P-Value [Acc &gt; NIR] : 0.0001116      
+                                         
+                  Kappa : 0.175          
+ Mcnemar's Test P-Value : &lt; 2.2e-16      
+                                         
+            Sensitivity : 0.9982         
+            Specificity : 0.1054         
+         Pos Pred Value : 0.9552         
+         Neg Pred Value : 0.7572         
+             Prevalence : 0.9503         
+         Detection Rate : 0.9486         
+   Detection Prevalence : 0.9931         
+      Balanced Accuracy : 0.5518         
+                                         
+       'Positive' Class : 0              
+                                         </code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxudG94aWNnbG0gPSBjdi5nbG1uZXQodHJhaW5bLDg6ZGltKHRyYWluKVsyXV0sIFxuICAgICAgICAgICAgICAgICAgICAgZmFjdG9yKHRyYWluWyw2XSksIFxuICAgICAgICAgICAgICAgICAgICAgYWxwaGEgPSAwLCBcbiAgICAgICAgICAgICAgICAgICAgIGZhbWlseSA9IFwiYmlub21pYWxcIiwgXG4gICAgICAgICAgICAgICAgICAgICB0eXBlLm1lYXN1cmUgPSBcImF1Y1wiLFxuICAgICAgICAgICAgICAgICAgICAgcGFyYWxsZWwgPSBULFxuICAgICAgICAgICAgICAgICAgICAgbmZvbGRzID0gNCxcbiAgICAgICAgICAgICAgICAgICAgIHN0YW5kYXJkaXplID0gVCxcbiAgICAgICAgICAgICAgICAgICAgIG5sYW1iZGEgPSA1MClcbnRveGljcHJlZHMgPSBwcmVkaWN0KHRveGljZ2xtLCBuZXd4ID0gdGVzdFssODpkaW0odGVzdClbMl1dLCB0eXBlID0gXCJyZXNwb25zZVwiLCBzID0gXCJsYW1iZGEubWluXCIpXG50b3hpY3ByZWRzID0gaWZlbHNlKHRveGljcHJlZHMgPiAwLjUsIDEgLDApXG5jb25mdXNpb25NYXRyaXgodG94aWNwcmVkcywgdGVzdFssNl0pXG5gYGAifQ== -->
+<pre class="r"><code>toxicglm = cv.glmnet(train[,8:dim(train)[2]], 
+                     factor(train[,6]), 
+                     alpha = 0, 
+                     family = &quot;binomial&quot;, 
+                     type.measure = &quot;auc&quot;,
+                     parallel = T,
+                     nfolds = 4,
+                     standardize = T,
+                     nlambda = 50)
+toxicpreds = predict(toxicglm, newx = test[,8:dim(test)[2]], type = &quot;response&quot;, s = &quot;lambda.min&quot;)
+toxicpreds = ifelse(toxicpreds &gt; 0.5, 1 ,0)
+confusionMatrix(toxicpreds, test[,6])</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiQ29uZnVzaW9uIE1hdHJpeCBhbmQgU3RhdGlzdGljc1xuXG4gICAgICAgICAgUmVmZXJlbmNlXG5QcmVkaWN0aW9uICAgICAwICAgICAxXG4gICAgICAgICAwIDQ5NTY1ICAgNDI1XG4gICAgICAgICAxICAgICA5ICAgICAxXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBcbiAgICAgICAgICAgICAgIEFjY3VyYWN5IDogMC45OTEzICAgICAgICAgIFxuICAgICAgICAgICAgICAgICA5NSUgQ0kgOiAoMC45OTA1LCAwLjk5MjEpXG4gICAgTm8gSW5mb3JtYXRpb24gUmF0ZSA6IDAuOTkxNSAgICAgICAgICBcbiAgICBQLVZhbHVlIFtBY2MgPiBOSVJdIDogMC42NjI4ICAgICAgICAgIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgXG4gICAgICAgICAgICAgICAgICBLYXBwYSA6IDAuMDA0MiAgICAgICAgICBcbiBNY25lbWFyJ3MgVGVzdCBQLVZhbHVlIDogPDJlLTE2ICAgICAgICAgIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgXG4gICAgICAgICAgICBTZW5zaXRpdml0eSA6IDAuOTk5ODE4ICAgICAgICBcbiAgICAgICAgICAgIFNwZWNpZmljaXR5IDogMC4wMDIzNDcgICAgICAgIFxuICAgICAgICAgUG9zIFByZWQgVmFsdWUgOiAwLjk5MTQ5OCAgICAgICAgXG4gICAgICAgICBOZWcgUHJlZCBWYWx1ZSA6IDAuMTAwMDAwICAgICAgICBcbiAgICAgICAgICAgICBQcmV2YWxlbmNlIDogMC45OTE0ODAgICAgICAgIFxuICAgICAgICAgRGV0ZWN0aW9uIFJhdGUgOiAwLjk5MTMwMCAgICAgICAgXG4gICBEZXRlY3Rpb24gUHJldmFsZW5jZSA6IDAuOTk5ODAwICAgICAgICBcbiAgICAgIEJhbGFuY2VkIEFjY3VyYWN5IDogMC41MDEwODMgICAgICAgIFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgXG4gICAgICAgJ1Bvc2l0aXZlJyBDbGFzcyA6IDAgICAgICAgICAgICAgICBcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIFxuIn0= -->
+<pre><code>Confusion Matrix and Statistics
+
+          Reference
+Prediction     0     1
+         0 49565   425
+         1     9     1
+                                          
+               Accuracy : 0.9913          
+                 95% CI : (0.9905, 0.9921)
+    No Information Rate : 0.9915          
+    P-Value [Acc &gt; NIR] : 0.6628          
+                                          
+                  Kappa : 0.0042          
+ Mcnemar's Test P-Value : &lt;2e-16          
+                                          
+            Sensitivity : 0.999818        
+            Specificity : 0.002347        
+         Pos Pred Value : 0.991498        
+         Neg Pred Value : 0.100000        
+             Prevalence : 0.991480        
+         Detection Rate : 0.991300        
+   Detection Prevalence : 0.999800        
+      Balanced Accuracy : 0.501083        
+                                          
+       'Positive' Class : 0               
+                                          </code></pre>
+<!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->

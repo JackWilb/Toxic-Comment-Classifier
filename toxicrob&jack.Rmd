@@ -15,6 +15,39 @@ library(glmnet)
 library(doParallel)
 #registerDoParallel(7)
 registerDoParallel(2)
+
+library(knitr)
+library(stringi)
+library(stringr)
+library(readr)
+library(quanteda)
+library(dplyr)
+library(glmnet)
+library(caret)
+#library(doParallel)
+#library(ngram)
+library(readr)
+library(mosaic)
+library(broom)
+library(cleanNLP)
+library(tm)
+library(tidytext)
+library(sentimentr)
+library(data.table)
+library(magrittr)
+library(randomForest)
+library(class)
+library(e1071)
+library(nnet)
+library(neuralnet)
+library(randomForest)
+library(ranger)
+library(ISLR)
+library(caret)
+library(boot)
+library(syuzhet)
+library(RTextTools)
+
 ```
 
 ### Importing and Cleaning
@@ -54,7 +87,8 @@ key.hatewords <- update_key(hatewords)
 
 
 
-
+stopWords = c(stop_words$word, "of", "or", "on")
+stopWords=stopWords[!(stopWords %in% c("new","used","small","large","thanks","greetings","works"))]
 
 ```
 
@@ -83,8 +117,7 @@ train = cbind(train, traintest[idtrain,3:ncol(traintest)])
 test = cbind(test, traintest[idtest,3:ncol(traintest)])
 
 ###sentiment values based on swears  added on onto DFM
-stopWords = c(stop_words$word, "of", "or", "on")
-stopWords=stopWords[!(stopWords %in% c("new","used","small","large","thanks","greetings","works"))]
+
 
 cmmnt = train$comment_text
 cmmnt = unlist(cmmnt)[!(unlist(cmmnt) %in% stopWords)]

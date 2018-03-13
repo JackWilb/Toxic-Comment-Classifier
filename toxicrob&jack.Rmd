@@ -8,6 +8,7 @@ output: html_document
 library(readr)
 library(stringi)
 library(data.table)
+library(sentimentr)
 library(quanteda)
 library(dplyr)
 library(caret)
@@ -15,12 +16,43 @@ library(glmnet)
 library(doParallel)
 #registerDoParallel(7)
 registerDoParallel(2)
+
+library(knitr)
+library(stringi)
+library(stringr)
+library(readr)
+library(quanteda)
+library(dplyr)
+library(glmnet)
+library(caret)
+#library(doParallel)
+#library(ngram)
+library(readr)
+library(mosaic)
+library(broom)
+library(cleanNLP)
+library(tm)
+library(tidytext)
+library(sentimentr)
+library(data.table)
+library(magrittr)
+library(randomForest)
+library(class)
+library(e1071)
+library(nnet)
+library(neuralnet)
+library(randomForest)
+library(ranger)
+library(ISLR)
+library(caret)
+library(boot)
+library(syuzhet)
+library(RTextTools)
 ```
 
 ### Importing and Cleaning
 
 ```{r, warning = FALSE, message = FALSE}
-set.seed(999)
 train = read_csv("train.csv")
 test = read_csv("test.csv")
 idtrain = 1:nrow(train)
@@ -46,16 +78,12 @@ mykey.swear<-update_key(swears)
 hatewords<-unique(hatewords[,1:2])
 hatewords$words<-gsub(",","",hatewords$words)
 hatewords$words<-gsub("'"," ",hatewords$words)
+
 hatewords$words<-tolower(hatewords$words)
 hatewords
 colnames(hatewords)[1] <- "x"
 colnames(hatewords)[2]<-"y"
 key.hatewords <- update_key(hatewords)
-
-
-
-
-
 ```
 
 ### Variable Creation
@@ -92,7 +120,6 @@ cmmnt = stri_replace_all_charclass(cmmnt, "[^[:alnum:]]", " ")
 id = rep(1:nrow(train))
 cmmnt_df = data.frame(id = id, comments = cmmnt)
 cmmnt_df$comments = as.character(cmmnt_df$comments)
-cmmnt
 
 
 cmmnt.t = test$comment_text

@@ -43,7 +43,7 @@ library(RTextTools)
 toxic.train<-fread("train.csv", sep=',')
 set.seed(1)
 #sample = sample(nrow(toxic.train), nrow(toxic.train)*.99)
-toxic_test = toxic.train[1:75000]
+toxic_test = toxic.train
 toxic_train = toxic.train[75001:150000]
 #traintest = rbind(toxic_train[,1:2], toxic_test[1:2])
 
@@ -247,6 +247,16 @@ confusionMatrix(hate_pred, toxic_test$identity_hate, positive = "1")
 ```
 
 ```{r}
+
+submission = cbind(toxic_test$id, toxic_pred, s.toxic_pred,
+               	obscene_pred, threat_pred, insult_pred, hate_pred)
+
+colnames(submission) <- c("id", "toxic", "severe_toxic", "obscene", "threat", "insult", "identity_hate")
+
+submission<-submission[-c(153165,.)]
+write_csv(as.data.frame(submission), "submission.csv")
+
+write
 #toxicglm = cv.glmnet(toxic_train[,9:25], 
                     # toxic_train[,2], 
                     # alpha = 0, 

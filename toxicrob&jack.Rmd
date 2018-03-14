@@ -8,6 +8,7 @@ output: html_document
 library(readr)
 library(stringi)
 library(data.table)
+library(sentimentr)
 library(quanteda)
 library(dplyr)
 library(caret)
@@ -47,13 +48,11 @@ library(caret)
 library(boot)
 library(syuzhet)
 library(RTextTools)
-
 ```
 
 ### Importing and Cleaning
 
 ```{r, warning = FALSE, message = FALSE}
-set.seed(999)
 train = read_csv("train.csv")
 #test = read_csv("test.csv")
 train = train[1:100000,]
@@ -85,17 +84,12 @@ mykey.swear<-update_key(swears)
 hatewords<-unique(hatewords[,1:2])
 hatewords$words<-gsub(",","",hatewords$words)
 hatewords$words<-gsub("'"," ",hatewords$words)
+
 hatewords$words<-tolower(hatewords$words)
 hatewords
 colnames(hatewords)[1] <- "x"
 colnames(hatewords)[2]<-"y"
 key.hatewords <- update_key(hatewords)
-
-
-
-stopWords = c(stop_words$word, "of", "or", "on")
-stopWords=stopWords[!(stopWords %in% c("new","used","small","large","thanks","greetings","works"))]
-
 ```
 
 ### Variable Creation
@@ -131,7 +125,6 @@ cmmnt = stri_replace_all_charclass(cmmnt, "[^[:alnum:]]", " ")
 id = rep(1:nrow(train))
 cmmnt_df = data.frame(id = id, comments = cmmnt)
 cmmnt_df$comments = as.character(cmmnt_df$comments)
-cmmnt
 
 
 cmmnt.t = test$comment_text

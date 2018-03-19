@@ -40,12 +40,8 @@ library(RTextTools)
 
 
 ```{r}
-toxic.train<-fread("train.csv", sep=',')
-set.seed(1)
-#sample = sample(nrow(toxic.train), nrow(toxic.train)*.99)
-toxic_test = toxic.train
-toxic_train = toxic.train[75001:150000]
-#traintest = rbind(toxic_train[,1:2], toxic_test[1:2])
+toxic_train = fread("train.csv", sep=',')
+toxic_test = fread("test.csv", sep=',')
 
 stopWords = c(stop_words$word, "of", "or", "on")
 stopWords=stopWords[!(stopWords %in% c("new","used","small","large","thanks","greetings","works"))]
@@ -137,7 +133,7 @@ traintest.t = mutate(toxic_test,
        #ntokens_nwords = ntokens / nwords
        )
 
-toxic_test<-cbind(toxic_test,traintest.t[,9:22])
+toxic_test<-cbind(toxic_test,traintest.t[,3:16])
 toxic_train<-cbind(toxic_train,traintest[,9:22])
 ```
 
@@ -185,7 +181,7 @@ toxic_prob<-predict(toxic.lr, newdata=toxic_test,type="response")
 
 toxic_pred<-ifelse(toxic_prob>.4,"1","0")
 
-confusionMatrix(toxic_pred, toxic_test$toxic, positive = "1")
+#confusionMatrix(toxic_pred, toxic_test$toxic, positive = "1")
 
 ###severe toxic --- no good
 
@@ -197,7 +193,7 @@ s.toxic_prob<-predict(s.toxic.lr, newdata=toxic_test,type="response")
 
 s.toxic_pred<-ifelse(s.toxic_prob>.7,"1","0")
 
-confusionMatrix(s.toxic_pred, toxic_test$severe_toxic, positive = "1")
+#confusionMatrix(s.toxic_pred, toxic_test$severe_toxic, positive = "1")
 
 ##obscene--- goood,.9628swear sent  9643 +hate_sent
 obscene.lr <-glm(obscene~swear_sent+hate_sent+ncap+ncap_len+nquest+nsent+nsymb+nwords+afinn, data=toxic_train, family= binomial)
@@ -208,7 +204,7 @@ swear_prob<-predict(obscene.lr, newdata=toxic_test,type="response")
 
 obscene_pred<-ifelse(swear_prob>.3,"1","0")
 
-confusionMatrix(obscene_pred, toxic_test$obscene, positive = "1")
+#confusionMatrix(obscene_pred, toxic_test$obscene, positive = "1")
 
 ###insult--good .9541
 insult.lr<-glm(insult~swear_sent+ncap_len+nquest+npunct_len+nsymb+nhate+afinn, data=toxic_train, family= binomial)
@@ -219,7 +215,7 @@ insult_prob<-predict(insult.lr, newdata=toxic_test,type="response")
 
 insult_pred<-ifelse(insult_prob>.2,"1","0")
 
-confusionMatrix(insult_pred, toxic_test$insult, positive = "1")
+#confusionMatrix(insult_pred, toxic_test$insult, positive = "1")
 
 ###threat---no good
 
@@ -230,7 +226,7 @@ summary(threat.lr)
 
 threat_pred<-ifelse(threat_prob>.02,"1","0")
 
-confusionMatrix(threat_pred, toxic_test$threat, positive = "1")
+#confusionMatrix(threat_pred, toxic_test$threat, positive = "1")
 
 ##hate
 
@@ -242,7 +238,7 @@ hate_prob<-predict(hate.lr, newdata=toxic_test,type="response")
 
 hate_pred<-ifelse(hate_prob>.4,"1","0")
 
-confusionMatrix(hate_pred, toxic_test$identity_hate, positive = "1")
+#confusionMatrix(hate_pred, toxic_test$identity_hate, positive = "1")
 
 ```
 
@@ -253,10 +249,9 @@ submission = cbind(toxic_test$id, toxic_pred, s.toxic_pred,
 
 colnames(submission) <- c("id", "toxic", "severe_toxic", "obscene", "threat", "insult", "identity_hate")
 
-submission<-submission[-c(153165,.)]
-write_csv(as.data.frame(submission), "submission.csv")
+write_csv(as.data.frame(submission), "submission2.csv")
 
-write
+
 #toxicglm = cv.glmnet(toxic_train[,9:25], 
                     # toxic_train[,2], 
                     # alpha = 0, 

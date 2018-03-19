@@ -55,7 +55,7 @@ stopWords=stopWords[!(stopWords %in% c("new","used","small","large","thanks","gr
 
 
 swears<-fread("swears.csv", sep = ",")
-hatewords<-fread("hatebase_dict.csv",sep=",")
+hatewords<-fread("hatebase_dict1.csv",sep=",")
 swears2 <-fread("swearlistcscmu.csv",sep=",")
 swears3<-fread("googleswear.csv",sep=",")
 
@@ -75,6 +75,7 @@ hatewords$words<-tolower(hatewords$words)
 hatewords
 colnames(hatewords)[1] <- "x"
 colnames(hatewords)[2]<-"y"
+hatewords<-unique(hatewords[,1:2])
 key.hatewords <- update_key(hatewords)
 
 
@@ -240,7 +241,7 @@ summary(toxic.lr)
 
 toxic_prob<-predict(toxic.lr, newdata=toxic_test,type="response")
 
-toxic_pred<-ifelse(toxic_prob>.9,"1","0")
+toxic_pred<-ifelse(toxic_prob>.99,"1","0")
 
 confusionMatrix(toxic_pred, toxic_test$toxic, positive = "1")
 

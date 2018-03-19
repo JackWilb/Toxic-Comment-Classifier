@@ -54,11 +54,11 @@ library(RTextTools)
 
 ```{r, warning = FALSE, message = FALSE}
 train = read_csv("train.csv")
-#test = read_csv("test.csv")
-train = train[1:100000,]
-sample = sample(nrow(train), nrow(train)/2)
-test = train[-sample,]
-train = train[sample,]
+test = read_csv("test.csv")
+#train = train[1:100000,]
+#sample = sample(nrow(train), nrow(train)/2)
+#test = train[-sample,]
+#train = train[sample,]
 
 
 idtrain = 1:nrow(train)
@@ -68,15 +68,15 @@ gc()
 
 ###swears
 swears<-fread("swears.csv", sep = ",")
-hatewords<-fread("hatebase_dict.csv",sep=",")
-swears2 <-fread("swearlistcscmu.csv",sep=",")
-swears3<-fread("googleswear.csv",sep=",")
+hatewords<-fread("hatebase_dict1.csv",sep=",")
+#swears2 <-fread("swearlistcscmu.csv",sep=",")
+#swears3<-fread("googleswear.csv",sep=",")
 
 
 swears<-unique( swears[ , 1:2 ] )
 swears$x <- gsub(",","",swears$x)
-swears<-rbind(swears,swears2)
-swears<-rbind(swears,swears3)
+#swears<-rbind(swears,swears2)
+#swears<-rbind(swears,swears3)
 swears<-unique(swears[,1:2])
 mykey.swear<-update_key(swears)
 
@@ -89,6 +89,7 @@ hatewords$words<-tolower(hatewords$words)
 hatewords
 colnames(hatewords)[1] <- "x"
 colnames(hatewords)[2]<-"y"
+hatewords<-unique(hatewords[,1:2])
 key.hatewords <- update_key(hatewords)
 ```
 

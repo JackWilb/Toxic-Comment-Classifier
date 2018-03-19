@@ -14,7 +14,6 @@ library(dplyr)
 library(glmnet)
 library(caret)
 #library(doParallel)
-#library(ngram)
 library(mosaic)
 library(broom)
 library(cleanNLP)
@@ -34,7 +33,6 @@ library(ISLR)
 library(boot)
 library(syuzhet)
 library(RTextTools)
-
 ```
 
 
@@ -46,44 +44,32 @@ toxic_test = fread("test.csv", sep=',')
 stopWords = c(stop_words$word, "of", "or", "on")
 stopWords=stopWords[!(stopWords %in% c("new","used","small","large","thanks","greetings","works"))]
 
-
 swears<-fread("swears.csv", sep = ",")
-#swears2 <-fread("swearlistcscmu.csv",sep=",")
-#swears3<-fread("googleswear.csv",sep=",")
-swears<-unique( swears[ , 1:2 ] )
 swears$x <- gsub(",","",swears$x)
-#swears<-rbind(swears,swears2)
-#swears<-rbind(swears,swears3)
 swears<-unique(swears[,1:2])
 mykey.swear<-update_key(swears)
 
-
 hatewords<-fread("hatebase_dict1.csv",sep=",")
 hatewords2<-fread("hate.ngram.csv",sep=",")
-hatewords<-unique(hatewords[,1:2])
 hatewords$words<-gsub(",","",hatewords$words)
 hatewords$words<-gsub("'"," ",hatewords$words)
 hatewords$words<-tolower(hatewords$words)
-hatewords
 colnames(hatewords)[1] <- "x"
 colnames(hatewords)[2]<-"y"
-
 hatewords<-unique(hatewords[,1:2])
 hatewords2<-unique(hatewords2[,1:2])
 hatewords<-rbind(hatewords,hatewords2)
 key.hatewords <- update_key(hatewords)
 
+rm(hatewords2)
+
 ####clean comment_text
-
-
 cmmnt = toxic_train$comment_text
 cmmnt = unlist(cmmnt)[!(unlist(cmmnt) %in% stopWords)]
 cmmnt = stri_replace_all_charclass(cmmnt, "[^[:alnum:]]", " ")
 id = rep(1:nrow(toxic_train))
 cmmnt_df = data.frame(id = id, comments = cmmnt)
 cmmnt_df$comments = as.character(cmmnt_df$comments)
-cmmnt
-
 
 cmmnt.t = toxic_test$comment_text
 cmmnt.t = unlist(cmmnt.t)[!(unlist(cmmnt.t) %in% stopWords)]
@@ -109,8 +95,6 @@ traintest = mutate(toxic_train,
        nwords = stri_count_words(comment_text),
        hate=stri_count_fixed(comment_text,c("nigger","fag")),
        nhate=stri_count_regex(comment_text, "[[hatewords$x]]")
-       #ntokens=length(!duplicated(comment_text)),
-       #ntokens_nwords = ntokens / nwords
        )
 
 
@@ -135,11 +119,15 @@ traintest.t = mutate(toxic_test,
 
 toxic_test<-cbind(toxic_test,traintest.t[,3:16])
 toxic_train<-cbind(toxic_train,traintest[,9:22])
+rm(traintest, traintest.t)
 ```
 
 ###Sentiment predictors, Custom-swears, afinn, nrc.
 ```{r}
 ###sentiment values based on swears  added on onto DFM
+trainsentences = get_sentences(cmmnt_df$comments)
+testsentenses = get_sentences(cmmnt_df.t$comments)
+
 swear.sent.train<-sentiment_by(cmmnt_df$comments,list(id), polarity_dt=mykey.swear)
 swear.sent.test<-sentiment_by(cmmnt_df.t$comments,list(id),polarity_dt=mykey.swear)
 
@@ -167,6 +155,7 @@ colnames(pos.sent.t)[4]<-"afinn"
 toxic_train<-cbind(toxic_train,pos.sent[,4])
 toxic_test<-cbind(toxic_test,pos.sent.t[,4])
 
+rm(cmmnt, cmmnt.t, cmmnt_df, cmmnt_df.t, hatewords, key.hatewords, swears, id, stopWords, mykey.swear)
 ```
 
 

@@ -128,15 +128,15 @@ rm(traintest, traintest.t)
 trainsentences = get_sentences(cmmnt_df$comments)
 testsentenses = get_sentences(cmmnt_df.t$comments)
 
-swear.sent.train<-sentiment_by(cmmnt_df$comments,list(id), polarity_dt=mykey.swear)
-swear.sent.test<-sentiment_by(cmmnt_df.t$comments,list(id),polarity_dt=mykey.swear)
+swear.sent.train<-sentiment_by(trainsentences,list(id), polarity_dt=mykey.swear)
+swear.sent.test<-sentiment_by(testsentenses,list(id),polarity_dt=mykey.swear)
 
 swear.sent.test
 colnames(swear.sent.test)[4] <- "swear_sent"
 colnames(swear.sent.train)[4]<-"swear_sent"
 key.hatewords <- key.hatewords[-c(1014), ]
-hate.sent.train<-sentiment_by(cmmnt_df$comments,list(id), polarity_dt=key.hatewords)
-hate.sent.test<-sentiment_by(cmmnt_df.t$comments,list(id),polarity_dt=key.hatewords)
+hate.sent.train<-sentiment_by(trainsentences,list(id), polarity_dt=key.hatewords)
+hate.sent.test<-sentiment_by(testsentenses,list(id),polarity_dt=key.hatewords)
 
 colnames(hate.sent.test)[4] <- "hate_sent"
 colnames(hate.sent.train)[4]<-"hate_sent"
@@ -146,8 +146,8 @@ toxic_test<-cbind(toxic_test,swear.sent.test[,4])
 toxic_train<-cbind(toxic_train,hate.sent.train[,4])
 toxic_test<-cbind(toxic_test,hate.sent.test[,4])
 ###positive sent- afinn
-pos.sent<-sentiment_by(cmmnt_df$comments, list(id), lexicon="afinn")
-pos.sent.t<-sentiment_by(cmmnt_df$comments, list(id), lexicon="afinn")
+pos.sent<-sentiment_by(trainsentences, list(id), lexicon="afinn")
+pos.sent.t<-sentiment_by(testsentenses, list(id), lexicon="afinn")
 
 colnames(pos.sent)[4] <- "afinn"
 colnames(pos.sent.t)[4]<-"afinn"

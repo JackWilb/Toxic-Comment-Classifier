@@ -13,34 +13,69 @@ library(dplyr)
 library(caret)
 library(glmnet)
 library(doParallel)
-#registerDoParallel(7)
-registerDoParallel(2)
+library(tidytext)
+library(data.table)
+library(sentimentr)
+registerDoParallel(7)
+#registerDoParallel(2)
 ```
 
 ### Importing and Cleaning
 
 ```{r, warning = FALSE, message = FALSE}
-set.seed(999)
 train = read_csv("train.csv")
-train = train[1:100000,]
-sample = sample(nrow(train), nrow(train)/2)
-test = train[-sample,]
-train = train[sample,]
-#test = read_csv("test.csv")
-#swear <- read_csv("swear.csv", col_names = "word")
+test = read_csv("test.csv")
 
-train$id2 = rep(1:nrow(train))
-test$id2 = rep(1:nrow(test))
+testid = test$id
 
 idtrain = 1:nrow(train)
 idtest = (nrow(train)+1):(nrow(train) + nrow(test))
-traintest = rbind(train[,1:2], test[1:2])
 gc()
 ```
 
 ### Variable Creation
 
 ```{r}
+# Rob's work
+stopWords = c(stop_words$word, "of", "or", "on")
+stopWords=stopWords[!(stopWords %in% c("new","used","small","large","thanks","greetings","works"))]
+
+swears<-fread("swears.csv", sep = ",")
+swears$x <- gsub(",","",swears$x)
+swears<-unique(swears[,1:2])
+mykey.swear<-update_key(swears)
+
+hatewords<-fread("hatebase_dict1.csv",sep=",")
+hatewords2<-fread("hate.ngram.csv",sep=",")
+hatewords$words<-gsub(",","",hatewords$words)
+hatewords$words<-gsub("'"," ",hatewords$words)
+hatewords$words<-tolower(hatewords$words)
+colnames(hatewords)[1] <- "x"
+colnames(hatewords)[2]<-"y"
+hatewords<-unique(hatewords[,1:2])
+hatewords2<-unique(hatewords2[,1:2])
+hatewords<-rbind(hatewords,hatewords2)
+key.hatewords <- update_key(hatewords)
+
+rm(hatewords2)
+
+trainsentences = get_sentences(train$comment_text)
+testsentenses = get_sentences(test$comment_text)
+
+swear.sent<-sentiment_by(trainsentences,list(train$id), polarity_dt=mykey.swear)
+swear.sent.t<-sentiment_by(testsentenses,list(test$id),polarity_dt=mykey.swear)
+key.hatewords <- key.hatewords[-c(1014), ]
+hate.sent<-sentiment_by(trainsentences,list(train$id), polarity_dt=key.hatewords)
+hate.sent.t<-sentiment_by(testsentenses,list(test$id),polarity_dt=key.hatewords)
+pos.sent<-sentiment_by(trainsentences, list(train$id), lexicon="afinn")
+pos.sent.t<-sentiment_by(testsentenses, list(test$id), lexicon="afinn")
+
+train<-cbind(train,pos.sent[,4], swear.sent[,4], hate.sent[,4])
+test<-cbind(test,pos.sent.t[,4], swear.sent.t[,4], hate.sent.t[,4])
+
+rm(hatewords, key.hatewords, swears, id, stopWords, mykey.swear)
+
+#Jack's work
 traintest = rbind(train[,1:2], test[1:2])
 traintest = mutate(traintest,
        length = stri_length(comment_text),
@@ -56,8 +91,8 @@ traintest = mutate(traintest,
        nsymb = stri_count_regex(comment_text, "&|@|#|\\$|%|\\*|\\^"),
        nsmile = stri_count_regex(comment_text, "((?::|;|=)(?:-)?(?:\\)|D|P))"),
        nwords = stri_count_words(comment_text),
-       ntokens = 1,
-       ntokens_nwords = ntokens / nwords
+       hate=stri_count_fixed(comment_text,c("nigger","fag")),
+       nhate=stri_count_regex(comment_text, "[[hatewords$x]]")
        )
 train = cbind(train, traintest[idtrain,3:ncol(traintest)])
 test = cbind(test, traintest[idtest,3:ncol(traintest)])
@@ -72,17 +107,17 @@ ttdfm = dfm_sort(ttdfm)
 sumttdfm = summary(ttdfm)
 sparsettdfm = sparseMatrix(i = sumttdfm$i, j = sumttdfm$j, x = sumttdfm$x)
 
-sparsetrain = Matrix(as.matrix(train[3:24]), sparse = TRUE)
-sparsetest = Matrix(as.matrix(test[3:24]), sparse = TRUE)
+sparsetrain = Matrix(as.matrix(train[3:ncol(train)]), sparse = TRUE)
+sparsetest = Matrix(as.matrix(test[3:ncol(test)]), sparse = TRUE)
 train = cbind(sparsetrain, sparsettdfm[1:nrow(train),])
 test = cbind(sparsetest, sparsettdfm[(nrow(train)+1):(nrow(train) + nrow(test)),])
-rm(sparsetrain, sparsetest)
+rm(sparsetrain, sparsetest, traintest, ttcorp, ttdfm, idtest, idtrain, sumttdfm, sparsettdfm)
 ```
 
 ### cv.glmnet
 
 ```{r}
-toxicglm = cv.glmnet(train[,8:dim(train)[2]], 
+toxicglm = cv.glmnet(train[,7:dim(train)[2]], 
                      factor(train[,1]), 
                      alpha = 0, 
                      family = "binomial", 
@@ -91,11 +126,9 @@ toxicglm = cv.glmnet(train[,8:dim(train)[2]],
                      nfolds = 4,
                      standardize = T,
                      nlambda = 50)
-toxicpreds = predict(toxicglm, newx = test[,8:dim(test)[2]], type = "response", s = "lambda.min")
-toxicpreds = ifelse(toxicpreds > 0.5, 1 ,0)
-confusionMatrix(toxicpreds, test[,1])
+toxicpreds = predict(toxicglm, newx = test[,1:dim(test)[2]], type = "response", s = "lambda.min")
 
-severe_toxicglm = cv.glmnet(train[,8:dim(train)[2]], 
+severe_toxicglm = cv.glmnet(train[,7:dim(train)[2]], 
                      factor(train[,2]), 
                      alpha = 0, 
                      family = "binomial", 
@@ -104,11 +137,9 @@ severe_toxicglm = cv.glmnet(train[,8:dim(train)[2]],
                      nfolds = 4,
                      standardize = T,
                      nlambda = 50)
-severe_toxicpreds = predict(severe_toxicglm, newx = test[,8:dim(test)[2]], type = "response", s = "lambda.min")
-severe_toxicpreds = ifelse(severe_toxicpreds > 0.5, 1 ,0)
-confusionMatrix(severe_toxicpreds, test[,2])
+severe_toxicpreds = predict(severe_toxicglm, newx = test[,1:dim(test)[2]], type = "response", s = "lambda.min")
 
-obsceneglm = cv.glmnet(train[,8:dim(train)[2]], 
+obsceneglm = cv.glmnet(train[,7:dim(train)[2]], 
                      factor(train[,3]), 
                      alpha = 0, 
                      family = "binomial", 
@@ -117,11 +148,9 @@ obsceneglm = cv.glmnet(train[,8:dim(train)[2]],
                      nfolds = 4,
                      standardize = T,
                      nlambda = 50)
-obscenepreds = predict(obsceneglm, newx = test[,8:dim(test)[2]], type = "response", s = "lambda.min")
-obscenepreds = ifelse(obscenepreds > 0.5, 1 ,0)
-confusionMatrix(obscenepreds, test[,3])
+obscenepreds = predict(obsceneglm, newx = test[,1:dim(test)[2]], type = "response", s = "lambda.min")
 
-threatglm = cv.glmnet(train[,8:dim(train)[2]], 
+threatglm = cv.glmnet(train[,7:dim(train)[2]], 
                      factor(train[,4]), 
                      alpha = 0, 
                      family = "binomial", 
@@ -130,11 +159,9 @@ threatglm = cv.glmnet(train[,8:dim(train)[2]],
                      nfolds = 4,
                      standardize = T,
                      nlambda = 50)
-threatpreds = predict(threatglm, newx = test[,8:dim(test)[2]], type = "response", s = "lambda.min")
-threatpreds = ifelse(threatpreds > 0.5, 1 ,0)
-confusionMatrix(threatpreds, test[,4])
+threatpreds = predict(threatglm, newx = test[,1:dim(test)[2]], type = "response", s = "lambda.min")
 
-insultglm = cv.glmnet(train[,8:dim(train)[2]], 
+insultglm = cv.glmnet(train[,7:dim(train)[2]], 
                      factor(train[,5]), 
                      alpha = 0, 
                      family = "binomial", 
@@ -143,11 +170,9 @@ insultglm = cv.glmnet(train[,8:dim(train)[2]],
                      nfolds = 4,
                      standardize = T,
                      nlambda = 50)
-insultpreds = predict(insultglm, newx = test[,8:dim(test)[2]], type = "response", s = "lambda.min")
-insultpreds = ifelse(insultpreds > 0.5, 1 ,0)
-confusionMatrix(insultpreds, test[,5])
+insultpreds = predict(insultglm, newx = test[,1:dim(test)[2]], type = "response", s = "lambda.min")
 
-toxicglm = cv.glmnet(train[,8:dim(train)[2]], 
+identity_hateglm = cv.glmnet(train[,7:dim(train)[2]], 
                      factor(train[,6]), 
                      alpha = 0, 
                      family = "binomial", 
@@ -156,8 +181,11 @@ toxicglm = cv.glmnet(train[,8:dim(train)[2]],
                      nfolds = 4,
                      standardize = T,
                      nlambda = 50)
-toxicpreds = predict(toxicglm, newx = test[,8:dim(test)[2]], type = "response", s = "lambda.min")
-toxicpreds = ifelse(toxicpreds > 0.5, 1 ,0)
-confusionMatrix(toxicpreds, test[,6])
+identity_hatepreds = predict(identity_hateglm, newx = test[,1:dim(test)[2]], type = "response", s = "lambda.min")
+
+submission = cbind(testid, toxicpreds, severe_toxicpreds, obscenepreds, threatpreds, insultpreds, identity_hatepreds)
+colnames(submission) = c("id", "toxic", "severe_toxic", "obscene", "threat", "insult", "identity_hate")
+options(scipen = 100000)
+write_csv(as.data.frame(submission), "submission.csv")
 ```
 

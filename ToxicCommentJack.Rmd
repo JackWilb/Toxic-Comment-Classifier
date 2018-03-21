@@ -16,8 +16,8 @@ library(doParallel)
 library(tidytext)
 library(data.table)
 library(sentimentr)
-registerDoParallel(7)
-#registerDoParallel(2)
+#registerDoParallel(7)
+registerDoParallel(2)
 ```
 
 ### Importing and Cleaning
@@ -107,8 +107,8 @@ ttdfm = dfm_sort(ttdfm)
 sumttdfm = summary(ttdfm)
 sparsettdfm = sparseMatrix(i = sumttdfm$i, j = sumttdfm$j, x = sumttdfm$x)
 
-sparsetrain = Matrix(as.matrix(train[3:ncol(train)]), sparse = TRUE)
-sparsetest = Matrix(as.matrix(test[3:ncol(test)]), sparse = TRUE)
+sparsetrain = Matrix(as.matrix(train[,3:ncol(train)]), sparse = TRUE)
+sparsetest = Matrix(as.matrix(test[,3:ncol(test)]), sparse = TRUE)
 train = cbind(sparsetrain, sparsettdfm[1:nrow(train),])
 test = cbind(sparsetest, sparsettdfm[(nrow(train)+1):(nrow(train) + nrow(test)),])
 rm(sparsetrain, sparsetest, traintest, ttcorp, ttdfm, idtest, idtrain, sumttdfm, sparsettdfm)

@@ -43,11 +43,9 @@ train[1,]
 ```
 
 
-
-
-Data Exploration
+Libraries
 ========================================================
-##Libraries
+
 ```{r, message = FALSE, warning = FALSE}
 library(readr)
 library(stringi)
@@ -61,11 +59,13 @@ library(data.table)
 library(sentimentr)
 ```
 
-##Exploratory
+
+Data Exploration
+========================================================
 Now that we have some additional variables lets explore the data a bit.  
 First lets count what we have.
 ```{r}
-tally(train$toxic)
+tally( ~ train$toxic)
 tally(train$severe_toxic)
 tally(train$obscene)
 tally(train$threat)

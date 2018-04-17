@@ -1,66 +1,59 @@
-Natural Language Processing In R: A Wikipedia Case Study
-========================================================
-author: Jack Wilburn and Rob Squire
-font-family: Georgia
-date: 20th April 2018
-autosize: true
-
-Motivation
-========================================================
-
-* Kaggle
-  - $50,000
-* Skills
-  - New
-  - Old
-
-Objectives
-========================================================
-
-* NLP
-  - Body Of Text
-  - Useful Variables
-  - Example
-* Predictive Modeling
-  - Explantory Variables
-  - Response Variable
-
-Exploratory Data Analysis
-========================================================
-
-```{r, echo=FALSE}
-library(tidyverse)
-train = read_csv("train.csv")
-head(train$comment_text, 2)
-names(train)
-```
-
-Structure
-========================================================
-
-```{r, echo=FALSE}
-train[1,]
-```
+---
+title: "UGRF"
+output: pdf_document
+---
+### Libraries
 
 
-
-
-Data Exploration
-========================================================
-##Libraries
-```{r, message = FALSE, warning = FALSE}
-library(readr)
+```{r, message=FALSE, warning=FALSE}
+library(knitr)
 library(stringi)
+library(stringr)
+library(readr)
 library(quanteda)
 library(dplyr)
-library(caret)
 library(glmnet)
-library(doParallel)
+library(caret)
+#library(doParallel)
+library(mosaic)
+library(broom)
+library(cleanNLP)
+library(tm)
 library(tidytext)
-library(data.table)
 library(sentimentr)
+library(data.table)
+library(magrittr)
+library(randomForest)
+library(class)
+library(e1071)
+library(nnet)
+library(neuralnet)
+library(randomForest)
+library(ranger)
+library(ISLR)
+library(boot)
+library(syuzhet)
+library(RTextTools)
+library(ISLR)
+library(tidyverse)
+library(caret)
+library(rpart)
+library(rpart.plot)
+library(MASS)
+library(gbm)
+library(tree)
+library(class)
 ```
 
+##Import data.
+
+```{r} 
+toxic.train = fread("~/Documents/Rstudio/Toxic-Comment-Classifier/train.csv", sep=',')
+toxic.train<-toxic.train[1:20000,]
+toxic<-createDataPartition(toxic.train$toxic,p=.75,list=FALSE)
+train<-toxic.train[toxic,]
+test<-toxic.train[-toxic,]
+```
 ##Exploratory
 Now that we have some additional variables lets explore the data a bit.  
 First lets count what we have.
@@ -156,25 +149,50 @@ data.frame(term = names(identity_hatefeatures2), freq = unname(identity_hatefeat
     labs(x = '', y = 'Frequency', title = 'Most common Identity_hate Word') + 
     coord_flip() 
 ```
-These word frequency visuals gives us an idea of words associated with certain classifications.  We can add counts of these words into our variable creation to make better predictions.
 
 ##PCA
 ```{r}
 train_num<-select_if(train, is.numeric)
+str(train_num)
+
+
+row.names(train_num)<-paste(train$toxic,train)
+head(train_num)
 train_num<-na.omit(train_num)
 
 
 train_pca<- prcomp(train_num, scale=TRUE)
+##Scale = true standardizes the data, mean centers an sd=1
+summary(train_pca)
+##cumulative proportion is how much of the data is explained.
+
 train_pca_tidy<- tidy(train_pca, matrix = "variables")
 head(train_pca_tidy, n=20)
+#gives us data in long format= a single colum with all possible values
+#try wide format
+#opposite of spread is gather.  wide to long. 
 train_pca_tidy_wide<- spread(train_pca_tidy, key=PC, value=value)
 
 head(cars_pca_tidy_wide)
+##numbers are loadings
+
+
+#how to get to each point in space
 train_pca_aug<-augment(train_pca)
 head(train_pca_aug)
 ```
 ```{r fig.width=14, fig.height=14}
+plot(train_pca)
 biplot(train_pca)
-```
-```
 
+#var.axes = TRUE,
+       xlabs = FALSE, ylabs = FALSE, expand = 1,
+       xlim  = FALSE, ylim  = FALSE, arrow.len = 0.1,
+       main = FALSE, sub = FALSE, xlab = FALSE, ylab = FALSE)
+autoplot(train_pca,data=train_num, loadings = TRUE, label=TRUE, loadings.label=TRUE)
+
+##PC1 says it explains 63% of variation  pc2 13.  
+
+##better model - 
+
+```

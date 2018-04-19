@@ -13,6 +13,7 @@ Motivation
 * Skills
   - New
   - Old
+* Develop Text anlysis techniques for increasing Data
 
 Objectives
 ========================================================
@@ -65,43 +66,30 @@ Data Exploration
 ========================================================
 Now that we have some additional variables lets explore the data a bit.  
 First lets count what we have.
-```{r}
+```{r, include=FALSE}
 table(train$toxic)
-```
 
-Data Exploration
-========================================================
-
-```{r}
 table(train$obscene)
-```
 
-Data Exploration
-========================================================
-
-```{r}
 table(train$threat)
-```
 
-Data Exploration
-========================================================
-
-```{r}
 table(train$insult)
-```
 
-Data Exploration
-========================================================
-
-```{r}
 table(train$identity_hate)
 ```
+Toxic comments represent `r (1432/15000)*100 %` of comments in the data.
+Severe_toxic comments represent `r (166/15000)*100 %` of comments in the data.
+Obscene comments represent `r (800/15000)*100 %` of comments in the data.
+Threat comments represent `r (48/15000)*100 %` of comments in the data.
+Insult comments represent `r (754/15000)*100 %` of comments in the data.
+Identity Hate comments represent `r (135/15000)*100 %` of comments in the data.
+
 The tally command tells us exactly how many of each category there are so we know what we are looking at.  Initial observations show that some categories like "threat" are quite small which may make classifying "threat" comments difficult. Let's take a look at the most common words from each category using tidy text.
 
 
 Tidy Text Word Analysis
 ========================================================
-```{r, warning=FALSE}
+```{r, warning=FALSE, include=FALSE}
 traincorpus = corpus(train$comment_text)
 docvars(traincorpus, "id") = 1:nrow(train)
 docvars(traincorpus, "toxic") = train$toxic
@@ -117,7 +105,7 @@ Tidy Text Word Analysis
 ========================================================
 
 
-```{r}
+```{r, echo=FALSE}
 traindfm2 = dfm(traincorpus, remove = stopwords("english"), stem = TRUE, remove_punct = TRUE)
 toxicdfm2 = dfm_subset(traindfm2, toxic == 1, remove = stopwords("english"))
 toxicfeatures2 = topfeatures(toxicdfm2, 10)
@@ -185,7 +173,7 @@ data.frame(term = c("ni**er","c*nt","tommy2010","licker","fan-1967","like","romn
 These word frequency visuals gives us an idea of words associated with certain classifications.  We can add counts of these words into our variable creation to make better predictions.
 
 ##PCA
-```{r}
+```{r, echo=FALSE}
 train_num<-select_if(train, is.numeric)
 train_num<-na.omit(train_num)
 
@@ -199,8 +187,68 @@ head(cars_pca_tidy_wide)
 train_pca_aug<-augment(train_pca)
 head(train_pca_aug)
 ```
-```{r fig.width=14, fig.height=14}
+```{r, echo=FALSE,fig.width=14, fig.height=14}
 biplot(train_pca, xlabs=rep("",15000))
 ```
 
+Variables Created
+========================================================
+
+*Feature Count 
+  -punctuation
+  -capital letters
+  -smileys
+  
+*Sentiment analysis
+  -Standard Lexicon/ library - AFINN
+  - Custom lexicon
+    -Swear
+    -Hate
+    
+- Sparse Document Feature Matrix
+  -counts of every possible "feature"
+    -words, punt, multiple words
+    -4000 features.
+   
+Methods 
+========================================================
+
+General Logistic Model
+
+
+Results
+========================================================
+
+Toxic-NIR
+Severe_Toxic
+Obscene
+Threat
+Insult
+Identity_Hate
+
+Discussion
+========================================================
+
+
+
+Limitations
+========================================================
+
+Some categories did not have a large enough sample to predict off of.  The test data contained very zero Identity hate comments.  Threat comments only registered 0.3% of training data.  
+
+Computing power presented a challenge to processing large document feature matrices.
+
+We were able to create some variables that were intuitive and some that were less intuitive.  There exists the possibility that many more predictive variables exists but we were not able to come up with them.
+
+
+Acknowledgements
+========================================================
+
+http://www.bannedwordlist.com/lists/swearWords.txt
+
+https://www.cs.cmu.edu/~biglou/resources/bad-words.txt
+
+https://github.com/t-davidson/hate-speech-and-offensive-language/tree/master/lexicons
+
+https://www.tidytextmining.com/tidytext.html
 

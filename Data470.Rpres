@@ -100,6 +100,10 @@ Data Exploration
 ```{r}
 table(train$identity_hate)
 ```
+
+Data Exploration
+========================================================
+
 The tally command tells us exactly how many of each category there are so we know what we are looking at.  Initial observations show that some categories like "threat" are quite small which may make classifying "threat" comments difficult. Let's take a look at the most common words from each category using tidy text.
 
 
@@ -207,6 +211,9 @@ Tidy Text Word Analysis
 ```{r, echo = FALSE, fig.width = 15, fig.height = 5}
 gridExtra::grid.arrange(e,f, ncol = 2)
 ```
+
+Tidy Text Word Analysis
+========================================================
 
 These word frequency visuals gives us an idea of words associated with certain classifications.  We can add counts of these words into our variable creation to make better predictions.
 

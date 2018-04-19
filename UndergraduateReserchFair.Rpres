@@ -157,38 +157,38 @@ identity_hatefeatures2 = topfeatures(identity_hatedfm2, 10)
 identity_hatewords2 = names(identity_hatefeatures2)
 
 a = data.frame(term = c("f**k","ni**er","a*s","sex","hate","go","c*nt","like","suck","moron"), freq = unname(toxicfeatures2)) %>%
-    ggplot(aes(x = reorder(term, freq), y = freq)) + 
-    geom_bar(stat = 'identity', fill = 'orangered2') + 
+    ggplot(aes(x = reorder(term, freq), y = freq)) +
+    geom_bar(stat = 'identity', fill = 'orangered2') + theme(text=element_text(size=16))+
     labs(x = '', y = 'Frequency', title = 'Most common Toxic Words') + 
     coord_flip()
 
 b = data.frame(term = c("f**k","a*s","suck","u","go","bastard","c*nt","athiest","fire","pro.assad.hannibal911you'r"), freq = unname(severe_toxicfeatures2)) %>%
-    ggplot(aes(x = reorder(term, freq), y = freq)) + 
-    geom_bar(stat = 'identity', fill = 'orangered2') + 
+    ggplot(aes(x = reorder(term, freq), y = freq)) +
+    geom_bar(stat = 'identity', fill = 'orangered2') + theme(text=element_text(size=16))+
     labs(x = '', y = 'Frequency', title = 'Most common Severe_toxic Words ') + 
     coord_flip() 
 
 c = data.frame(term = c("f**k","ni**er","a*s","c*nt","suck","go","u","bollock","d*ckhead","like"), freq = unname(obscenefeatures2)) %>%
-    ggplot(aes(x = reorder(term, freq), y = freq)) + 
+    ggplot(aes(x = reorder(term, freq), y = freq)) + theme(text=element_text(size=16))+
     geom_bar(stat = 'identity', fill = 'orangered2') + 
     labs(x = '', y = 'Frequency', title = 'Most common Obscene Words') + 
     coord_flip() 
 
 d = data.frame(term = c("a*s","will","supertr0l","die","live","pathet(ic)","forev(er)","fool","respect","f**k"), freq = unname(threatfeatures2)) %>%
     ggplot(aes(x = reorder(term, freq), y = freq)) + 
-    geom_bar(stat = 'identity', fill = 'orangered2') + 
+    geom_bar(stat = 'identity', fill = 'orangered2') +theme(text=element_text(size=16))+ 
     labs(x = '', y = 'Frequency', title = 'Most common Threat Word') + 
     coord_flip() 
 
 e = data.frame(term = c("f**k","ni**er","a*s","hate","c*nt","go","moron","hi","u","suck"), freq = unname(insultfeatures2)) %>%
     ggplot(aes(x = reorder(term, freq), y = freq)) + 
-    geom_bar(stat = 'identity', fill = 'orangered2') + 
+    geom_bar(stat = 'identity', fill = 'orangered2') + theme(text=element_text(size=16))+
     labs(x = '', y = 'Frequency', title = 'Most common Insult Word') + 
     coord_flip() 
 
 
 f = data.frame(term = c("ni**er","c*nt","tommy2010","licker","fan-1967","like","romney","mitt","homo","f**k"), freq = unname(identity_hatefeatures2)) %>%
-    ggplot(aes(x = reorder(term, freq), y = freq)) + 
+    ggplot(aes(x = reorder(term, freq), y = freq)) + theme(text=element_text(size=16))+
     geom_bar(stat = 'identity', fill = 'orangered2') + 
     labs(x = '', y = 'Frequency', title = 'Most common Identity_hate Word') + 
     coord_flip() 
@@ -220,12 +220,14 @@ These word frequency visuals gives us an idea of words associated with certain c
 PCA
 ========================================================
 
-```{r, echo=FALSE, fig.width=8, fig.height=8}
+```{r, echo=FALSE, fig.width=18, fig.height=10}
 train_num<-select_if(train, is.numeric)
 train_num<-na.omit(train_num)
 train_pca<- prcomp(train_num, scale=TRUE)
 biplot(train_pca, xlabs=rep("",159571))
 ```
+This loosely corresponds to correlation of comments.  It behaves as we'd expect.
+
 
 Variables Created
 ========================================================
@@ -251,12 +253,17 @@ Variables Created
 Results
 ========================================================
 
-Toxic-NIR
-Severe_Toxic
-Obscene
-Threat
-Insult
-Identity_Hate
+*Toxic -NIR
+
+*Severe_Toxic - Resulted in No improvement over No Information Rate(NIR).
+
+*Obscene -
+
+*Threat -
+
+*Insult -
+
+*Identity_Hate - Resulted in No improvement over No Information Rate(NIR).
 
 Discussion
 ========================================================
@@ -266,7 +273,7 @@ Discussion
 Limitations
 ========================================================
 
-Some categories did not have a large enough sample to predict off of.  The test data contained very zero Identity hate comments.  Threat comments only registered 0.3% of training data.  
+The Some categories did not have a large enough sample to predict off of.  The larger categories are still quit small.    Threat comments only registered 0.3% of training data.  
 
 Computing power presented a challenge to processing large document feature matrices.
 
@@ -283,4 +290,8 @@ https://www.cs.cmu.edu/~biglou/resources/bad-words.txt
 https://github.com/t-davidson/hate-speech-and-offensive-language/tree/master/lexicons
 
 https://www.tidytextmining.com/tidytext.html
+
+https://www.kaggle.com/c/jigsaw-toxic-comment-classification-challenge
+
+
 

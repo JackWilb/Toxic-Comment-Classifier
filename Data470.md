@@ -53,6 +53,10 @@ Structure
 # ... with 1 more variable: identity_hate <int>
 ```
 
+```
+[1] "Explanation\nWhy the edits made under my username Hardcore Metallica Fan were reverted? They weren't vandalisms, just closure on some GAs after I voted at New York Dolls FAC. And please don't remove the template from the talk page since I'm retired now.89.205.38.27"
+```
+
 
 Libraries
 ========================================================
@@ -223,8 +227,6 @@ These word frequency visuals gives us an idea of words associated with certain c
 PCA
 ========================================================
 
-
-
-![plot of chunk unnamed-chunk-16](Data470-figure/unnamed-chunk-16-1.png)
+![plot of chunk unnamed-chunk-15](Data470-figure/unnamed-chunk-15-1.png)
 
 

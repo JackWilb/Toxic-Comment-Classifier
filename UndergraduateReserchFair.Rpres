@@ -185,22 +185,11 @@ data.frame(term = c("ni**er","c*nt","tommy2010","licker","fan-1967","like","romn
 These word frequency visuals gives us an idea of words associated with certain classifications.  We can add counts of these words into our variable creation to make better predictions.
 
 ##PCA
-```{r}
+```{r, echo=FALSE, fig.width=8, fig.height=8}
 train_num<-select_if(train, is.numeric)
 train_num<-na.omit(train_num)
-
-
 train_pca<- prcomp(train_num, scale=TRUE)
-train_pca_tidy<- tidy(train_pca, matrix = "variables")
-head(train_pca_tidy, n=20)
-train_pca_tidy_wide<- spread(train_pca_tidy, key=PC, value=value)
-
-head(cars_pca_tidy_wide)
-train_pca_aug<-augment(train_pca)
-head(train_pca_aug)
-```
-```{r fig.width=14, fig.height=14}
-biplot(train_pca, xlabs=rep("",15000))
+biplot(train_pca, xlabs=rep("",159571))
 ```
 
 

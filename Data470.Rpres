@@ -44,6 +44,7 @@ Structure
 
 ```{r, echo=FALSE}
 train[1,]
+train[1,]$comment_text
 ```
 
 
@@ -221,13 +222,10 @@ These word frequency visuals gives us an idea of words associated with certain c
 PCA
 ========================================================
 
-```{r, echo = FALSE}
+```{r, echo=FALSE, fig.width=8, fig.height=8}
 train_num<-select_if(train, is.numeric)
 train_num<-na.omit(train_num)
 train_pca<- prcomp(train_num, scale=TRUE)
-```
-
-```{r, echo=FALSE, fig.width=5, fig.height=5}
 biplot(train_pca, xlabs=rep("",159571))
 ```
 

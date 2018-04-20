@@ -475,7 +475,6 @@ Limitations
 
 The categories of Severe_Toxic, Threat, and Identity_Hate, did not have a large enough sample to predict from.  The larger categories are still quit small.    Threat comments only registered 0.3% of training data.  
 
-
 The best predictions were made in the largest categories which is reasonable considering statistically significant explanatory variables derived from these categories.
 
 

@@ -184,7 +184,3 @@ https://github.com/t-davidson/hate-speech-and-offensive-language/tree/master/lex
 
 https://www.tidytextmining.com/tidytext.html
 
-https://www.kaggle.com/c/jigsaw-toxic-comment-classification-challenge
-
-
-

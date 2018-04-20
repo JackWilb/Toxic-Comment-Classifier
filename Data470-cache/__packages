@@ -21,3 +21,6 @@ doParallel
 tidytext
 data.table
 sentimentr
+NLP
+tm
+lexicon

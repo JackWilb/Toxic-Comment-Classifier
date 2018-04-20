@@ -65,8 +65,6 @@ registerDoParallel(4)
 library(tidytext)
 library(data.table)
 library(sentimentr)
-library(tm)
-library(lexicon)
 ```
 
 * readr

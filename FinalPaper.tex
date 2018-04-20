@@ -1,0 +1,245 @@
+\documentclass[]{article}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\usepackage{fixltx2e} % provides \textsubscript
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+\else % if luatex or xelatex
+  \ifxetex
+    \usepackage{mathspec}
+  \else
+    \usepackage{fontspec}
+  \fi
+  \defaultfontfeatures{Ligatures=TeX,Scale=MatchLowercase}
+\fi
+% use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+% use microtype if available
+\IfFileExists{microtype.sty}{%
+\usepackage{microtype}
+\UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\usepackage[margin=1in]{geometry}
+\usepackage{hyperref}
+\hypersetup{unicode=true,
+            pdftitle={Final Paper},
+            pdfauthor={Jack Wilburn and Rob Squire},
+            pdfborder={0 0 0},
+            breaklinks=true}
+\urlstyle{same}  % don't use monospace font for urls
+\usepackage{graphicx,grffile}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+\IfFileExists{parskip.sty}{%
+\usepackage{parskip}
+}{% else
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+}
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{0}
+% Redefines (sub)paragraphs to behave more like sections
+\ifx\paragraph\undefined\else
+\let\oldparagraph\paragraph
+\renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+\let\oldsubparagraph\subparagraph
+\renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+
+%%% Use protect on footnotes to avoid problems with footnotes in titles
+\let\rmarkdownfootnote\footnote%
+\def\footnote{\protect\rmarkdownfootnote}
+
+%%% Change title format to be more compact
+\usepackage{titling}
+
+% Create subtitle command for use in maketitle
+\newcommand{\subtitle}[1]{
+  \posttitle{
+    \begin{center}\large#1\end{center}
+    }
+}
+
+\setlength{\droptitle}{-2em}
+  \title{Final Paper}
+  \pretitle{\vspace{\droptitle}\centering\huge}
+  \posttitle{\par}
+  \author{Jack Wilburn and Rob Squire}
+  \preauthor{\centering\large\emph}
+  \postauthor{\par}
+  \predate{\centering\large\emph}
+  \postdate{\par}
+  \date{4/30/2018}
+
+
+\begin{document}
+\maketitle
+
+\subsection{Abstract}\label{abstract}
+
+The purpose of this semester long project was to learn a new skill in R:
+Natural Language Processing (NLP). The impetus for this project came
+from Kaggle.com, a site that hosts data science related challenges, in
+the form of a competition that asked us to classify certain Wikipedia
+submission comments into 6 categories (toxic, severe toxic, obscene,
+insult identity hate, and threat). Our objectives were to understand
+what NLP is and to create a cross validated logistic regression model
+that would accurately classify the comment text based on these
+categories. We were successful in both endeavours and were able to
+predict comment categories with a SOMETHING PERCENT improvement over the
+no-information rate, significant for us but not the best entry in the
+competition. This newly gained knowledge will help us when formulating
+other NLP based predictive models and the research methodology we used
+will help us learn other techniques for future model building in any
+setting.
+
+Keywords: Cross Validation, Document Feature Matrix, Logistic
+Regression, Natural Language Processing (NLP), Sentiment Analysis,
+Sparse Matrix, Text Mining
+
+Introduction
+
+The spoken and written language of humans, has been the predominant
+method for conveying ideas, stories, thoughts, etc. for milenia. In
+fact, ``language first appeared among Homo sapiens somewhere between
+30,000 and 100,000 years ago'' (Bryant), and is still one of a few of
+communication. These verbal and written words necessitate reading, or
+listening, and then an accurate comprehension of the words; however, the
+creation of ideas has far outpaced our ability to interpret in a timely
+fashion. As a consequence, there are large bodies of knowledge that lie
+unread or unheard and thus that knowledge has not been co-opted into
+society. While concepts have been able to evolve based on preceding
+work, the methods of interpretation remain limited by human
+comprehension. With the onset of computers, we are now on the precipice
+of a new method for language comprehension at speeds that far outpace
+human ability. Developing methods for computers to interpret language
+presents the ability extract key bits of information from vast amounts
+of language.\\
+With the increasing global access to technology, data is being created
+and consumed at an ever increasing rate (CITATION), requiring
+development of analysis techniques that can effectively process
+language, written or spoken. The ability to condense a body of text
+from: Twitter tweets, books, internet comments, websites, etc, is vital
+to drawing meaningful information from vasts amount of text. We can
+achieve this condensation in many ways; for example, we could use a
+dimension reduction or, more commonly, a feature selection. After this
+condensation we can apply an algorithm that will allow us to predict
+certain facets of interest.
+
+Methods
+
+Natural Language Processing (NLP) At a basic level, natural language
+processing is a method through which researchers can develop
+understanding about large (or small) sets of text data by considering
+how humans interact and how they present themselves on a computer. The
+goal of NLP is to breakdown strings of text such as comments, product
+reviews, or even books to extract informative, or even predictive,
+variables from words that don't inherently have meaning. (Chowdhury,
+51). NLP is colloquially referred to as text mining and is the backbone
+of this project. We used NLP extensively to clean, process, and
+represent the text strings in the Wikipedia comments as new variables
+that may have predictive power. The variables we created are included
+later in this section and they allowed us to predict whether or not
+comments would be some type of offensive. Variable Creation Variable
+creation was the most important step in this project. Going from plain
+text to numerical/categorical variables that represent important
+information allowed us to predict was the hurdle that we had to leap
+over and comprised the most of our time. In all we created about 4000
+variables that might help us explain what was happening Tokens A token,
+put simply, is a word inside a string of text. The only important thing
+to note is that tokens only count as one word even if they are in a
+string multiple times. Take for example the string ``I love love data.''
+In this string, there would be only 3 tokens, ``I'', ``love'', and
+``data.'' This is the convention of the tidy text package and the
+function tokenizer. Tokens are useful in understanding which words are
+present and how many times they occur in a vector of strings but not for
+understanding total occurrences in either one string or the entire
+string vector. N-grams An n-gram is similar to a token but is a string
+comprising of n words. For example, you might notice that the words
+``love'' and ``you'' occur consecutively so instead of searching for
+each word as a token, you might instead search for the 2-gram ``love
+you''. This might help you dial in a more specific sentiment for
+groupings of words as opposed to if you searched for each word
+independently. Sentiment Analysis Sentiment analysis consists of
+assigning values to words, tokens, or n-grams in order to
+classify/interpret a specific body of text. In our case we used
+sentiment analysis to put large negative weights on swear words and
+large positive weights on words that we believed would be would not be
+in any of the categories we were predicting. Sparse Matrix A sparse data
+matrix is a specific type of data containing object inside of R (and
+maybe other programming languages). This type of matrix is useful
+because it preserves memory by tracking the locations and values at
+specific coordinates in an array instead of keeping all the zeros in
+memory -- they are simply omitted. This meant in our case that the
+matrix that we held our data in was able to be stored in memory and was
+actually only SOMETHING\% of the size of the original matrix. This meant
+that we were able to preserve memory and actually allowed us to build
+our model and cross validate it. There are many implementations of
+sparse matrices that handle the data in slightly different ways but the
+one we used specifically was the Document Feature Matrix A document
+feature matrix is a relatively simple structure that records the number
+of occurrence of words, tokens, or n-grams. These matrices are usually
+very large and require some kind of subsetting to remove words/phrases
+that are not predictive and also removing words that occur too
+frequently. Looking for words that are infrequent but consistently occur
+in categories of interest is really useful because they are very
+predictive. Cross Validation Cross validation is a technique that
+Logistic Regression Logistic regression is a classification model that
+Confusion Matrix Confusion
+
+Results
+
+\begin{verbatim}
+The study created 23 predictive variables: Length ( number of characters), ncap(number of capital letters), nnum(number of numbers), ncap_len(ratio of ncap to Length),nnum_len(ratio of nnum to length), nexcl(number of exclamation marks), nquest( number of question marks), npunct( number of punctuation marks defined by [[:punct]] lexicon), npunct_len( punctuation to length ratio), nsent (number of sentences), nsymb ( number of symbols “ (&|@|#|\\$|%|\\*|\\^ )”), nsmile (number of smiley faces “(?::|;|=)(?:-)?(?:\\)|D|P)”), nwords ( number of words), hate ( number of occurrences of “ni****” and “fa*”), nhate ( number of occurrences of hate words defined by custom lexicon),  AFINN sentiment value, Custom swear sentiment value, hate words sentiment value.
+These predictors were used with a cross validated logistic regression to classify comments as Toxic, Severe_Toxic, Obscene, Threat, Insult, and Identity Hate.
+\end{verbatim}
+
+The results are evaluated as percent of accurate classifications made
+and p-values are given as an improvement from the no-information rate.
+Toxic-, Severe\_Toxic-, Obscene-, Threat-, Insult-, Hate-.
+
+Discussion The results indicate that statistically significant
+classifications can be made by analysis of comment structure and
+sentiment analysis. This combination was found to be an improvement over
+each method independently method and substantiates intuition that
+Natural Language Processing is multi-facetted. The study recognizes that
+further relationships between structure, sentiment, and other factors
+could play an important role in accurate comment classifications.
+
+Conclusion
+
+\begin{verbatim}
+This study combined techniques commonly used for text inference in order to make predict classifications.  The ability to draw meaningful inference from vasts amount of text data is inextricably connected to being able to make predictions and classify text.  This study explored a method of examining text structure and word sentiment to classify comments and produce insight from large amounts of text data.
+\end{verbatim}
+
+Acknowledgements
+
+\begin{verbatim}
+This study was facilitated by our faculty advisor Sean Raleigh and was supported by Westminster College. We’d also like to thank Kaggle for hosting this data and creating the competition that this data was drawn from. Additionally, we’d be remiss to not acknowledge Wikipedia’s role in providing the data and the incentives on Kaggle.
+\end{verbatim}
+
+Works Cited
+
+Chowdhury, Gobinda G. ``Natural Language Processing.'' Annual Review of
+Information Science and Technology, Wiley-Blackwell, 31 Jan. 2005,
+onlinelibrary.wiley.com/doi/full/10.1002/aris.1440370103.
+
+Silge, Julia \& Robinson, David. ``Tidy Mining with R, A Tidy
+Approach''.
+
+\url{https://science.howstuffworks.com/life/evolution/language-evolve.htm}
+
+
+\end{document}

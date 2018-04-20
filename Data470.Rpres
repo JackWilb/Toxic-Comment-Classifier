@@ -463,14 +463,23 @@ Identity_Hate = `r unname((identity_hateconf$overall[1]-identity_hateconf$overal
 Discussion
 ========================================================
 
+Accurate classifcation predictions were made in the Toxic, Obscene, and Insult, categories.  The variables created provided significant  explanatory power in providing classifications.  Sentiment analysis, number of capital letters, and punctuation were the most powerful predictor variables created.
+
+A number of explanatory variables were effective in making accurate predictions confirming that in addition to somewhat obvious predictors, less obvious variables derived from machine learning algorithms are effective in extracting key features from text data.
 
 
 Limitations
 ========================================================
 
-Some categories did not have a large enough sample to predict off of.  The test data contained very zero Identity hate comments.  Threat comments only registered 0.3% of training data.  
+The categories of Severe_Toxic, Threat, and Identity_Hate, did not have a large enough sample to predict from.  The larger categories are still quit small.    Threat comments only registered 0.3% of training data.  
 
-Computing power presented a challenge to processing large document feature matrices.
+
+The best predictions were made in the largest categories which is reasonable considering statistically significant explanatory variables derived from these categories.
+
+
+Computing power also presented a challenge to processing large document feature matrices.  This hurdle prevented processing more types of explanatory variables. 
+  - N-grams
+  - Feature Combinations
 
 We were able to create some variables that were intuitive and some that were less intuitive.  There exists the possibility that many more predictive variables exists but we were not able to come up with them.
 

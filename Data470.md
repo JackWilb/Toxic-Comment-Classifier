@@ -5,228 +5,169 @@ font-family: Georgia
 date: 20th April 2018
 autosize: true
 
+
+
 Motivation
 ========================================================
 
-* Kaggle
-  - $50,000
-* Skills
-  - New
-  - Old
+* Text Analysis
+* Develop Techniques
+  - Data Aggregation/Cleaning
+  - Modeling
+  - Reporting
 
 Objectives
 ========================================================
 
-* NLP
+* Natural Language Processing (NLP)
   - Body Of Text
   - Useful Variables
-  - Example
 * Predictive Modeling
   - Explantory Variables
-  - Response Variable
+  - 6 Response Variables
+  - Inference
+  
+Methods 
+========================================================
+
+* Explore Raw Data
+
+* Clean Data
+
+* Create Variables
+
+* Split data
+  - Training/Test
+  
+Methods 
+========================================================  
+
+* Implement models 
+  - Cross Validated Logistic Regression
+
+* Assess Accuracy
+  - Confusion Matrix
+
+Libraries
+========================================================
+
+
+
+* readr
+* stringi
+* quanteda
+* dplyr
+* caret
+* tm
+
+***
+
+* glmnet
+* doParallel
+* tidytext
+* data.table
+* sentimentr
 
 Exploratory Data Analysis
 ========================================================
 
 
 
+* Structure Of The Data
 
 ```
-[1] "Explanation\nWhy the edits made under my username Hardcore Metallica Fan were reverted? They weren't vandalisms, just closure on some GAs after I voted at New York Dolls FAC. And please don't remove the template from the talk page since I'm retired now.89.205.38.27"
-[2] "D'aww! He matches this background colour I'm seemingly stuck with. Thanks.  (talk) 21:51, January 11, 2016 (UTC)"                                                                                                                                                         
+                id
+1 003dbd1b9b354c1f
+                                                                                                                                                                                                                                                              comment_text
+1 You can do all you're doing right now but if you get a username you'll be able to do more and have more impact is what I'm saying. And you seem to be very familiar with everything so you probably have a username? Just get one, it takes 10 seconds.  (talk•contribs)
+  toxic severe_toxic obscene threat insult identity_hate
+1     0            0       0      0      0             0
 ```
 
-```
-[1] "id"            "comment_text"  "toxic"         "severe_toxic" 
-[5] "obscene"       "threat"        "insult"        "identity_hate"
-```
-
-Structure
+Exploratory Data Analysis
 ========================================================
 
 
-```
-# A tibble: 1 x 8
-  id     comment_text             toxic severe_toxic obscene threat insult
-  <chr>  <chr>                    <int>        <int>   <int>  <int>  <int>
-1 00009… "Explanation\nWhy the e…     0            0       0      0      0
-# ... with 1 more variable: identity_hate <int>
-```
 
-```
-[1] "Explanation\nWhy the edits made under my username Hardcore Metallica Fan were reverted? They weren't vandalisms, just closure on some GAs after I voted at New York Dolls FAC. And please don't remove the template from the talk page since I'm retired now.89.205.38.27"
-```
+* Toxic: 9.5844483 %.
 
+* Severe_toxic: 0.9995551 %.
 
-Libraries
-========================================================
+* Obscene: 5.2948217 %.
 
+* Threat: 0.2995532 %.
 
-```r
-library(readr)
-library(stringi)
-library(quanteda)
-library(dplyr)
-library(caret)
-library(glmnet)
-library(doParallel)
-registerDoParallel(4)
-library(tidytext)
-library(data.table)
-library(sentimentr)
-```
+* Insult: 4.9363606 %.
 
-
-Data Exploration
-========================================================
-Now that we have some additional variables lets explore the data a bit.  
-First lets count what we have.
-
-```r
-table(train$toxic)
-```
-
-```
-
-     0      1 
-144277  15294 
-```
-
-Data Exploration
-========================================================
-
-
-```r
-table(train$obscene)
-```
-
-```
-
-     0      1 
-151122   8449 
-```
-
-Data Exploration
-========================================================
-
-
-```r
-table(train$threat)
-```
-
-```
-
-     0      1 
-159093    478 
-```
-
-Data Exploration
-========================================================
-
-
-```r
-table(train$insult)
-```
-
-```
-
-     0      1 
-151694   7877 
-```
-
-Data Exploration
-========================================================
-
-
-```r
-table(train$identity_hate)
-```
-
-```
-
-     0      1 
-158166   1405 
-```
-
-Data Exploration
-========================================================
-
-The tally command tells us exactly how many of each category there are so we know what we are looking at.  Initial observations show that some categories like "threat" are quite small which may make classifying "threat" comments difficult. Let's take a look at the most common words from each category using tidy text.
-
-
-Tidy Text Word Analysis
-========================================================
-
-```r
-traincorpus = corpus(train$comment_text)
-docvars(traincorpus, "id") = 1:nrow(train)
-docvars(traincorpus, "toxic") = train$toxic
-docvars(traincorpus, "severe_toxic") = train$severe_toxic
-docvars(traincorpus, "obscene") = train$obscene
-docvars(traincorpus, "threat") = train$threat
-docvars(traincorpus, "insult") = train$insult
-docvars(traincorpus, "identity_hate") = train$identity_hate
-docvars(traincorpus, "ntokens") = ntoken(traincorpus, remove_punct = TRUE)
-```
+* Identity Hate: 0.8804858 %.
 
 Tidy Text Word Analysis
 ========================================================
 
 
 
-```r
-traindfm2 = dfm(traincorpus, remove = stopwords("english"), stem = TRUE, remove_punct = TRUE)
-toxicdfm2 = dfm_subset(traindfm2, toxic == 1, remove = stopwords("english"))
-toxicfeatures2 = topfeatures(toxicdfm2, 10)
-toxicwords2 = names(toxicfeatures2)
-
-severe_toxicdfm2 = dfm_subset(traindfm2, severe_toxic == 1,remove = stopwords("english"))
-severe_toxicfeatures2 = topfeatures(severe_toxicdfm2, 10)
-severe_toxicwords2 = names(severe_toxicfeatures2)
-
-obscenedfm2 = dfm_subset(traindfm2, obscene == 1,remove = stopwords("english"))
-obscenefeatures2 = topfeatures(obscenedfm2, 10)
-obscenewords2 = names(obscenefeatures2)
-
-threatdfm2 = dfm_subset(traindfm2, threat == 1,remove = stopwords("english"))
-threatfeatures2 = topfeatures(threatdfm2, 10)
-threatwords2 = names(threatfeatures2)
-
-insultdfm2 = dfm_subset(traindfm2, insult == 1,remove = stopwords("english"))
-insultfeatures2 = topfeatures(insultdfm2, 10)
-insultwords2 = names(insultfeatures2)
-
-identity_hatedfm2 = dfm_subset(traindfm2, identity_hate == 1,remove = stopwords("english"))
-identity_hatefeatures2 = topfeatures(identity_hatedfm2, 10)
-identity_hatewords2 = names(identity_hatefeatures2)
-```
+![plot of chunk unnamed-chunk-6](Data470-figure/unnamed-chunk-6-1.png)
 
 Tidy Text Word Analysis
 ========================================================
 
-
-
-![plot of chunk unnamed-chunk-12](Data470-figure/unnamed-chunk-12-1.png)
+![plot of chunk unnamed-chunk-7](Data470-figure/unnamed-chunk-7-1.png)
 
 Tidy Text Word Analysis
 ========================================================
 
-![plot of chunk unnamed-chunk-13](Data470-figure/unnamed-chunk-13-1.png)
+![plot of chunk unnamed-chunk-8](Data470-figure/unnamed-chunk-8-1.png)
 
-Tidy Text Word Analysis
-========================================================
-
-![plot of chunk unnamed-chunk-14](Data470-figure/unnamed-chunk-14-1.png)
-
-Tidy Text Word Analysis
-========================================================
 
 These word frequency visuals gives us an idea of words associated with certain classifications.  We can add counts of these words into our variable creation to make better predictions.
+
 
 
 PCA
 ========================================================
 
-![plot of chunk unnamed-chunk-15](Data470-figure/unnamed-chunk-15-1.png)
+![plot of chunk unnamed-chunk-9](Data470-figure/unnamed-chunk-9-1.png)
+
+Variables Created
+========================================================
+
+* Feature Count 
+  -punctuation
+  -capital letters
+  -smileys
+  
+* Sentiment analysis
+  -Standard Lexicon/ library - AFINN
+  - Custom lexicon
+    -Swear
+    -Hate
+    
+* Sparse Document Feature Matrix
+  -counts of every possible "feature"
+    -words, punt, multiple words
+    -4000 features.
+   
 
 
+Results
+========================================================
+
+
+
+
+```
+processing file: Data470.Rpres
+Quitting from lines 258-455 (Data470.Rpres) 
+Error: `data` and `reference` should be factors with the same levels.
+In addition: Warning messages:
+1: In split_warn(text.var, "sentiment_by", ...) :
+  Each time `sentiment_by` is run it has to do sentence boundary disambiguation when a raw `character` vector is passed to `text.var`. This may be costly of time and memory.  It is highly recommended that the user first runs the raw `character` vector through the `get_sentences` function.
+2: In split_warn(text.var, "sentiment_by", ...) :
+  Each time `sentiment_by` is run it has to do sentence boundary disambiguation when a raw `character` vector is passed to `text.var`. This may be costly of time and memory.  It is highly recommended that the user first runs the raw `character` vector through the `get_sentences` function.
+3: In split_warn(text.var, "sentiment_by", ...) :
+  Each time `sentiment_by` is run it has to do sentence boundary disambiguation when a raw `character` vector is passed to `text.var`. This may be costly of time and memory.  It is highly recommended that the user first runs the raw `character` vector through the `get_sentences` function.
+4: In split_warn(text.var, "sentiment_by", ...) :
+  Each time `sentiment_by` is run it has to do sentence boundary disambiguation when a raw `character` vector is passed to `text.var`. This may be costly of time and memory.  It is highly recommended that the user first runs the raw `character` vector through the `get_sentences` function.
+5: executing %dopar% sequentially: no parallel backend registered 
+Execution halted
+```

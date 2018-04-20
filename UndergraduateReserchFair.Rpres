@@ -54,6 +54,7 @@ Libraries
 ========================================================
 
 ```{r, include = FALSE}
+set.seed(1)
 library(readr)
 library(stringi)
 library(quanteda)
@@ -253,31 +254,130 @@ Variables Created
 Results
 ========================================================
 
-*Toxic -NIR
+```{r, include = FALSE}
+toxicglm = cv.glmnet(train[,8:dim(train)[2]], 
+                     factor(train[,1]), 
+                     alpha = 0, 
+                     family = "binomial", 
+                     type.measure = "auc",
+                     parallel = T,
+                     nfolds = 40,
+                     standardize = T,
+                     nlambda = 50)
+toxicpreds = predict(toxicglm, newx = test[,8:dim(test)[2]], type = "response", s = "lambda.min")
+toxicpreds = ifelse(toxicpreds > 0.27, 1 ,0)
+toxicconf = confusionMatrix(factor(toxicpreds), factor(test[,1]))
 
-*Severe_Toxic - Resulted in No improvement over No Information Rate(NIR).
+severe_toxicglm = cv.glmnet(train[,8:dim(train)[2]], 
+                     factor(train[,2]), 
+                     alpha = 0, 
+                     family = "binomial", 
+                     type.measure = "auc",
+                     parallel = T,
+                     nfolds = 4,
+                     standardize = T,
+                     nlambda = 50)
+severe_toxicpreds = predict(severe_toxicglm, newx = test[,8:dim(test)[2]], type = "response", s = "lambda.min")
+severe_toxicpreds = ifelse(severe_toxicpreds > 0.02, 1 ,0)
+severe_toxicconf = confusionMatrix(factor(severe_toxicpreds), factor(test[,2]))
 
-*Obscene -
+obsceneglm = cv.glmnet(train[,8:dim(train)[2]], 
+                     factor(train[,3]), 
+                     alpha = 0, 
+                     family = "binomial", 
+                     type.measure = "auc",
+                     parallel = T,
+                     nfolds = 4,
+                     standardize = T,
+                     nlambda = 50)
+obscenepreds = predict(obsceneglm, newx = test[,8:dim(test)[2]], type = "response", s = "lambda.min")
+obscenepreds = ifelse(obscenepreds > 0.22, 1 ,0)
+obsceneconf = confusionMatrix(factor(obscenepreds), factor(test[,3]))
 
-*Threat -
+threatglm = cv.glmnet(train[,8:dim(train)[2]], 
+                     factor(train[,4]), 
+                     alpha = 0, 
+                     family = "binomial", 
+                     type.measure = "auc",
+                     parallel = T,
+                     nfolds = 4,
+                     standardize = T,
+                     nlambda = 50)
+threatpreds = predict(threatglm, newx = test[,8:dim(test)[2]], type = "response", s = "lambda.min")
+threatpreds = ifelse(threatpreds > 1, 1 ,0)
+threatconf = confusionMatrix(factor(threatpreds), factor(test[,4]))
 
-*Insult -
+insultglm = cv.glmnet(train[,8:dim(train)[2]], 
+                     factor(train[,5]), 
+                     alpha = 0, 
+                     family = "binomial", 
+                     type.measure = "auc",
+                     parallel = T,
+                     nfolds = 4,
+                     standardize = T,
+                     nlambda = 50)
+insultpreds = predict(insultglm, newx = test[,8:dim(test)[2]], type = "response", s = "lambda.min")
+insultpreds = ifelse(insultpreds > 0.21, 1 ,0)
+insultconf = confusionMatrix(factor(insultpreds), factor(test[,5]))
 
-*Identity_Hate - Resulted in No improvement over No Information Rate(NIR).
+identity_hateglm = cv.glmnet(train[,8:dim(train)[2]], 
+                     factor(train[,6]), 
+                     alpha = 0, 
+                     family = "binomial", 
+                     type.measure = "auc",
+                     parallel = T,
+                     nfolds = 4,
+                     standardize = T,
+                     nlambda = 50)
+identity_hatepreds = predict(identity_hateglm, newx = test[,8:dim(test)[2]], type = "response", s = "lambda.min")
+identity_hatepreds = ifelse(identity_hatepreds > 1, 1 ,0)
+identity_hateconf = confusionMatrix(factor(identity_hatepreds), factor(test[,6]))
+```
+
+
+Toxic = `r unname((toxicconf$overall[1]-toxicconf$overall[5])/(1-toxicconf$overall[5]))*100`
+Severe_Toxic = `r unname((severe_toxicconf$overall[1]-severe_toxicconf$overall[5])/(1-severe_toxicconf$overall[5]))*100`
+Obscene = `r unname((obsceneconf$overall[1]-obsceneconf$overall[5])/(1-obsceneconf$overall[5]))*100`
+Threat = `r unname((threatconf$overall[1]-threatconf$overall[5])/(1-threatconf$overall[5]))*100`
+Insult = `r unname((insultconf$overall[1]-insultconf$overall[5])/(1-insultconf$overall[5]))*100`
+Identity_Hate = `r unname((identity_hateconf$overall[1]-identity_hateconf$overall[5])/(1-identity_hateconf$overall[5]))*100`
 
 Discussion
 ========================================================
 
+Satistically signficant Classifications:
+
+  -Toxic
+  -Obscene
+  -Insult
+  
+No Improvement:
+
+  -Severe_toxic
+  -Threat
+  -Identity_hate
+  
+Significant Variables:
+
+  -Sentiment Analysis
+  -Document Feature Matrix
 
 
 Limitations
 ========================================================
 
-The Some categories did not have a large enough sample to predict off of.  The larger categories are still quit small.    Threat comments only registered 0.3% of training data.  
+* Data Size:
+  - Small, number of certain categories (0.3% Threat)
+  
+  - Machine Learning limited
 
-Computing power presented a challenge to processing large document feature matrices.
-
-We were able to create some variables that were intuitive and some that were less intuitive.  There exists the possibility that many more predictive variables exists but we were not able to come up with them.
+* Computing power:
+  
+  - N-grams
+  
+  - Feature Combinations
+  
+  - Unkown Variables
 
 
 Acknowledgements

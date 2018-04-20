@@ -159,7 +159,304 @@ $(document).ready(function () {
 </div>
 <div id="coding-procedure" class="section level3">
 <h3>Coding Procedure</h3>
-<p>       Our coding procedure is outlined below</p>
+<p>       Our coding procedure is outlined below:</p>
+<pre class="r"><code># Set seed for consistent results
+set.seed(1)
+
+# Importing Libraries
+library(readr) # Importing and exporting csv files
+library(stringi) # Fast string manipulation package (improved version of stringr)
+library(quanteda) # Fast tokenizing and dfm creation (see methods)
+library(dplyr) # Tidy variable creator and data cleaner
+library(caret) # Predictive modeling package, used for confusionMatrix function (see methods) 
+library(glmnet) # Predictive modeling package, used for cross validated logistic regression
+library(doParallel) # Parallelizing model and dfm building
+registerDoParallel(4) # Number of cores to be parallel over
+library(tidytext) # Tidy data wrangling, used for stopwords
+library(data.table) # Importing swear databases that are friendly with sentimentr
+library(sentimentr) # Apply custom sentiments to words of interest
+
+# Import dataset from Kaggle.com
+train = read_csv(&quot;train.csv&quot;)</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   id = col_character(),
+##   comment_text = col_character(),
+##   toxic = col_integer(),
+##   severe_toxic = col_integer(),
+##   obscene = col_integer(),
+##   threat = col_integer(),
+##   insult = col_integer(),
+##   identity_hate = col_integer()
+## )</code></pre>
+<pre class="r"><code># Making the number of rows even, dropping the first observation
+train = train[2:159571,]
+
+# Splitting the dataset into a training and a testing set
+sample = sample(nrow(train), nrow(train)/2)
+test = train[-sample,]
+train = train[sample,]
+idtrain = 1:nrow(train)
+idtest = (nrow(train)+1):(nrow(train) + nrow(test))
+traintest = rbind(train[,1:2], test[1:2])
+gc()</code></pre>
+<pre><code>##            used  (Mb) gc trigger  (Mb) max used  (Mb)
+## Ncells  2714088 145.0    4703850 251.3  3713354 198.4
+## Vcells 13640057 104.1   23084074 176.2 16844587 128.6</code></pre>
+<pre class="r"><code># Using dplyr and stringi to generate new variables related to properties of the strings
+traintest = rbind(train[,1:2], test[1:2])
+traintest = mutate(traintest,
+       length = stri_length(comment_text),
+       ncap = stri_count_charclass(comment_text, &quot;[A-Z]&quot;),
+       nnum = stri_count_charclass(comment_text, &quot;[0-9]&quot;),
+       ncap_len = ncap / length,
+       nnum_len = nnum / length,
+       nexcl = stri_count_fixed(comment_text, &quot;!&quot;),
+       nquest = stri_count_fixed(comment_text, &quot;?&quot;),
+       npunct = stri_count_charclass(comment_text, &quot;[[:punct:]]&quot;),
+       npunct_len = npunct / length,
+       nsent = stri_count_boundaries(comment_text, &quot;sentence&quot;),
+       nsymb = stri_count_regex(comment_text, &quot;&amp;|@|#|\\$|%|\\*|\\^&quot;),
+       nsmile = stri_count_regex(comment_text, &quot;((?::|;|=)(?:-)?(?:\\)|D|P))&quot;),
+       nwords = stri_count_words(comment_text)
+       )
+train = cbind(train, traintest[idtrain,3:ncol(traintest)])
+test = cbind(test, traintest[idtest,3:ncol(traintest)])
+
+###swears
+swears&lt;-fread(&quot;swears.csv&quot;, sep = &quot;,&quot;)
+hatewords&lt;-fread(&quot;hatebase_dict1.csv&quot;,sep=&quot;,&quot;)
+#swears2 &lt;-fread(&quot;swearlistcscmu.csv&quot;,sep=&quot;,&quot;)
+#swears3&lt;-fread(&quot;googleswear.csv&quot;,sep=&quot;,&quot;)
+
+
+swears&lt;-unique( swears[ , 1:2 ] )
+swears$x &lt;- gsub(&quot;,&quot;,&quot;&quot;,swears$x)
+#swears&lt;-rbind(swears,swears2)
+#swears&lt;-rbind(swears,swears3)
+swears&lt;-unique(swears[,1:2])
+mykey.swear&lt;-update_key(swears)
+
+
+hatewords&lt;-unique(hatewords[,1:2])
+hatewords$words&lt;-gsub(&quot;,&quot;,&quot;&quot;,hatewords$words)
+hatewords$words&lt;-gsub(&quot;'&quot;,&quot; &quot;,hatewords$words)
+
+hatewords$words&lt;-tolower(hatewords$words)
+hatewords</code></pre>
+<pre><code>##                       x   y words
+##    1:     uncivilised', -10    NA
+##    2:           'gypo', -10    NA
+##    3:          'gypos', -10    NA
+##    4:           'cunt', -10    NA
+##    5:          'cunts', -10    NA
+##   ---                            
+## 1014: 'proddywhoddies', -10    NA
+## 1015:    'proddywoddy', -10    NA
+## 1016:  'proddywoddies', -10    NA
+## 1017:   'Rhine monkey', -10    NA
+## 1018:    Rhine monkies' -10    NA</code></pre>
+<pre class="r"><code>colnames(hatewords)[1] &lt;- &quot;x&quot;
+colnames(hatewords)[2]&lt;-&quot;y&quot;
+hatewords&lt;-unique(hatewords[,1:2])
+key.hatewords &lt;- update_key(hatewords)
+
+stopWords = c(stop_words$word, &quot;of&quot;, &quot;or&quot;, &quot;on&quot;)
+stopWords=stopWords[!(stopWords %in% c(&quot;new&quot;,&quot;used&quot;,&quot;small&quot;,&quot;large&quot;,&quot;thanks&quot;,&quot;greetings&quot;,&quot;works&quot;))]
+
+cmmnt = train$comment_text
+cmmnt = unlist(cmmnt)[!(unlist(cmmnt) %in% stopWords)]
+cmmnt = stri_replace_all_charclass(cmmnt, &quot;[^[:alnum:]]&quot;, &quot; &quot;)
+id = rep(1:nrow(train))
+cmmnt_df = data.frame(id = id, comments = cmmnt)
+cmmnt_df$comments = as.character(cmmnt_df$comments)
+
+
+cmmnt.t = test$comment_text
+cmmnt.t = unlist(cmmnt.t)[!(unlist(cmmnt.t) %in% stopWords)]
+cmmnt.t = stri_replace_all_charclass(cmmnt.t, &quot;[^[:alnum:]]&quot;, &quot; &quot;)
+id = rep(1:nrow(test))
+cmmnt_df.t = data.frame(id = id, comments = cmmnt.t)
+cmmnt_df.t$comments = as.character(cmmnt_df.t$comments)
+
+
+swear.sent.train&lt;-sentiment_by(cmmnt_df$comments,list(id), polarity_dt=mykey.swear)</code></pre>
+<pre><code>## Warning in split_warn(text.var, &quot;sentiment_by&quot;, ...): Each time
+## `sentiment_by` is run it has to do sentence boundary disambiguation when
+## a raw `character` vector is passed to `text.var`. This may be costly of
+## time and memory. It is highly recommended that the user first runs the raw
+## `character` vector through the `get_sentences` function.</code></pre>
+<pre class="r"><code>swear.sent.test&lt;-sentiment_by(cmmnt_df.t$comments,list(id),polarity_dt=mykey.swear)</code></pre>
+<pre><code>## Warning in split_warn(text.var, &quot;sentiment_by&quot;, ...): Each time
+## `sentiment_by` is run it has to do sentence boundary disambiguation when
+## a raw `character` vector is passed to `text.var`. This may be costly of
+## time and memory. It is highly recommended that the user first runs the raw
+## `character` vector through the `get_sentences` function.</code></pre>
+<pre class="r"><code>colnames(swear.sent.test)[4] &lt;- &quot;swear_sent&quot;
+colnames(swear.sent.train)[4]&lt;-&quot;swear_sent&quot;
+
+
+#cmmnt_df$comments&lt;-na.omit(cmmnt_df$comments)
+#cmmnt_df.t$comments&lt;-na.omit(cmmnt_df.t$comments)
+
+#hate.sent.train&lt;-sentiment_by(cmmnt_df$comments,list(id), polarity_dt=key.hatewords)
+#hate.sent.test&lt;-sentiment_by(cmmnt_df.t$comments,list(id),polarity_dt=key.hatewords)
+
+#colnames(hate.sent.test)[4] &lt;- &quot;hate_sent&quot;
+#colnames(hate.sent.train)[4]&lt;-&quot;hate_sent&quot;
+
+train&lt;-cbind(train,swear.sent.train[,4])
+test&lt;-cbind(test,swear.sent.test[,4])
+#train&lt;-cbind(train,hate.sent.train[,4])
+#test&lt;-cbind(test,hate.sent.test[,4])
+###positive sent- afinn
+pos.sent&lt;-sentiment_by(cmmnt_df$comments, list(id), lexicon=&quot;afinn&quot;)</code></pre>
+<pre><code>## Warning in split_warn(text.var, &quot;sentiment_by&quot;, ...): Each time
+## `sentiment_by` is run it has to do sentence boundary disambiguation when
+## a raw `character` vector is passed to `text.var`. This may be costly of
+## time and memory. It is highly recommended that the user first runs the raw
+## `character` vector through the `get_sentences` function.</code></pre>
+<pre class="r"><code>pos.sent.t&lt;-sentiment_by(cmmnt_df$comments, list(id), lexicon=&quot;afinn&quot;)</code></pre>
+<pre><code>## Warning in split_warn(text.var, &quot;sentiment_by&quot;, ...): Each time
+## `sentiment_by` is run it has to do sentence boundary disambiguation when
+## a raw `character` vector is passed to `text.var`. This may be costly of
+## time and memory. It is highly recommended that the user first runs the raw
+## `character` vector through the `get_sentences` function.</code></pre>
+<pre class="r"><code>colnames(pos.sent)[4] &lt;- &quot;afinn&quot;
+colnames(pos.sent.t)[4]&lt;-&quot;afinn&quot;
+
+train&lt;-cbind(train,pos.sent[,4])
+test&lt;-cbind(test,pos.sent.t[,4])
+
+
+## quanteda
+ttcorp = corpus(traintest$comment_text)
+ttdfm = dfm(ttcorp, remove = stopwords(&quot;english&quot;))
+ttdfm = dfm_trim(ttdfm, min_docfreq = 150, max_docfreq = 100000)
+ttdfm = dfm_sort(ttdfm)
+
+# sparse matrix
+sumttdfm = summary(ttdfm)
+sparsettdfm = sparseMatrix(i = sumttdfm$i, j = sumttdfm$j, x = sumttdfm$x)
+
+sparsetrain = Matrix(as.matrix(train[3:23]), sparse = TRUE)
+sparsetest = Matrix(as.matrix(test[3:23]), sparse = TRUE)
+train = cbind(sparsetrain, sparsettdfm[1:nrow(train),])
+test = cbind(sparsetest, sparsettdfm[(nrow(train)+1):(nrow(train) + nrow(test)),])
+rm(sparsetrain, sparsetest)
+
+toxicglm = cv.glmnet(train[,8:dim(train)[2]], 
+                     factor(train[,1]), 
+                     alpha = 0, 
+                     family = &quot;binomial&quot;, 
+                     type.measure = &quot;auc&quot;,
+                     parallel = T,
+                     nfolds = 40,
+                     standardize = T,
+                     nlambda = 50)
+toxicpreds = predict(toxicglm, newx = test[,8:dim(test)[2]], type = &quot;response&quot;, s = &quot;lambda.min&quot;)
+toxicpreds = ifelse(toxicpreds &gt; 0.27, 1 ,0)
+toxicconf = confusionMatrix(factor(toxicpreds), factor(test[,1]))
+
+severe_toxicglm = cv.glmnet(train[,8:dim(train)[2]], 
+                     factor(train[,2]), 
+                     alpha = 0, 
+                     family = &quot;binomial&quot;, 
+                     type.measure = &quot;auc&quot;,
+                     parallel = T,
+                     nfolds = 4,
+                     standardize = T,
+                     nlambda = 50)
+severe_toxicpreds = predict(severe_toxicglm, newx = test[,8:dim(test)[2]], type = &quot;response&quot;, s = &quot;lambda.min&quot;)
+severe_toxicpreds = ifelse(severe_toxicpreds &gt; 0.02, 1 ,0)
+severe_toxicconf = confusionMatrix(factor(severe_toxicpreds), factor(test[,2]))
+
+obsceneglm = cv.glmnet(train[,8:dim(train)[2]], 
+                     factor(train[,3]), 
+                     alpha = 0, 
+                     family = &quot;binomial&quot;, 
+                     type.measure = &quot;auc&quot;,
+                     parallel = T,
+                     nfolds = 4,
+                     standardize = T,
+                     nlambda = 50)</code></pre>
+<pre><code>## Warning: from glmnet Fortran code (error code -48); Convergence for 48th
+## lambda value not reached after maxit=100000 iterations; solutions for
+## larger lambdas returned</code></pre>
+<pre class="r"><code>obscenepreds = predict(obsceneglm, newx = test[,8:dim(test)[2]], type = &quot;response&quot;, s = &quot;lambda.min&quot;)
+obscenepreds = ifelse(obscenepreds &gt; 0.22, 1 ,0)
+obsceneconf = confusionMatrix(factor(obscenepreds), factor(test[,3]))
+
+threatglm = cv.glmnet(train[,8:dim(train)[2]], 
+                     factor(train[,4]), 
+                     alpha = 0, 
+                     family = &quot;binomial&quot;, 
+                     type.measure = &quot;auc&quot;,
+                     parallel = T,
+                     nfolds = 4,
+                     standardize = T,
+                     nlambda = 50)
+threatpreds = predict(threatglm, newx = test[,8:dim(test)[2]], type = &quot;response&quot;, s = &quot;lambda.min&quot;)
+threatpreds = ifelse(threatpreds &gt; 1, 1 ,0)
+threatconf = confusionMatrix(factor(threatpreds), factor(test[,4]))</code></pre>
+<pre><code>## Warning in confusionMatrix.default(factor(threatpreds), factor(test[, 4])):
+## Levels are not in the same order for reference and data. Refactoring data
+## to match.</code></pre>
+<pre class="r"><code>insultglm = cv.glmnet(train[,8:dim(train)[2]], 
+                     factor(train[,5]), 
+                     alpha = 0, 
+                     family = &quot;binomial&quot;, 
+                     type.measure = &quot;auc&quot;,
+                     parallel = T,
+                     nfolds = 4,
+                     standardize = T,
+                     nlambda = 50)
+insultpreds = predict(insultglm, newx = test[,8:dim(test)[2]], type = &quot;response&quot;, s = &quot;lambda.min&quot;)
+insultpreds = ifelse(insultpreds &gt; 0.21, 1 ,0)
+insultconf = confusionMatrix(factor(insultpreds), factor(test[,5]))
+
+identity_hateglm = cv.glmnet(train[,8:dim(train)[2]], 
+                     factor(train[,6]), 
+                     alpha = 0, 
+                     family = &quot;binomial&quot;, 
+                     type.measure = &quot;auc&quot;,
+                     parallel = T,
+                     nfolds = 4,
+                     standardize = T,
+                     nlambda = 50)
+identity_hatepreds = predict(identity_hateglm, newx = test[,8:dim(test)[2]], type = &quot;response&quot;, s = &quot;lambda.min&quot;)
+identity_hatepreds = ifelse(identity_hatepreds &gt; 1, 1 ,0)
+identity_hateconf = confusionMatrix(factor(identity_hatepreds), factor(test[,6]))</code></pre>
+<pre><code>## Warning in confusionMatrix.default(factor(identity_hatepreds),
+## factor(test[, : Levels are not in the same order for reference and data.
+## Refactoring data to match.</code></pre>
+<pre class="r"><code>identity_hateconf</code></pre>
+<pre><code>## Confusion Matrix and Statistics
+## 
+##           Reference
+## Prediction     0     1
+##          0 79094   691
+##          1     0     0
+##                                          
+##                Accuracy : 0.9913         
+##                  95% CI : (0.9907, 0.992)
+##     No Information Rate : 0.9913         
+##     P-Value [Acc &gt; NIR] : 0.5101         
+##                                          
+##                   Kappa : 0              
+##  Mcnemar's Test P-Value : &lt;2e-16         
+##                                          
+##             Sensitivity : 1.0000         
+##             Specificity : 0.0000         
+##          Pos Pred Value : 0.9913         
+##          Neg Pred Value :    NaN         
+##              Prevalence : 0.9913         
+##          Detection Rate : 0.9913         
+##    Detection Prevalence : 1.0000         
+##       Balanced Accuracy : 0.5000         
+##                                          
+##        'Positive' Class : 0              
+## </code></pre>
 </div>
 <div id="results" class="section level3">
 <h3>Results</h3>
@@ -167,11 +464,24 @@ $(document).ready(function () {
 <p>       These predictors were used with a cross validated logistic regression to classify comments as Toxic, Severe_Toxic, Obscene, Threat, Insult, and Identity Hate.</p>
 <p>       The results are evaluated as percent of accurate classifications made and p-values are given as an improvement from the no-information rate.</p>
 <blockquote>
-<p>Toxic-, Severe_Toxic-, Obscene-, Threat-, Insult-, Hate-.</p>
+<p>Toxic: 31.1955249,</p>
 </blockquote>
-</div>
-<div id="discussion" class="section level3">
-<h3>Discussion</h3>
+<blockquote>
+<p>Severe_Toxic: 2.6348808,</p>
+</blockquote>
+<blockquote>
+<p>Obscene: 27.1555764,</p>
+</blockquote>
+<blockquote>
+<p>Threat: 0,</p>
+</blockquote>
+<blockquote>
+<p>Insult: 15.4600302,</p>
+</blockquote>
+<blockquote>
+<p>Hate: 0.</p>
+</blockquote>
+<p>Toxic = 31.1955249 Severe_Toxic = 2.6348808 Obscene = 27.1555764 Threat = 0 Insult = 15.4600302 Identity_Hate = 0 ### Discussion</p>
 <p>       The results indicate that statistically significant classifications can be made by analysis of comment structure and sentiment analysis. This combination was found to be an improvement over each method independently method and substantiates intuition that Natural Language Processing is multi-facetted. The study recognizes that further relationships between structure, sentiment, and other factors could play an important role in accurate comment classifications.</p>
 </div>
 <div id="conclusion" class="section level3">

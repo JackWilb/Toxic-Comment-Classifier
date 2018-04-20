@@ -7,6 +7,7 @@ autosize: true
 
 ```{r setup, include=FALSE}
 opts_chunk$set(cache=TRUE)
+set.seed(1)
 ```
 
 Motivation
@@ -54,6 +55,7 @@ Libraries
 ========================================================
 
 ```{r, include = FALSE}
+set.seed(1)
 library(readr)
 library(stringi)
 library(quanteda)
@@ -383,7 +385,7 @@ toxicglm = cv.glmnet(train[,8:dim(train)[2]],
                      standardize = T,
                      nlambda = 50)
 toxicpreds = predict(toxicglm, newx = test[,8:dim(test)[2]], type = "response", s = "lambda.min")
-toxicpreds = ifelse(toxicpreds > 0.0099, 1 ,0)
+toxicpreds = ifelse(toxicpreds > 0.27, 1 ,0)
 toxicconf = confusionMatrix(factor(toxicpreds), factor(test[,1]))
 
 severe_toxicglm = cv.glmnet(train[,8:dim(train)[2]], 
@@ -396,7 +398,7 @@ severe_toxicglm = cv.glmnet(train[,8:dim(train)[2]],
                      standardize = T,
                      nlambda = 50)
 severe_toxicpreds = predict(severe_toxicglm, newx = test[,8:dim(test)[2]], type = "response", s = "lambda.min")
-severe_toxicpreds = ifelse(severe_toxicpreds > 0.016, 1 ,0)
+severe_toxicpreds = ifelse(severe_toxicpreds > 0.02, 1 ,0)
 severe_toxicconf = confusionMatrix(factor(severe_toxicpreds), factor(test[,2]))
 
 obsceneglm = cv.glmnet(train[,8:dim(train)[2]], 
@@ -409,7 +411,7 @@ obsceneglm = cv.glmnet(train[,8:dim(train)[2]],
                      standardize = T,
                      nlambda = 50)
 obscenepreds = predict(obsceneglm, newx = test[,8:dim(test)[2]], type = "response", s = "lambda.min")
-obscenepreds = ifelse(obscenepreds > 0.23, 1 ,0)
+obscenepreds = ifelse(obscenepreds > 0.22, 1 ,0)
 obsceneconf = confusionMatrix(factor(obscenepreds), factor(test[,3]))
 
 threatglm = cv.glmnet(train[,8:dim(train)[2]], 
@@ -422,7 +424,7 @@ threatglm = cv.glmnet(train[,8:dim(train)[2]],
                      standardize = T,
                      nlambda = 50)
 threatpreds = predict(threatglm, newx = test[,8:dim(test)[2]], type = "response", s = "lambda.min")
-threatpreds = ifelse(threatpreds > 0.004, 1 ,0)
+threatpreds = ifelse(threatpreds > 1, 1 ,0)
 threatconf = confusionMatrix(factor(threatpreds), factor(test[,4]))
 
 insultglm = cv.glmnet(train[,8:dim(train)[2]], 
@@ -435,7 +437,7 @@ insultglm = cv.glmnet(train[,8:dim(train)[2]],
                      standardize = T,
                      nlambda = 50)
 insultpreds = predict(insultglm, newx = test[,8:dim(test)[2]], type = "response", s = "lambda.min")
-insultpreds = ifelse(insultpreds > 0.255, 1 ,0)
+insultpreds = ifelse(insultpreds > 0.21, 1 ,0)
 insultconf = confusionMatrix(factor(insultpreds), factor(test[,5]))
 
 identity_hateglm = cv.glmnet(train[,8:dim(train)[2]], 
@@ -448,7 +450,7 @@ identity_hateglm = cv.glmnet(train[,8:dim(train)[2]],
                      standardize = T,
                      nlambda = 50)
 identity_hatepreds = predict(identity_hateglm, newx = test[,8:dim(test)[2]], type = "response", s = "lambda.min")
-identity_hatepreds = ifelse(identity_hatepreds > 0.3, 1 ,0)
+identity_hatepreds = ifelse(identity_hatepreds > 1, 1 ,0)
 identity_hateconf = confusionMatrix(factor(identity_hatepreds), factor(test[,6]))
 ```
 
@@ -463,17 +465,25 @@ Identity_Hate = `r unname((identity_hateconf$overall[1]-identity_hateconf$overal
 Discussion
 ========================================================
 
+Accurate classifcation predictions were made in the Toxic, Obscene, and Insult, categories.  The variables created provided significant  explanatory power in providing classifications.  Sentiment analysis, number of capital letters, and punctuation were the most powerful predictor variables created.
+
+A number of explanatory variables were effective in making accurate predictions confirming that in addition to somewhat obvious predictors, less obvious variables derived from machine learning algorithms are effective in extracting key features from text data.
 
 
 Limitations
 ========================================================
 
-Some categories did not have a large enough sample to predict off of.  The test data contained very zero Identity hate comments.  Threat comments only registered 0.3% of training data.  
+The categories of Severe_Toxic, Threat, and Identity_Hate, did not have a large enough sample to predict from.  The larger categories are still quit small.    Threat comments only registered 0.3% of training data.  
 
-Computing power presented a challenge to processing large document feature matrices.
+
+The best predictions were made in the largest categories which is reasonable considering statistically significant explanatory variables derived from these categories.
+
+
+Computing power also presented a challenge to processing large document feature matrices.  This hurdle prevented processing more types of explanatory variables. 
+  - N-grams
+  - Feature Combinations
 
 We were able to create some variables that were intuitive and some that were less intuitive.  There exists the possibility that many more predictive variables exists but we were not able to come up with them.
-
 
 Acknowledgements
 ========================================================

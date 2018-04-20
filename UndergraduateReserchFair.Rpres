@@ -158,37 +158,37 @@ identity_hatewords2 = names(identity_hatefeatures2)
 
 a = data.frame(term = c("f**k","ni**er","a*s","sex","hate","go","c*nt","like","suck","moron"), freq = unname(toxicfeatures2)) %>%
     ggplot(aes(x = reorder(term, freq), y = freq)) +
-    geom_bar(stat = 'identity', fill = 'orangered2') + theme(text=element_text(size=16))+
+    geom_bar(stat = 'identity', fill = 'orangered2') + axis.text.y = theme_text(size=35)+
     labs(x = '', y = 'Frequency', title = 'Most common Toxic Words') + 
     coord_flip()
 
 b = data.frame(term = c("f**k","a*s","suck","u","go","bastard","c*nt","athiest","fire","pro.assad.hannibal911you'r"), freq = unname(severe_toxicfeatures2)) %>%
     ggplot(aes(x = reorder(term, freq), y = freq)) +
-    geom_bar(stat = 'identity', fill = 'orangered2') + theme(text=element_text(size=16))+
+    geom_bar(stat = 'identity', fill = 'orangered2') + theme(text=element_text(size=70))+
     labs(x = '', y = 'Frequency', title = 'Most common Severe_toxic Words ') + 
     coord_flip() 
 
 c = data.frame(term = c("f**k","ni**er","a*s","c*nt","suck","go","u","bollock","d*ckhead","like"), freq = unname(obscenefeatures2)) %>%
-    ggplot(aes(x = reorder(term, freq), y = freq)) + theme(text=element_text(size=16))+
+    ggplot(aes(x = reorder(term, freq), y = freq)) + theme(text=element_text(size=70))+
     geom_bar(stat = 'identity', fill = 'orangered2') + 
     labs(x = '', y = 'Frequency', title = 'Most common Obscene Words') + 
     coord_flip() 
 
 d = data.frame(term = c("a*s","will","supertr0l","die","live","pathet(ic)","forev(er)","fool","respect","f**k"), freq = unname(threatfeatures2)) %>%
     ggplot(aes(x = reorder(term, freq), y = freq)) + 
-    geom_bar(stat = 'identity', fill = 'orangered2') +theme(text=element_text(size=16))+ 
+    geom_bar(stat = 'identity', fill = 'orangered2') +theme(text=element_text(size=70))+ 
     labs(x = '', y = 'Frequency', title = 'Most common Threat Word') + 
     coord_flip() 
 
 e = data.frame(term = c("f**k","ni**er","a*s","hate","c*nt","go","moron","hi","u","suck"), freq = unname(insultfeatures2)) %>%
     ggplot(aes(x = reorder(term, freq), y = freq)) + 
-    geom_bar(stat = 'identity', fill = 'orangered2') + theme(text=element_text(size=16))+
+    geom_bar(stat = 'identity', fill = 'orangered2') + theme(text=element_text(size=70))+
     labs(x = '', y = 'Frequency', title = 'Most common Insult Word') + 
     coord_flip() 
 
 
 f = data.frame(term = c("ni**er","c*nt","tommy2010","licker","fan-1967","like","romney","mitt","homo","f**k"), freq = unname(identity_hatefeatures2)) %>%
-    ggplot(aes(x = reorder(term, freq), y = freq)) + theme(text=element_text(size=16))+
+    ggplot(aes(x = reorder(term, freq), y = freq)) + theme(text=element_text(size=70))+
     geom_bar(stat = 'identity', fill = 'orangered2') + 
     labs(x = '', y = 'Frequency', title = 'Most common Identity_hate Word') + 
     coord_flip() 

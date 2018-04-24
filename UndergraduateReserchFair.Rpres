@@ -107,17 +107,19 @@ table(train$insult)
 table(train$identity_hate)
 ```
 
-* Toxic: `r (15294/159571)*100` %.
+* Prevalence
 
-* Severe_toxic: `r (1595/159571)*100 ` %.
-
-* Obscene: `r (8449/159571)*100 ` %.
-
-* Threat: `r (478/159571)*100 ` %.
-
-* Insult: `r (7877/159571)*100 ` %.
-
-* Identity Hate: `r (1405/159571)*100 ` %.
+  * Toxic: `r (15294/159571)*100` %.
+  
+  * Severe_toxic: `r (1595/159571)*100 ` %.
+  
+  * Obscene: `r (8449/159571)*100 ` %.
+  
+  * Threat: `r (478/159571)*100 ` %.
+  
+  * Insult: `r (7877/159571)*100 ` %.
+  
+  * Identity Hate: `r (1405/159571)*100 ` %.
 
 Tidy Text Word Analysis
 ========================================================
@@ -251,15 +253,15 @@ Variables Created
 * Sentiment analysis
   - Standard Lexicon/ library - AFINN
   - Custom lexicon
-    -Swear
-    -Hate
+    * Swear
+    * Hate
   
 Variables Created
 ========================================================  
     
 * Sparse Document Feature Matrix
   - Counts of every possible "feature"
-    - Words, punt, multiple words
+    - Words, punctuation, multiple words strings
     - 4000 features.
    
 
@@ -515,7 +517,7 @@ Results
 Discussion
 ========================================================
 
-* Satistically signficant Classifications:
+* Statistically significant Classifications:
   - Toxic
   - Obscene
   - Insult
@@ -548,7 +550,7 @@ Limitations
   
   - Feature Combinations
   
-  - Unkown Variables
+  - Unknown Variables
 
 
 Acknowledgements

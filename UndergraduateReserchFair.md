@@ -89,17 +89,19 @@ Exploratory Data Analysis
 
 
 
-* Toxic: 9.5844483 %.
+* Prevalence
 
-* Severe_toxic: 0.9995551 %.
-
-* Obscene: 5.2948217 %.
-
-* Threat: 0.2995532 %.
-
-* Insult: 4.9363606 %.
-
-* Identity Hate: 0.8804858 %.
+  * Toxic: 9.5844483 %.
+  
+  * Severe_toxic: 0.9995551 %.
+  
+  * Obscene: 5.2948217 %.
+  
+  * Threat: 0.2995532 %.
+  
+  * Insult: 4.9363606 %.
+  
+  * Identity Hate: 0.8804858 %.
 
 Tidy Text Word Analysis
 ========================================================
@@ -108,133 +110,20 @@ Tidy Text Word Analysis
 
 
 
-![plot of chunk unnamed-chunk-7](UndergraduateReserchFair-figure/unnamed-chunk-7-1.png)
-
-Tidy Text Word Analysis
-========================================================
-
-![plot of chunk unnamed-chunk-8](UndergraduateReserchFair-figure/unnamed-chunk-8-1.png)
-
-Tidy Text Word Analysis
-========================================================
-
-![plot of chunk unnamed-chunk-9](UndergraduateReserchFair-figure/unnamed-chunk-9-1.png)
-
-
-Word frequencies for associated classifications.  
-
-
-
-PCA
-========================================================
-
-![plot of chunk unnamed-chunk-10](UndergraduateReserchFair-figure/unnamed-chunk-10-1.png)
-
-It behaves as we'd expect.
-
-
-Variables Created
-========================================================
-
-* Feature Count 
-  - Punctuation
-  - Capital letters
-  - Smileys
-  
-* Sentiment analysis
-  - Standard Lexicon/ library - AFINN
-  - Custom lexicon
-    -Swear
-    -Hate
-  
-Variables Created
-========================================================  
-    
-* Sparse Document Feature Matrix
-  - Counts of every possible "feature"
-    - Words, punt, multiple words
-    - 4000 features.
-   
-
-
-Results
-========================================================
 
 
 
 
-* Toxic = 0.9337093. 
-  - 31.1955249 % increase
-  
-* Severe_Toxic = 0.9902739
-  - 2.6348808 % increase
-  
-* Obscene = 0.9610328
-  - 27.1555764 % increase
-
-Results
-========================================================  
-
-* Threat = 0.9970421
-  - 0 % increase
-  
-* Insult = 0.9578492
-  - 15.4600302 % increase
-  
-* Identity_Hate = 0.9913392
-  - 0 % increase
-
-Discussion
-========================================================
-
-* Satistically signficant Classifications:
-  - Toxic
-  - Obscene
-  - Insult
-  
-* No Improvement:
-  - Severe_toxic
-  - Threat
-  - Identity_hate
-  
-Discussion
-========================================================
-  
-* Significant Variables:
-  - Sentiment Analysis
-  - Document Feature Matrix
-
-
-Limitations
-========================================================
-
-* Data Size:
-
-  - Prevalence (0.3% Threat)
-  
-  - Machine Learning Limited
-
-* Computing power:
-  
-  - N-grams
-  
-  - Feature Combinations
-  
-  - Unkown Variables
-
-
-Acknowledgements
-========================================================
-
-http://www.bannedwordlist.com/lists/swearWords.txt
-
-https://www.cs.cmu.edu/~biglou/resources/bad-words.txt
-
-https://github.com/t-davidson/hate-speech-and-offensive-language/tree/master/lexicons
-
-https://www.tidytextmining.com/tidytext.html
-
-https://www.kaggle.com/c/jigsaw-toxic-comment-classification-challenge
 
 
 
+
+
+
+
+```
+Error in parse(text = x, srcfile = src) : <text>:3:1: unexpected input
+2:     ggplot(aes(x = reorder(term, freq), y = freq)) +
+3: <<
+   ^
+```

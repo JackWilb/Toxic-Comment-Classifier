@@ -164,6 +164,7 @@ identity_hatewords2 = names(identity_hatefeatures2)
 ```{r, include = FALSE}
 a = data.frame(term = c("f**k","ni**er","a*s","sex","hate","go","c*nt","like","suck","moron"), freq = unname(toxicfeatures2)) %>%
     ggplot(aes(x = reorder(term, freq), y = freq)) +
+<<<<<<< HEAD
     geom_bar(stat = 'identity', fill = 'orangered2') + theme(text=element_text(size=16))+
     labs(x = '', y = 'Frequency', title = 'Toxic') + 
     theme(axis.text.y = element_text(size = 40), plot.title = element_text(size = 50)) + 
@@ -178,8 +179,7 @@ b = data.frame(term = c("f**k","a*s","suck","u","go","bastard","c*nt","athiest",
 
 c = data.frame(term = c("f**k","ni**er","a*s","c*nt","suck","go","u","bollock","d*ckhead","like"), freq = unname(obscenefeatures2)) %>%
     ggplot(aes(x = reorder(term, freq), y = freq)) + 
-    theme(axis.text.y = element_text(size = 40), plot.title = element_text(size = 50)) +
-    geom_bar(stat = 'identity', fill = 'orangered2') + 
+    theme(axis.text.y = element_text(size = 40), plot.title = element_text(size = 50)) ++ 
     labs(x = '', y = 'Frequency', title = 'Obscene') + 
     coord_flip() 
 

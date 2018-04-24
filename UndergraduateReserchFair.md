@@ -22,6 +22,7 @@ Objectives
 * Natural Language Processing (NLP)
   - Body Of Text
   - Useful Variables
+  
 * Predictive Modeling
   - Explantory Variables
   - 6 Response Variables
@@ -105,10 +106,7 @@ Tidy Text Word Analysis
 
 
 
-![plot of chunk unnamed-chunk-6](UndergraduateReserchFair-figure/unnamed-chunk-6-1.png)
 
-Tidy Text Word Analysis
-========================================================
 
 ![plot of chunk unnamed-chunk-7](UndergraduateReserchFair-figure/unnamed-chunk-7-1.png)
 
@@ -117,60 +115,112 @@ Tidy Text Word Analysis
 
 ![plot of chunk unnamed-chunk-8](UndergraduateReserchFair-figure/unnamed-chunk-8-1.png)
 
+Tidy Text Word Analysis
+========================================================
 
-These word frequency visuals gives us an idea of words associated with certain classifications.  We can add counts of these words into our variable creation to make better predictions.
+![plot of chunk unnamed-chunk-9](UndergraduateReserchFair-figure/unnamed-chunk-9-1.png)
+
+
+Word frequencies for associated classifications.  
 
 
 
 PCA
 ========================================================
 
-![plot of chunk unnamed-chunk-9](UndergraduateReserchFair-figure/unnamed-chunk-9-1.png)
+![plot of chunk unnamed-chunk-10](UndergraduateReserchFair-figure/unnamed-chunk-10-1.png)
+
+It behaves as we'd expect.
+
 
 Variables Created
 ========================================================
 
-*Feature Count 
-  -punctuation
-  -capital letters
-  -smileys
+* Feature Count 
+  - Punctuation
+  - Capital letters
+  - Smileys
   
-*Sentiment analysis
-  -Standard Lexicon/ library - AFINN
+* Sentiment analysis
+  - Standard Lexicon/ library - AFINN
   - Custom lexicon
     -Swear
     -Hate
+  
+Variables Created
+========================================================  
     
-- Sparse Document Feature Matrix
-  -counts of every possible "feature"
-    -words, punt, multiple words
-    -4000 features.
+* Sparse Document Feature Matrix
+  - Counts of every possible "feature"
+    - Words, punt, multiple words
+    - 4000 features.
    
 
 
 Results
 ========================================================
 
-Toxic-NIR
-Severe_Toxic
-Obscene
-Threat
-Insult
-Identity_Hate
+
+
+
+* Toxic = 0.9337093. 
+  - 31.1955249 % increase
+  
+* Severe_Toxic = 0.9902739
+  - 2.6348808 % increase
+  
+* Obscene = 0.9610328
+  - 27.1555764 % increase
+
+Results
+========================================================  
+
+* Threat = 0.9970421
+  - 0 % increase
+  
+* Insult = 0.9578492
+  - 15.4600302 % increase
+  
+* Identity_Hate = 0.9913392
+  - 0 % increase
 
 Discussion
 ========================================================
 
+* Satistically signficant Classifications:
+  - Toxic
+  - Obscene
+  - Insult
+  
+* No Improvement:
+  - Severe_toxic
+  - Threat
+  - Identity_hate
+  
+Discussion
+========================================================
+  
+* Significant Variables:
+  - Sentiment Analysis
+  - Document Feature Matrix
 
 
 Limitations
 ========================================================
 
-Some categories did not have a large enough sample to predict off of.  The test data contained very zero Identity hate comments.  Threat comments only registered 0.3% of training data.  
+* Data Size:
 
-Computing power presented a challenge to processing large document feature matrices.
+  - Prevalence (0.3% Threat)
+  
+  - Machine Learning Limited
 
-We were able to create some variables that were intuitive and some that were less intuitive.  There exists the possibility that many more predictive variables exists but we were not able to come up with them.
+* Computing power:
+  
+  - N-grams
+  
+  - Feature Combinations
+  
+  - Unkown Variables
 
 
 Acknowledgements
@@ -183,4 +233,8 @@ https://www.cs.cmu.edu/~biglou/resources/bad-words.txt
 https://github.com/t-davidson/hate-speech-and-offensive-language/tree/master/lexicons
 
 https://www.tidytextmining.com/tidytext.html
+
+https://www.kaggle.com/c/jigsaw-toxic-comment-classification-challenge
+
+
 

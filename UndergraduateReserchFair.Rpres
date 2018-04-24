@@ -24,6 +24,7 @@ Objectives
 * Natural Language Processing (NLP)
   - Body Of Text
   - Useful Variables
+  
 * Predictive Modeling
   - Explantory Variables
   - 6 Response Variables
@@ -156,42 +157,50 @@ insultwords2 = names(insultfeatures2)
 identity_hatedfm2 = dfm_subset(traindfm2, identity_hate == 1,remove = stopwords("english"))
 identity_hatefeatures2 = topfeatures(identity_hatedfm2, 10)
 identity_hatewords2 = names(identity_hatefeatures2)
+```
 
+```{r, include = FALSE}
 a = data.frame(term = c("f**k","ni**er","a*s","sex","hate","go","c*nt","like","suck","moron"), freq = unname(toxicfeatures2)) %>%
     ggplot(aes(x = reorder(term, freq), y = freq)) +
     geom_bar(stat = 'identity', fill = 'orangered2') + theme(text=element_text(size=16))+
-    labs(x = '', y = 'Frequency', title = 'Most common Toxic Words') + 
+    labs(x = '', y = 'Frequency', title = 'Toxic') + 
+    theme(axis.text.y = element_text(size = 40), plot.title = element_text(size = 50)) + 
     coord_flip()
 
-b = data.frame(term = c("f**k","a*s","suck","u","go","bastard","c*nt","athiest","fire","pro.assad.hannibal911you'r"), freq = unname(severe_toxicfeatures2)) %>%
+b = data.frame(term = c("f**k","a*s","suck","u","go","bastard","c*nt","athiest","fire","pro.assad(...)"), freq = unname(severe_toxicfeatures2)) %>%
     ggplot(aes(x = reorder(term, freq), y = freq)) +
-    geom_bar(stat = 'identity', fill = 'orangered2') + theme(text=element_text(size=16))+
-    labs(x = '', y = 'Frequency', title = 'Most common Severe_toxic Words ') + 
+    geom_bar(stat = 'identity', fill = 'orangered2') + 
+    theme(axis.text.y = element_text(size = 40), plot.title = element_text(size = 50)) +
+    labs(x = '', y = 'Frequency', title = 'Severe_toxic') + 
     coord_flip() 
 
 c = data.frame(term = c("f**k","ni**er","a*s","c*nt","suck","go","u","bollock","d*ckhead","like"), freq = unname(obscenefeatures2)) %>%
-    ggplot(aes(x = reorder(term, freq), y = freq)) + theme(text=element_text(size=16))+
+    ggplot(aes(x = reorder(term, freq), y = freq)) + 
+    theme(axis.text.y = element_text(size = 40), plot.title = element_text(size = 50)) +
     geom_bar(stat = 'identity', fill = 'orangered2') + 
-    labs(x = '', y = 'Frequency', title = 'Most common Obscene Words') + 
+    labs(x = '', y = 'Frequency', title = 'Obscene') + 
     coord_flip() 
 
 d = data.frame(term = c("a*s","will","supertr0l","die","live","pathet(ic)","forev(er)","fool","respect","f**k"), freq = unname(threatfeatures2)) %>%
     ggplot(aes(x = reorder(term, freq), y = freq)) + 
-    geom_bar(stat = 'identity', fill = 'orangered2') +theme(text=element_text(size=16))+ 
-    labs(x = '', y = 'Frequency', title = 'Most common Threat Word') + 
+    geom_bar(stat = 'identity', fill = 'orangered2') +
+    theme(axis.text.y = element_text(size = 40), plot.title = element_text(size = 50)) + 
+    labs(x = '', y = 'Frequency', title = 'Threat') + 
     coord_flip() 
 
 e = data.frame(term = c("f**k","ni**er","a*s","hate","c*nt","go","moron","hi","u","suck"), freq = unname(insultfeatures2)) %>%
     ggplot(aes(x = reorder(term, freq), y = freq)) + 
-    geom_bar(stat = 'identity', fill = 'orangered2') + theme(text=element_text(size=16))+
-    labs(x = '', y = 'Frequency', title = 'Most common Insult Word') + 
+    geom_bar(stat = 'identity', fill = 'orangered2') + 
+    theme(axis.text.y = element_text(size = 40), plot.title = element_text(size = 50)) +
+    labs(x = '', y = 'Frequency', title = 'Insult') + 
     coord_flip() 
 
 
 f = data.frame(term = c("ni**er","c*nt","tommy2010","licker","fan-1967","like","romney","mitt","homo","f**k"), freq = unname(identity_hatefeatures2)) %>%
-    ggplot(aes(x = reorder(term, freq), y = freq)) + theme(text=element_text(size=16))+
+    ggplot(aes(x = reorder(term, freq), y = freq)) + 
+    theme(axis.text.y = element_text(size = 40), plot.title = element_text(size = 50)) +
     geom_bar(stat = 'identity', fill = 'orangered2') + 
-    labs(x = '', y = 'Frequency', title = 'Most common Identity_hate Word') + 
+    labs(x = '', y = 'Frequency', title = "Identity_hate") + 
     coord_flip() 
 ```
 
@@ -214,7 +223,7 @@ gridExtra::grid.arrange(e,f, ncol = 2)
 ```
 
 
-These word frequency visuals gives us an idea of words associated with certain classifications.  We can add counts of these words into our variable creation to make better predictions.
+Word frequencies for associated classifications.  
 
 
 
@@ -227,27 +236,31 @@ train_num<-na.omit(train_num)
 train_pca<- prcomp(train_num, scale=TRUE)
 biplot(train_pca, xlabs=rep("",159571))
 ```
-This loosely corresponds to correlation of comments.  It behaves as we'd expect.
+
+It behaves as we'd expect.
 
 
 Variables Created
 ========================================================
 
-*Feature Count 
-  -punctuation
-  -capital letters
-  -smileys
+* Feature Count 
+  - Punctuation
+  - Capital letters
+  - Smileys
   
-*Sentiment analysis
-  -Standard Lexicon/ library - AFINN
+* Sentiment analysis
+  - Standard Lexicon/ library - AFINN
   - Custom lexicon
     -Swear
     -Hate
+  
+Variables Created
+========================================================  
     
-- Sparse Document Feature Matrix
-  -counts of every possible "feature"
-    -words, punt, multiple words
-    -4000 features.
+* Sparse Document Feature Matrix
+  - Counts of every possible "feature"
+    - Words, punt, multiple words
+    - 4000 features.
    
 
 
@@ -255,6 +268,149 @@ Results
 ========================================================
 
 ```{r, include = FALSE}
+# Set seed for consistent results
+set.seed(1)
+
+# Importing Libraries
+library(readr) # Importing and exporting csv files
+library(stringi) # Fast string manipulation package (improved version of stringr)
+library(quanteda) # Fast tokenizing and dfm creation (see methods)
+library(dplyr) # Tidy variable creator and data cleaner
+library(caret) # Predictive modeling package, used for confusionMatrix function (see methods) 
+library(glmnet) # Predictive modeling package, used for cross validated logistic regression
+library(doParallel) # Parallelizing model and dfm building
+registerDoParallel(4) # Number of cores to be parallel over
+library(tidytext) # Tidy data wrangling, used for stopwords
+library(data.table) # Importing swear databases that are friendly with sentimentr
+library(sentimentr) # Apply custom sentiments to words of interest
+
+# Import dataset from Kaggle.com
+train = read_csv("train.csv")
+
+# Making the number of rows even, dropping the first observation
+train = train[2:159571,]
+
+# Splitting the dataset into a training and a testing set
+sample = sample(nrow(train), nrow(train)/2)
+test = train[-sample,]
+train = train[sample,]
+idtrain = 1:nrow(train)
+idtest = (nrow(train)+1):(nrow(train) + nrow(test))
+traintest = rbind(train[,1:2], test[1:2])
+gc()
+
+# Using dplyr and stringi to generate new variables related to properties of the strings
+traintest = rbind(train[,1:2], test[1:2])
+traintest = mutate(traintest,
+       length = stri_length(comment_text),
+       ncap = stri_count_charclass(comment_text, "[A-Z]"),
+       nnum = stri_count_charclass(comment_text, "[0-9]"),
+       ncap_len = ncap / length,
+       nnum_len = nnum / length,
+       nexcl = stri_count_fixed(comment_text, "!"),
+       nquest = stri_count_fixed(comment_text, "?"),
+       npunct = stri_count_charclass(comment_text, "[[:punct:]]"),
+       npunct_len = npunct / length,
+       nsent = stri_count_boundaries(comment_text, "sentence"),
+       nsymb = stri_count_regex(comment_text, "&|@|#|\\$|%|\\*|\\^"),
+       nsmile = stri_count_regex(comment_text, "((?::|;|=)(?:-)?(?:\\)|D|P))"),
+       nwords = stri_count_words(comment_text)
+       )
+train = cbind(train, traintest[idtrain,3:ncol(traintest)])
+test = cbind(test, traintest[idtest,3:ncol(traintest)])
+
+###swears
+swears<-fread("swears.csv", sep = ",")
+hatewords<-fread("hatebase_dict1.csv",sep=",")
+#swears2 <-fread("swearlistcscmu.csv",sep=",")
+#swears3<-fread("googleswear.csv",sep=",")
+
+
+swears<-unique( swears[ , 1:2 ] )
+swears$x <- gsub(",","",swears$x)
+#swears<-rbind(swears,swears2)
+#swears<-rbind(swears,swears3)
+swears<-unique(swears[,1:2])
+mykey.swear<-update_key(swears)
+
+
+hatewords<-unique(hatewords[,1:2])
+hatewords$words<-gsub(",","",hatewords$words)
+hatewords$words<-gsub("'"," ",hatewords$words)
+
+hatewords$words<-tolower(hatewords$words)
+hatewords
+colnames(hatewords)[1] <- "x"
+colnames(hatewords)[2]<-"y"
+hatewords<-unique(hatewords[,1:2])
+key.hatewords <- update_key(hatewords)
+
+stopWords = c(stop_words$word, "of", "or", "on")
+stopWords=stopWords[!(stopWords %in% c("new","used","small","large","thanks","greetings","works"))]
+
+cmmnt = train$comment_text
+cmmnt = unlist(cmmnt)[!(unlist(cmmnt) %in% stopWords)]
+cmmnt = stri_replace_all_charclass(cmmnt, "[^[:alnum:]]", " ")
+id = rep(1:nrow(train))
+cmmnt_df = data.frame(id = id, comments = cmmnt)
+cmmnt_df$comments = as.character(cmmnt_df$comments)
+
+
+cmmnt.t = test$comment_text
+cmmnt.t = unlist(cmmnt.t)[!(unlist(cmmnt.t) %in% stopWords)]
+cmmnt.t = stri_replace_all_charclass(cmmnt.t, "[^[:alnum:]]", " ")
+id = rep(1:nrow(test))
+cmmnt_df.t = data.frame(id = id, comments = cmmnt.t)
+cmmnt_df.t$comments = as.character(cmmnt_df.t$comments)
+
+
+swear.sent.train<-sentiment_by(cmmnt_df$comments,list(id), polarity_dt=mykey.swear)
+swear.sent.test<-sentiment_by(cmmnt_df.t$comments,list(id),polarity_dt=mykey.swear)
+
+colnames(swear.sent.test)[4] <- "swear_sent"
+colnames(swear.sent.train)[4]<-"swear_sent"
+
+
+#cmmnt_df$comments<-na.omit(cmmnt_df$comments)
+#cmmnt_df.t$comments<-na.omit(cmmnt_df.t$comments)
+
+#hate.sent.train<-sentiment_by(cmmnt_df$comments,list(id), polarity_dt=key.hatewords)
+#hate.sent.test<-sentiment_by(cmmnt_df.t$comments,list(id),polarity_dt=key.hatewords)
+
+#colnames(hate.sent.test)[4] <- "hate_sent"
+#colnames(hate.sent.train)[4]<-"hate_sent"
+
+train<-cbind(train,swear.sent.train[,4])
+test<-cbind(test,swear.sent.test[,4])
+#train<-cbind(train,hate.sent.train[,4])
+#test<-cbind(test,hate.sent.test[,4])
+###positive sent- afinn
+pos.sent<-sentiment_by(cmmnt_df$comments, list(id), lexicon="afinn")
+pos.sent.t<-sentiment_by(cmmnt_df$comments, list(id), lexicon="afinn")
+
+colnames(pos.sent)[4] <- "afinn"
+colnames(pos.sent.t)[4]<-"afinn"
+
+train<-cbind(train,pos.sent[,4])
+test<-cbind(test,pos.sent.t[,4])
+
+
+## quanteda
+ttcorp = corpus(traintest$comment_text)
+ttdfm = dfm(ttcorp, remove = stopwords("english"))
+ttdfm = dfm_trim(ttdfm, min_docfreq = 150, max_docfreq = 100000)
+ttdfm = dfm_sort(ttdfm)
+
+# sparse matrix
+sumttdfm = summary(ttdfm)
+sparsettdfm = sparseMatrix(i = sumttdfm$i, j = sumttdfm$j, x = sumttdfm$x)
+
+sparsetrain = Matrix(as.matrix(train[3:23]), sparse = TRUE)
+sparsetest = Matrix(as.matrix(test[3:23]), sparse = TRUE)
+train = cbind(sparsetrain, sparsettdfm[1:nrow(train),])
+test = cbind(sparsetest, sparsettdfm[(nrow(train)+1):(nrow(train) + nrow(test)),])
+rm(sparsetrain, sparsetest)
+
 toxicglm = cv.glmnet(train[,8:dim(train)[2]], 
                      factor(train[,1]), 
                      alpha = 0, 
@@ -335,41 +491,56 @@ identity_hateconf = confusionMatrix(factor(identity_hatepreds), factor(test[,6])
 ```
 
 
-Toxic = `r unname((toxicconf$overall[1]-toxicconf$overall[5])/(1-toxicconf$overall[5]))*100`
-Severe_Toxic = `r unname((severe_toxicconf$overall[1]-severe_toxicconf$overall[5])/(1-severe_toxicconf$overall[5]))*100`
-Obscene = `r unname((obsceneconf$overall[1]-obsceneconf$overall[5])/(1-obsceneconf$overall[5]))*100`
-Threat = `r unname((threatconf$overall[1]-threatconf$overall[5])/(1-threatconf$overall[5]))*100`
-Insult = `r unname((insultconf$overall[1]-insultconf$overall[5])/(1-insultconf$overall[5]))*100`
-Identity_Hate = `r unname((identity_hateconf$overall[1]-identity_hateconf$overall[5])/(1-identity_hateconf$overall[5]))*100`
+* Toxic = `r toxicconf$overall[1]`. 
+  - `r unname((toxicconf$overall[1]-toxicconf$overall[5])/(1-toxicconf$overall[5]))*100` % increase
+  
+* Severe_Toxic = `r severe_toxicconf$overall[1]`
+  - `r unname((severe_toxicconf$overall[1]-severe_toxicconf$overall[5])/(1-severe_toxicconf$overall[5]))*100` % increase
+  
+* Obscene = `r obsceneconf$overall[1]`
+  - `r unname((obsceneconf$overall[1]-obsceneconf$overall[5])/(1-obsceneconf$overall[5]))*100` % increase
+
+Results
+========================================================  
+
+* Threat = `r threatconf$overall[1]`
+  - `r unname((threatconf$overall[1]-threatconf$overall[5])/(1-threatconf$overall[5]))*100` % increase
+  
+* Insult = `r insultconf$overall[1]`
+  - `r unname((insultconf$overall[1]-insultconf$overall[5])/(1-insultconf$overall[5]))*100` % increase
+  
+* Identity_Hate = `r identity_hateconf$overall[1]`
+  - `r unname((identity_hateconf$overall[1]-identity_hateconf$overall[5])/(1-identity_hateconf$overall[5]))*100` % increase
 
 Discussion
 ========================================================
 
-Satistically signficant Classifications:
-
-  -Toxic
-  -Obscene
-  -Insult
+* Satistically signficant Classifications:
+  - Toxic
+  - Obscene
+  - Insult
   
-No Improvement:
-
-  -Severe_toxic
-  -Threat
-  -Identity_hate
+* No Improvement:
+  - Severe_toxic
+  - Threat
+  - Identity_hate
   
-Significant Variables:
-
-  -Sentiment Analysis
-  -Document Feature Matrix
+Discussion
+========================================================
+  
+* Significant Variables:
+  - Sentiment Analysis
+  - Document Feature Matrix
 
 
 Limitations
 ========================================================
 
 * Data Size:
-  - Small, number of certain categories (0.3% Threat)
+
+  - Prevalence (0.3% Threat)
   
-  - Machine Learning limited
+  - Machine Learning Limited
 
 * Computing power:
   

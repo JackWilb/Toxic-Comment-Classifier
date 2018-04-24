@@ -37,20 +37,24 @@ library(RTextTools)
 
 
 
-```{r}
+```{r} 
 toxic_train = fread("train.csv", sep=',')
 toxic_test = fread("test.csv", sep=',')
 
 stopWords = c(stop_words$word, "of", "or", "on")
 stopWords=stopWords[!(stopWords %in% c("new","used","small","large","thanks","greetings","works"))]
 
-swears<-fread("swears.csv", sep = ",")
+swears<-fread("swear(-10).csv", sep = ",")
+#swears2<-fread("swearlistcscmu.csv",sep=",")
 swears$x <- gsub(",","",swears$x)
+#swears2$y<-(-10)
+#swears2<-unique(swears2[,1:2])
+#swears<-rbind(swears, swears2)
 swears<-unique(swears[,1:2])
 mykey.swear<-update_key(swears)
 
-hatewords<-fread("hatebase_dict1.csv",sep=",")
-hatewords2<-fread("hate.ngram.csv",sep=",")
+hatewords<-fread("hatebase_dict(-10).csv",sep=",")
+hatewords2<-fread("hate.ngram(-10).csv",sep=",")
 hatewords$words<-gsub(",","",hatewords$words)
 hatewords$words<-gsub("'"," ",hatewords$words)
 hatewords$words<-tolower(hatewords$words)

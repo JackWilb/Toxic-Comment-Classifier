@@ -14,7 +14,7 @@ opts_chunk$set(cache=TRUE)
 
 ### Abstract
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The purpose of this semester long project was to learn a new skill in R: Natural Language Processing (NLP) and, ultimately, we were successful. The impetus for this project came from Kaggle.com, a site that hosts data science related challenges, in the form of a competition that asked us to classify certain Wikipedia submission comments into 6 categories (toxic, severe toxic, obscene, insult, threat, and identity hate). Our objectives were to understand what NLP is and to create a cross validated logistic regression model that would accurately classify the comment text based on these categories. We were successful in both endeavours and were able to predict comment categories with a 20% improvement over the no-information rate, significant for us but not the best entry in the competition. This newly gained knowledge will help us when formulating other NLP based predictive models and the research methodology we used will help us learn other techniques for future model building in any setting. In all, this project was a great first foray into NLP and will be a great stepping off point for many other projects.
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The purpose of this semester long project was to learn a new skill in R: Natural Language Processing (NLP) and, ultimately, we were successful. The impetus for this project came from Kaggle.com, a site that hosts data science related challenges, in the form of a competition that asked us to classify certain Wikipedia submission comments into 6 categories (toxic, severe toxic, obscene, insult, threat, and identity hate). Our objectives were to understand what NLP is and to create a cross validated logistic regression model that would accurately classify the comment text based on these categories. We were successful in both endeavours and were able to predict comment categories with as much as 31.29% improvement over the no-information rate, significant for us but not the best entry in the competition. This newly gained knowledge will help us when formulating other NLP based predictive models and the research methodology we used will help us learn other techniques for future model building in any setting. In all, this project was a great first foray into NLP and will be a great stepping off point for many other projects.
 
 **Keywords: Cross Validation, Document Feature Matrix, Logistic Regression, Natural Language Processing (NLP), Sentiment Analysis, Sparse Matrix, Text Mining**
 
@@ -23,7 +23,7 @@ opts_chunk$set(cache=TRUE)
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  The spoken and written language of humans, has been the predominant method for conveying ideas, stories, thoughts, etc. for milenia. In fact, “language first appeared among Homo sapiens somewhere between 30,000 and 100,000 years ago” (Bryant), and is still one of a few of communication. These verbal and written words necessitate reading, or listening, and then an accurate comprehension of the words; however, the creation of ideas has far outpaced our ability to interpret in a timely fashion. As a consequence, there are large bodies of knowledge that lie unread or unheard and thus that knowledge has not been co-opted into society. While concepts have been able to evolve based on preceding work, the methods of interpretation remain limited by human comprehension.
 With the onset of computers, we are now on the precipice of a new method for language comprehension at speeds that far outpace human ability.  Developing methods for computers to interpret language presents the ability extract key bits of information from vast amounts of language.  
  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; With the increasing global access to technology, data is being created and consumed at an ever increasing rate (CITATION), requiring development of analysis techniques that can effectively process language, written or spoken.  The ability to condense a body of text from: Twitter tweets, books, internet comments, websites, etc, is vital to drawing meaningful information from vasts amount of text. We can achieve this condensation in many ways; for example, we could use a dimension reduction or, more commonly, a feature selection. 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; With the increasing global access to technology, data is being created and consumed at an ever increasing rate (insideBIGDATA), requiring development of analysis techniques that can effectively process language, written or spoken.  The ability to condense a body of text from: Twitter tweets, books, internet comments, websites, etc, is vital to drawing meaningful information from vasts amount of text. We can achieve this condensation in many ways; for example, we could use a dimension reduction or, more commonly, a feature selection. 
 After this condensation we can apply an algorithm that will allow us to predict certain facets of interest.
 
 ### Methods
@@ -34,7 +34,7 @@ After this condensation we can apply an algorithm that will allow us to predict 
     
 **Variable Creation**
     
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Variable creation was the most important step in this project. Going from plain text to numerical/categorical variables that represent important information allowed us to predict was the hurdle that we had to leap over and comprised the most of our time. In all we created about 4000 variables that might help us explain what was happening
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Variable creation was the most important step in this project. Going from plain text to numerical/categorical variables that represent important information allowed us to predict was the hurdle that we had to leap over and comprised the most of our time. In all we created about 4000 variables that might help us explain what was happening.
 
 **Tokens**
 
@@ -48,24 +48,33 @@ After this condensation we can apply an algorithm that will allow us to predict 
     
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Sentiment analysis consists of assigning values to words, tokens, or n-grams in order to classify/interpret a specific body of text. In our case we used sentiment analysis to put large negative weights on swear words and large positive weights on words that we believed would be would not be in any of the categories we were predicting.
 
-**Sparse Matrix**
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; A sparse data matrix is a specific type of data containing object inside of R (and maybe other programming languages). This type of matrix is useful because it preserves memory by tracking the locations and values at specific coordinates in an array instead of keeping all the zeros in memory – they are simply omitted. This meant in our case that the matrix that we held our data in was able to be stored in memory and was actually only SOMETHING% of the size of the original matrix. This meant that we were able to preserve memory and actually allowed us to build our model and cross validate it. There are many implementations of sparse matrices that handle the data in slightly different ways but the one we used specifically was the 
-
 **Document Feature Matrix**
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; A document feature matrix is a relatively simple structure that records the number  of occurrence of words, tokens, or n-grams. These matrices are usually very large and require some kind of sub-setting to remove words/phrases that are not predictive and also removing words that occur too frequently. Looking for words that are infrequent but consistently occur in categories of interest is really useful because they are very predictive.
 
+**Sparse Matrix**
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; A sparse data matrix is a specific type of data containing object inside of R (and maybe other programming languages). This type of matrix is useful because it preserves memory by tracking the locations and values at specific coordinates in an array instead of keeping all the zeros in memory – they are simply omitted. This meant in our case that the matrix that we held our data in was able to be stored in memory and was actually only SOMETHING% of the size of the original matrix. This meant that we were able to preserve memory and actually allowed us to build our model and cross validate it. There are many implementations of sparse matrices that handle the data in slightly different ways but the one we used specifically was the 
+
+
 **Cross Validation**
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Cross validation is a technique that 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Cross validation is a technique implemented in predictive model development that utilizes re-sampling of the same training and test data multiple times in order to “train” the model over many training and test sets.  This method aids in training the model to make better predictions on new data. 
 
 **Logistic Regression**
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Logistic regression is a classification model that 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Logistic regression is a binary classification method used to estimate the probability of a binary response based on one or more predictor variables (features). It allows evaluation of a variable’s effect on predictions, classification, and outcomes. 
 
 **Confusion Matrix**
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; A confusion matrix is a method of classifying
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 	A confusion matrix is a table that reports:
+-Accuracy: Overall, how often is the classifier correct.
+-Misclassification Rate (error rate): Overall, how often is it wrong.
+-True Positive Rate: When it's actually yes, how often does it predict yes.
+-False Positive Rate: When it's actually no, how often does it predict yes.
+-Specificity: When it's actually no, how often does it predict no.
+-Precision: When it predicts yes, how often is it correct.
+-Prevalence: How often does the yes condition actually occur in our sample.
+
 
 ### Coding Procedure
 
@@ -296,7 +305,7 @@ identity_hateconf = confusionMatrix(factor(identity_hatepreds), factor(test[,6])
 
 ### Results
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The study created 23 predictive variables: Length ( number of characters), ncap(number of capital letters), nnum(number of numbers), ncap_len(ratio of ncap to Length),nnum_len(ratio of nnum to length), nexcl(number of exclamation marks), nquest( number of question marks), npunct( number of punctuation marks defined by [[:punct]] lexicon), npunct_len( punctuation to length ratio), nsent (number of sentences), nsymb ( number of symbols “ (&|@|#|\\$|%|\\*|\\^ )”), nsmile (number of smiley faces “(?::|;|=)(?:-)?(?:\\)|D|P)”), nwords ( number of words), hate ( number of occurrences of “ni****” and “fa*”), nhate ( number of occurrences of hate words defined by custom lexicon),  AFINN sentiment value, Custom swear sentiment value, hate words sentiment value.
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The study created 23 predictive variables: Length ( number of characters), ncap(number of capital letters), nnum(number of numbers), ncap_len(ratio of ncap to Length),nnum_len(ratio of nnum to length), nexcl(number of exclamation marks), nquest( number of question marks), npunct( number of punctuation marks defined by [[:punct]] lexicon), npunct_len( punctuation to length ratio), nsent (number of sentences), nsymb ( number of symbols “ (&|@|#|\\$|%|\\*|\\^ )”), nsmile (number of smiley faces “(?::|;|=)(?:-)?(?:\\)|D|P)”), nwords ( number of words), hate ( number of occurrences of “ni****” and “fa*”), nhate ( number of occurrences of hate words defined by custom lexicon),  AFINN sentiment value, Custom swear sentiment value, hate words sentiment value.  Additionally a document feature matrix was added to predictive variables which consisted of 4000 features that were counts of different single element components of a text.
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; These predictors were used with a cross validated logistic regression to classify comments as Toxic, Severe_Toxic, Obscene, Threat, Insult, and Identity Hate.
 
@@ -320,6 +329,7 @@ Obscene = `r unname((obsceneconf$overall[1]-obsceneconf$overall[5])/(1-obsceneco
 Threat = `r unname((threatconf$overall[1]-threatconf$overall[5])/(1-threatconf$overall[5]))*100`
 Insult = `r unname((insultconf$overall[1]-insultconf$overall[5])/(1-insultconf$overall[5]))*100`
 Identity_Hate = `r unname((identity_hateconf$overall[1]-identity_hateconf$overall[5])/(1-identity_hateconf$overall[5]))*100`
+
 ### Discussion
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; The results indicate that statistically significant classifications can be made by analysis of comment structure and sentiment analysis.  This combination was found to be an improvement over each method independently  method and substantiates intuition that Natural Language Processing is multi-facetted.  The study recognizes that further relationships between structure, sentiment, and other factors could play an important role in accurate comment classifications. 
@@ -341,4 +351,6 @@ onlinelibrary.wiley.com/doi/full/10.1002/aris.1440370103.
 Silge, Julia & Robinson, David. “Tidy Mining with R, A Tidy Approach”.
 
 https://science.howstuffworks.com/life/evolution/language-evolve.htm
+
+https://insidebigdata.com/2017/02/16/the-exponential-growth-of-data/
 

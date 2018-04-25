@@ -127,35 +127,35 @@ $(document).ready(function () {
 
 <div id="abstract" class="section level3">
 <h3>Abstract</h3>
-<p>       The purpose of this semester long project was to learn a new skill in R: Natural Language Processing (NLP) and, ultimately, we were successful. The impetus for this project came from Kaggle.com, a site that hosts data science related challenges, in the form of a competition that asked us to classify certain Wikipedia submission comments into 6 categories (toxic, severe toxic, obscene, insult, threat, and identity hate). Our objectives were to understand what NLP is and to create a cross validated logistic regression model that would accurately classify the comment text based on these categories. We were successful in both endeavours and were able to predict comment categories with a 20% improvement over the no-information rate, significant for us but not the best entry in the competition. This newly gained knowledge will help us when formulating other NLP based predictive models and the research methodology we used will help us learn other techniques for future model building in any setting. In all, this project was a great first foray into NLP and will be a great stepping off point for many other projects.</p>
+<p>       The purpose of this semester long project was to learn a new skill in R: Natural Language Processing (NLP) and, ultimately, we were successful. The impetus for this project came from Kaggle.com, a site that hosts data science related challenges, in the form of a competition that asked us to classify certain Wikipedia submission comments into 6 categories (toxic, severe toxic, obscene, insult, threat, and identity hate). Our objectives were to understand what NLP is and to create a cross validated logistic regression model that would accurately classify the comment text based on these categories. We were successful in both endeavours and were able to predict comment categories with as much as 31.29% improvement over the no-information rate, significant for us but not the best entry in the competition. This newly gained knowledge will help us when formulating other NLP based predictive models and the research methodology we used will help us learn other techniques for future model building in any setting. In all, this project was a great first foray into NLP and will be a great stepping off point for many other projects.</p>
 <p><strong>Keywords: Cross Validation, Document Feature Matrix, Logistic Regression, Natural Language Processing (NLP), Sentiment Analysis, Sparse Matrix, Text Mining</strong></p>
 </div>
 <div id="introduction" class="section level3">
 <h3>Introduction</h3>
 <p>       The spoken and written language of humans, has been the predominant method for conveying ideas, stories, thoughts, etc. for milenia. In fact, “language first appeared among Homo sapiens somewhere between 30,000 and 100,000 years ago” (Bryant), and is still one of a few of communication. These verbal and written words necessitate reading, or listening, and then an accurate comprehension of the words; however, the creation of ideas has far outpaced our ability to interpret in a timely fashion. As a consequence, there are large bodies of knowledge that lie unread or unheard and thus that knowledge has not been co-opted into society. While concepts have been able to evolve based on preceding work, the methods of interpretation remain limited by human comprehension. With the onset of computers, we are now on the precipice of a new method for language comprehension at speeds that far outpace human ability. Developing methods for computers to interpret language presents the ability extract key bits of information from vast amounts of language.</p>
-<p>       With the increasing global access to technology, data is being created and consumed at an ever increasing rate (CITATION), requiring development of analysis techniques that can effectively process language, written or spoken. The ability to condense a body of text from: Twitter tweets, books, internet comments, websites, etc, is vital to drawing meaningful information from vasts amount of text. We can achieve this condensation in many ways; for example, we could use a dimension reduction or, more commonly, a feature selection. After this condensation we can apply an algorithm that will allow us to predict certain facets of interest.</p>
+<p>       With the increasing global access to technology, data is being created and consumed at an ever increasing rate (insideBIGDATA), requiring development of analysis techniques that can effectively process language, written or spoken. The ability to condense a body of text from: Twitter tweets, books, internet comments, websites, etc, is vital to drawing meaningful information from vasts amount of text. We can achieve this condensation in many ways; for example, we could use a dimension reduction or, more commonly, a feature selection. After this condensation we can apply an algorithm that will allow us to predict certain facets of interest.</p>
 </div>
 <div id="methods" class="section level3">
 <h3>Methods</h3>
 <p><strong>Natural Language Processing (NLP)</strong></p>
 <p>       At a basic level, natural language processing is a method through which researchers can develop understanding about large (or small) sets of text data by considering how humans interact and how they present themselves on a computer. The goal of NLP is to breakdown strings of text such as comments, product reviews, or even books to extract informative, or even predictive, variables from words that don’t inherently have meaning. (Chowdhury, 51). NLP is colloquially referred to as text mining and is the backbone of this project. We used NLP extensively to clean, process, and represent the text strings in the Wikipedia comments as new variables that may have predictive power. The variables we created are included later in this section and they allowed us to predict whether or not comments would be some type of offensive.</p>
 <p><strong>Variable Creation</strong></p>
-<p>       Variable creation was the most important step in this project. Going from plain text to numerical/categorical variables that represent important information allowed us to predict was the hurdle that we had to leap over and comprised the most of our time. In all we created about 4000 variables that might help us explain what was happening</p>
+<p>       Variable creation was the most important step in this project. Going from plain text to numerical/categorical variables that represent important information allowed us to predict was the hurdle that we had to leap over and comprised the most of our time. In all we created about 4000 variables that might help us explain what was happening.</p>
 <p><strong>Tokens</strong></p>
 <p>       A token, put simply, is a word inside a string of text. The only important thing to note is that tokens only count as one word even if they are in a string multiple times. Take for example the string “I love love data.” In this string, there would be only 3 tokens, “I”, “love”, and “data.” This is the convention of the tidy text package and the function tokenizer. Tokens are useful in understanding which words are present and how many times they occur in a vector of strings but not for understanding total occurrences in either one string or the entire string vector.</p>
 <p><strong>N-grams</strong></p>
 <p>       An n-gram is similar to a token but is a string comprising of n words. For example, you might notice that the words “love” and “you” occur consecutively so instead of searching for each word as a token, you might instead search for the 2-gram “love you”. This might help you dial in a more specific sentiment for groupings of words as opposed to if you searched for each word independently.</p>
 <p><strong>Sentiment Analysis</strong></p>
 <p>       Sentiment analysis consists of assigning values to words, tokens, or n-grams in order to classify/interpret a specific body of text. In our case we used sentiment analysis to put large negative weights on swear words and large positive weights on words that we believed would be would not be in any of the categories we were predicting.</p>
-<p><strong>Sparse Matrix</strong></p>
-<p>       A sparse data matrix is a specific type of data containing object inside of R (and maybe other programming languages). This type of matrix is useful because it preserves memory by tracking the locations and values at specific coordinates in an array instead of keeping all the zeros in memory – they are simply omitted. This meant in our case that the matrix that we held our data in was able to be stored in memory and was actually only SOMETHING% of the size of the original matrix. This meant that we were able to preserve memory and actually allowed us to build our model and cross validate it. There are many implementations of sparse matrices that handle the data in slightly different ways but the one we used specifically was the</p>
 <p><strong>Document Feature Matrix</strong></p>
 <p>       A document feature matrix is a relatively simple structure that records the number of occurrence of words, tokens, or n-grams. These matrices are usually very large and require some kind of sub-setting to remove words/phrases that are not predictive and also removing words that occur too frequently. Looking for words that are infrequent but consistently occur in categories of interest is really useful because they are very predictive.</p>
+<p><strong>Sparse Matrix</strong></p>
+<p>       A sparse data matrix is a specific type of data containing object inside of R (and maybe other programming languages). This type of matrix is useful because it preserves memory by tracking the locations and values at specific coordinates in an array instead of keeping all the zeros in memory – they are simply omitted. This meant in our case that the matrix that we held our data in was able to be stored in memory and was actually only SOMETHING% of the size of the original matrix. This meant that we were able to preserve memory and actually allowed us to build our model and cross validate it. There are many implementations of sparse matrices that handle the data in slightly different ways but the one we used specifically was the</p>
 <p><strong>Cross Validation</strong></p>
-<p>       Cross validation is a technique that</p>
+<p>       Cross validation is a technique implemented in predictive model development that utilizes re-sampling of the same training and test data multiple times in order to “train” the model over many training and test sets. This method aids in training the model to make better predictions on new data.</p>
 <p><strong>Logistic Regression</strong></p>
-<p>       Logistic regression is a classification model that</p>
-<p><strong>Confusion Matrix</strong>        A confusion matrix is a method of classifying</p>
+<p>       Logistic regression is a binary classification method used to estimate the probability of a binary response based on one or more predictor variables (features). It allows evaluation of a variable’s effect on predictions, classification, and outcomes.</p>
+<p><strong>Confusion Matrix</strong>        A confusion matrix is a table that reports: -Accuracy: Overall, how often is the classifier correct. -Misclassification Rate (error rate): Overall, how often is it wrong. -True Positive Rate: When it’s actually yes, how often does it predict yes. -False Positive Rate: When it’s actually no, how often does it predict yes. -Specificity: When it’s actually no, how often does it predict no. -Precision: When it predicts yes, how often is it correct. -Prevalence: How often does the yes condition actually occur in our sample.</p>
 </div>
 <div id="coding-procedure" class="section level3">
 <h3>Coding Procedure</h3>
@@ -174,22 +174,12 @@ library(doParallel) # Parallelizing model and dfm building
 registerDoParallel(4) # Number of cores to be parallel over
 library(tidytext) # Tidy data wrangling, used for stopwords
 library(data.table) # Importing swear databases that are friendly with sentimentr
-library(sentimentr) # Apply custom sentiments to words of interest
+library(sentimentr) # Applying custom sentiments to words of interest
 
-# Import dataset from Kaggle.com
-train = read_csv(&quot;train.csv&quot;)</code></pre>
-<pre><code>## Parsed with column specification:
-## cols(
-##   id = col_character(),
-##   comment_text = col_character(),
-##   toxic = col_integer(),
-##   severe_toxic = col_integer(),
-##   obscene = col_integer(),
-##   threat = col_integer(),
-##   insult = col_integer(),
-##   identity_hate = col_integer()
-## )</code></pre>
-<pre class="r"><code># Making the number of rows even, dropping the first observation
+# Importing dataset from Kaggle.com
+train = read_csv(&quot;train.csv&quot;)
+
+# Making the number of rows even, dropping the first observation
 train = train[2:159571,]
 
 # Splitting the dataset into a training and a testing set
@@ -201,9 +191,11 @@ idtest = (nrow(train)+1):(nrow(train) + nrow(test))
 traintest = rbind(train[,1:2], test[1:2])
 gc()</code></pre>
 <pre><code>##            used  (Mb) gc trigger  (Mb) max used  (Mb)
-## Ncells  2714088 145.0    4703850 251.3  3713354 198.4
-## Vcells 13640057 104.1   23084074 176.2 16844587 128.6</code></pre>
-<pre class="r"><code># Using dplyr and stringi to generate new variables related to properties of the strings
+## Ncells  2714062 145.0    4703850 251.3  3713320 198.4
+## Vcells 13640239 104.1   23084789 176.2 16844771 128.6</code></pre>
+<pre class="r"><code># Using dplyr and stringi to generate new variables related to 
+# properties of the strings, names here are descriptive. 
+# Output stored in 3 places: train, test, traintest
 traintest = rbind(train[,1:2], test[1:2])
 traintest = mutate(traintest,
        length = stri_length(comment_text),
@@ -223,54 +215,36 @@ traintest = mutate(traintest,
 train = cbind(train, traintest[idtrain,3:ncol(traintest)])
 test = cbind(test, traintest[idtest,3:ncol(traintest)])
 
-###swears
+# Importing swear databases, cleaning them, and making a sentiment key
 swears&lt;-fread(&quot;swears.csv&quot;, sep = &quot;,&quot;)
-hatewords&lt;-fread(&quot;hatebase_dict1.csv&quot;,sep=&quot;,&quot;)
-#swears2 &lt;-fread(&quot;swearlistcscmu.csv&quot;,sep=&quot;,&quot;)
-#swears3&lt;-fread(&quot;googleswear.csv&quot;,sep=&quot;,&quot;)
-
-
 swears&lt;-unique( swears[ , 1:2 ] )
 swears$x &lt;- gsub(&quot;,&quot;,&quot;&quot;,swears$x)
-#swears&lt;-rbind(swears,swears2)
-#swears&lt;-rbind(swears,swears3)
 swears&lt;-unique(swears[,1:2])
 mykey.swear&lt;-update_key(swears)
 
-
+# Importing hate databases, cleaning them, and making a sentiment key.
+# More code than before because there was more to clean
+hatewords&lt;-fread(&quot;hatebase_dict1.csv&quot;,sep=&quot;,&quot;)
 hatewords&lt;-unique(hatewords[,1:2])
 hatewords$words&lt;-gsub(&quot;,&quot;,&quot;&quot;,hatewords$words)
 hatewords$words&lt;-gsub(&quot;'&quot;,&quot; &quot;,hatewords$words)
-
 hatewords$words&lt;-tolower(hatewords$words)
-hatewords</code></pre>
-<pre><code>##                       x   y words
-##    1:     uncivilised', -10    NA
-##    2:           'gypo', -10    NA
-##    3:          'gypos', -10    NA
-##    4:           'cunt', -10    NA
-##    5:          'cunts', -10    NA
-##   ---                            
-## 1014: 'proddywhoddies', -10    NA
-## 1015:    'proddywoddy', -10    NA
-## 1016:  'proddywoddies', -10    NA
-## 1017:   'Rhine monkey', -10    NA
-## 1018:    Rhine monkies' -10    NA</code></pre>
-<pre class="r"><code>colnames(hatewords)[1] &lt;- &quot;x&quot;
+colnames(hatewords)[1] &lt;- &quot;x&quot;
 colnames(hatewords)[2]&lt;-&quot;y&quot;
 hatewords&lt;-unique(hatewords[,1:2])
 key.hatewords &lt;- update_key(hatewords)
 
+# Removing stop words and some cleaning of the stopwords
 stopWords = c(stop_words$word, &quot;of&quot;, &quot;or&quot;, &quot;on&quot;)
 stopWords=stopWords[!(stopWords %in% c(&quot;new&quot;,&quot;used&quot;,&quot;small&quot;,&quot;large&quot;,&quot;thanks&quot;,&quot;greetings&quot;,&quot;works&quot;))]
 
+# Creating new data frames to train run sentiment analysis
 cmmnt = train$comment_text
 cmmnt = unlist(cmmnt)[!(unlist(cmmnt) %in% stopWords)]
 cmmnt = stri_replace_all_charclass(cmmnt, &quot;[^[:alnum:]]&quot;, &quot; &quot;)
 id = rep(1:nrow(train))
 cmmnt_df = data.frame(id = id, comments = cmmnt)
 cmmnt_df$comments = as.character(cmmnt_df$comments)
-
 
 cmmnt.t = test$comment_text
 cmmnt.t = unlist(cmmnt.t)[!(unlist(cmmnt.t) %in% stopWords)]
@@ -279,72 +253,41 @@ id = rep(1:nrow(test))
 cmmnt_df.t = data.frame(id = id, comments = cmmnt.t)
 cmmnt_df.t$comments = as.character(cmmnt_df.t$comments)
 
-
-swear.sent.train&lt;-sentiment_by(cmmnt_df$comments,list(id), polarity_dt=mykey.swear)</code></pre>
-<pre><code>## Warning in split_warn(text.var, &quot;sentiment_by&quot;, ...): Each time
-## `sentiment_by` is run it has to do sentence boundary disambiguation when
-## a raw `character` vector is passed to `text.var`. This may be costly of
-## time and memory. It is highly recommended that the user first runs the raw
-## `character` vector through the `get_sentences` function.</code></pre>
-<pre class="r"><code>swear.sent.test&lt;-sentiment_by(cmmnt_df.t$comments,list(id),polarity_dt=mykey.swear)</code></pre>
-<pre><code>## Warning in split_warn(text.var, &quot;sentiment_by&quot;, ...): Each time
-## `sentiment_by` is run it has to do sentence boundary disambiguation when
-## a raw `character` vector is passed to `text.var`. This may be costly of
-## time and memory. It is highly recommended that the user first runs the raw
-## `character` vector through the `get_sentences` function.</code></pre>
-<pre class="r"><code>colnames(swear.sent.test)[4] &lt;- &quot;swear_sent&quot;
+# Running swear sentiment analysis
+swear.sent.train&lt;-sentiment_by(cmmnt_df$comments,list(id), polarity_dt=mykey.swear)
+swear.sent.test&lt;-sentiment_by(cmmnt_df.t$comments,list(id),polarity_dt=mykey.swear)
+colnames(swear.sent.test)[4] &lt;- &quot;swear_sent&quot;
 colnames(swear.sent.train)[4]&lt;-&quot;swear_sent&quot;
-
-
-#cmmnt_df$comments&lt;-na.omit(cmmnt_df$comments)
-#cmmnt_df.t$comments&lt;-na.omit(cmmnt_df.t$comments)
-
-#hate.sent.train&lt;-sentiment_by(cmmnt_df$comments,list(id), polarity_dt=key.hatewords)
-#hate.sent.test&lt;-sentiment_by(cmmnt_df.t$comments,list(id),polarity_dt=key.hatewords)
-
-#colnames(hate.sent.test)[4] &lt;- &quot;hate_sent&quot;
-#colnames(hate.sent.train)[4]&lt;-&quot;hate_sent&quot;
-
 train&lt;-cbind(train,swear.sent.train[,4])
 test&lt;-cbind(test,swear.sent.test[,4])
-#train&lt;-cbind(train,hate.sent.train[,4])
-#test&lt;-cbind(test,hate.sent.test[,4])
-###positive sent- afinn
-pos.sent&lt;-sentiment_by(cmmnt_df$comments, list(id), lexicon=&quot;afinn&quot;)</code></pre>
-<pre><code>## Warning in split_warn(text.var, &quot;sentiment_by&quot;, ...): Each time
-## `sentiment_by` is run it has to do sentence boundary disambiguation when
-## a raw `character` vector is passed to `text.var`. This may be costly of
-## time and memory. It is highly recommended that the user first runs the raw
-## `character` vector through the `get_sentences` function.</code></pre>
-<pre class="r"><code>pos.sent.t&lt;-sentiment_by(cmmnt_df$comments, list(id), lexicon=&quot;afinn&quot;)</code></pre>
-<pre><code>## Warning in split_warn(text.var, &quot;sentiment_by&quot;, ...): Each time
-## `sentiment_by` is run it has to do sentence boundary disambiguation when
-## a raw `character` vector is passed to `text.var`. This may be costly of
-## time and memory. It is highly recommended that the user first runs the raw
-## `character` vector through the `get_sentences` function.</code></pre>
-<pre class="r"><code>colnames(pos.sent)[4] &lt;- &quot;afinn&quot;
-colnames(pos.sent.t)[4]&lt;-&quot;afinn&quot;
 
+# Running regular sentiment analysis with afinn lexicon
+pos.sent&lt;-sentiment_by(cmmnt_df$comments, list(id), lexicon=&quot;afinn&quot;)
+pos.sent.t&lt;-sentiment_by(cmmnt_df$comments, list(id), lexicon=&quot;afinn&quot;)
+colnames(pos.sent)[4] &lt;- &quot;afinn&quot;
+colnames(pos.sent.t)[4]&lt;-&quot;afinn&quot;
 train&lt;-cbind(train,pos.sent[,4])
 test&lt;-cbind(test,pos.sent.t[,4])
 
 
-## quanteda
+# Running corpus from quanteda, the first step to creating the document feature matrix
 ttcorp = corpus(traintest$comment_text)
 ttdfm = dfm(ttcorp, remove = stopwords(&quot;english&quot;))
 ttdfm = dfm_trim(ttdfm, min_docfreq = 150, max_docfreq = 100000)
 ttdfm = dfm_sort(ttdfm)
 
-# sparse matrix
+# Converting the corpus to a sparse matrix
 sumttdfm = summary(ttdfm)
 sparsettdfm = sparseMatrix(i = sumttdfm$i, j = sumttdfm$j, x = sumttdfm$x)
 
+# Converting train and test to sparse and then binding on document feature matrix to each
 sparsetrain = Matrix(as.matrix(train[3:23]), sparse = TRUE)
 sparsetest = Matrix(as.matrix(test[3:23]), sparse = TRUE)
 train = cbind(sparsetrain, sparsettdfm[1:nrow(train),])
 test = cbind(sparsetest, sparsettdfm[(nrow(train)+1):(nrow(train) + nrow(test)),])
 rm(sparsetrain, sparsetest)
 
+# Running toxic model
 toxicglm = cv.glmnet(train[,8:dim(train)[2]], 
                      factor(train[,1]), 
                      alpha = 0, 
@@ -358,6 +301,7 @@ toxicpreds = predict(toxicglm, newx = test[,8:dim(test)[2]], type = &quot;respon
 toxicpreds = ifelse(toxicpreds &gt; 0.27, 1 ,0)
 toxicconf = confusionMatrix(factor(toxicpreds), factor(test[,1]))
 
+# Running severe toxic model
 severe_toxicglm = cv.glmnet(train[,8:dim(train)[2]], 
                      factor(train[,2]), 
                      alpha = 0, 
@@ -371,6 +315,7 @@ severe_toxicpreds = predict(severe_toxicglm, newx = test[,8:dim(test)[2]], type 
 severe_toxicpreds = ifelse(severe_toxicpreds &gt; 0.02, 1 ,0)
 severe_toxicconf = confusionMatrix(factor(severe_toxicpreds), factor(test[,2]))
 
+# Running obscene model
 obsceneglm = cv.glmnet(train[,8:dim(train)[2]], 
                      factor(train[,3]), 
                      alpha = 0, 
@@ -379,14 +324,12 @@ obsceneglm = cv.glmnet(train[,8:dim(train)[2]],
                      parallel = T,
                      nfolds = 4,
                      standardize = T,
-                     nlambda = 50)</code></pre>
-<pre><code>## Warning: from glmnet Fortran code (error code -48); Convergence for 48th
-## lambda value not reached after maxit=100000 iterations; solutions for
-## larger lambdas returned</code></pre>
-<pre class="r"><code>obscenepreds = predict(obsceneglm, newx = test[,8:dim(test)[2]], type = &quot;response&quot;, s = &quot;lambda.min&quot;)
+                     nlambda = 50)
+obscenepreds = predict(obsceneglm, newx = test[,8:dim(test)[2]], type = &quot;response&quot;, s = &quot;lambda.min&quot;)
 obscenepreds = ifelse(obscenepreds &gt; 0.22, 1 ,0)
 obsceneconf = confusionMatrix(factor(obscenepreds), factor(test[,3]))
 
+# Running threat model
 threatglm = cv.glmnet(train[,8:dim(train)[2]], 
                      factor(train[,4]), 
                      alpha = 0, 
@@ -398,11 +341,10 @@ threatglm = cv.glmnet(train[,8:dim(train)[2]],
                      nlambda = 50)
 threatpreds = predict(threatglm, newx = test[,8:dim(test)[2]], type = &quot;response&quot;, s = &quot;lambda.min&quot;)
 threatpreds = ifelse(threatpreds &gt; 1, 1 ,0)
-threatconf = confusionMatrix(factor(threatpreds), factor(test[,4]))</code></pre>
-<pre><code>## Warning in confusionMatrix.default(factor(threatpreds), factor(test[, 4])):
-## Levels are not in the same order for reference and data. Refactoring data
-## to match.</code></pre>
-<pre class="r"><code>insultglm = cv.glmnet(train[,8:dim(train)[2]], 
+threatconf = confusionMatrix(factor(threatpreds), factor(test[,4]))
+
+# Running insult model
+insultglm = cv.glmnet(train[,8:dim(train)[2]], 
                      factor(train[,5]), 
                      alpha = 0, 
                      family = &quot;binomial&quot;, 
@@ -415,6 +357,7 @@ insultpreds = predict(insultglm, newx = test[,8:dim(test)[2]], type = &quot;resp
 insultpreds = ifelse(insultpreds &gt; 0.21, 1 ,0)
 insultconf = confusionMatrix(factor(insultpreds), factor(test[,5]))
 
+# Running identity hate model model
 identity_hateglm = cv.glmnet(train[,8:dim(train)[2]], 
                      factor(train[,6]), 
                      alpha = 0, 
@@ -427,40 +370,10 @@ identity_hateglm = cv.glmnet(train[,8:dim(train)[2]],
 identity_hatepreds = predict(identity_hateglm, newx = test[,8:dim(test)[2]], type = &quot;response&quot;, s = &quot;lambda.min&quot;)
 identity_hatepreds = ifelse(identity_hatepreds &gt; 1, 1 ,0)
 identity_hateconf = confusionMatrix(factor(identity_hatepreds), factor(test[,6]))</code></pre>
-<pre><code>## Warning in confusionMatrix.default(factor(identity_hatepreds),
-## factor(test[, : Levels are not in the same order for reference and data.
-## Refactoring data to match.</code></pre>
-<pre class="r"><code>identity_hateconf</code></pre>
-<pre><code>## Confusion Matrix and Statistics
-## 
-##           Reference
-## Prediction     0     1
-##          0 79094   691
-##          1     0     0
-##                                          
-##                Accuracy : 0.9913         
-##                  95% CI : (0.9907, 0.992)
-##     No Information Rate : 0.9913         
-##     P-Value [Acc &gt; NIR] : 0.5101         
-##                                          
-##                   Kappa : 0              
-##  Mcnemar's Test P-Value : &lt;2e-16         
-##                                          
-##             Sensitivity : 1.0000         
-##             Specificity : 0.0000         
-##          Pos Pred Value : 0.9913         
-##          Neg Pred Value :    NaN         
-##              Prevalence : 0.9913         
-##          Detection Rate : 0.9913         
-##    Detection Prevalence : 1.0000         
-##       Balanced Accuracy : 0.5000         
-##                                          
-##        'Positive' Class : 0              
-## </code></pre>
 </div>
 <div id="results" class="section level3">
 <h3>Results</h3>
-<p>       The study created 23 predictive variables: Length ( number of characters), ncap(number of capital letters), nnum(number of numbers), ncap_len(ratio of ncap to Length),nnum_len(ratio of nnum to length), nexcl(number of exclamation marks), nquest( number of question marks), npunct( number of punctuation marks defined by [[:punct]] lexicon), npunct_len( punctuation to length ratio), nsent (number of sentences), nsymb ( number of symbols “ (&amp;|@|#|\$|%|\*|\^ )”), nsmile (number of smiley faces “(?::|;|=)(?:-)?(?:\)|D|P)”), nwords ( number of words), hate ( number of occurrences of “ni****” and “fa*”), nhate ( number of occurrences of hate words defined by custom lexicon), AFINN sentiment value, Custom swear sentiment value, hate words sentiment value.</p>
+<p>       The study created 23 predictive variables: Length ( number of characters), ncap(number of capital letters), nnum(number of numbers), ncap_len(ratio of ncap to Length),nnum_len(ratio of nnum to length), nexcl(number of exclamation marks), nquest( number of question marks), npunct( number of punctuation marks defined by [[:punct]] lexicon), npunct_len( punctuation to length ratio), nsent (number of sentences), nsymb ( number of symbols “ (&amp;|@|#|\$|%|\*|\^ )”), nsmile (number of smiley faces “(?::|;|=)(?:-)?(?:\)|D|P)”), nwords ( number of words), hate ( number of occurrences of “ni****” and “fa*”), nhate ( number of occurrences of hate words defined by custom lexicon), AFINN sentiment value, Custom swear sentiment value, hate words sentiment value. Additionally a document feature matrix was added to predictive variables which consisted of 4000 features that were counts of different single element components of a text.</p>
 <p>       These predictors were used with a cross validated logistic regression to classify comments as Toxic, Severe_Toxic, Obscene, Threat, Insult, and Identity Hate.</p>
 <p>       The results are evaluated as percent of accurate classifications made and p-values are given as an improvement from the no-information rate.</p>
 <blockquote>
@@ -481,7 +394,9 @@ identity_hateconf = confusionMatrix(factor(identity_hatepreds), factor(test[,6])
 <blockquote>
 <p>Hate: 0.</p>
 </blockquote>
-<p>Toxic = 31.1955249 Severe_Toxic = 2.6348808 Obscene = 27.1555764 Threat = 0 Insult = 15.4600302 Identity_Hate = 0 ### Discussion</p>
+</div>
+<div id="discussion" class="section level3">
+<h3>Discussion</h3>
 <p>       The results indicate that statistically significant classifications can be made by analysis of comment structure and sentiment analysis. This combination was found to be an improvement over each method independently method and substantiates intuition that Natural Language Processing is multi-facetted. The study recognizes that further relationships between structure, sentiment, and other factors could play an important role in accurate comment classifications.</p>
 </div>
 <div id="conclusion" class="section level3">
@@ -497,6 +412,7 @@ identity_hateconf = confusionMatrix(factor(identity_hatepreds), factor(test[,6])
 <p>Chowdhury, Gobinda G. “Natural Language Processing.” Annual Review of Information Science and Technology, Wiley-Blackwell, 31 Jan. 2005, onlinelibrary.wiley.com/doi/full/10.1002/aris.1440370103.</p>
 <p>Silge, Julia &amp; Robinson, David. “Tidy Mining with R, A Tidy Approach”.</p>
 <p><a href="https://science.howstuffworks.com/life/evolution/language-evolve.htm" class="uri">https://science.howstuffworks.com/life/evolution/language-evolve.htm</a></p>
+<p><a href="https://insidebigdata.com/2017/02/16/the-exponential-growth-of-data/" class="uri">https://insidebigdata.com/2017/02/16/the-exponential-growth-of-data/</a></p>
 </div>
 
 

@@ -80,7 +80,7 @@ After this condensation we can apply an algorithm that will allow us to predict 
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Our coding procedure is outlined below:
 
-```{r}
+```{r, warning = FALSE, message = FALSE}
 # Set seed for consistent results
 set.seed(1)
 
@@ -95,9 +95,9 @@ library(doParallel) # Parallelizing model and dfm building
 registerDoParallel(4) # Number of cores to be parallel over
 library(tidytext) # Tidy data wrangling, used for stopwords
 library(data.table) # Importing swear databases that are friendly with sentimentr
-library(sentimentr) # Apply custom sentiments to words of interest
+library(sentimentr) # Applying custom sentiments to words of interest
 
-# Import dataset from Kaggle.com
+# Importing dataset from Kaggle.com
 train = read_csv("train.csv")
 
 # Making the number of rows even, dropping the first observation
@@ -112,7 +112,9 @@ idtest = (nrow(train)+1):(nrow(train) + nrow(test))
 traintest = rbind(train[,1:2], test[1:2])
 gc()
 
-# Using dplyr and stringi to generate new variables related to properties of the strings
+# Using dplyr and stringi to generate new variables related to 
+# properties of the strings, names here are descriptive. 
+# Output stored in 3 places: train, test, traintest
 traintest = rbind(train[,1:2], test[1:2])
 traintest = mutate(traintest,
        length = stri_length(comment_text),
@@ -132,42 +134,36 @@ traintest = mutate(traintest,
 train = cbind(train, traintest[idtrain,3:ncol(traintest)])
 test = cbind(test, traintest[idtest,3:ncol(traintest)])
 
-###swears
+# Importing swear databases, cleaning them, and making a sentiment key
 swears<-fread("swears.csv", sep = ",")
-hatewords<-fread("hatebase_dict1.csv",sep=",")
-#swears2 <-fread("swearlistcscmu.csv",sep=",")
-#swears3<-fread("googleswear.csv",sep=",")
-
-
 swears<-unique( swears[ , 1:2 ] )
 swears$x <- gsub(",","",swears$x)
-#swears<-rbind(swears,swears2)
-#swears<-rbind(swears,swears3)
 swears<-unique(swears[,1:2])
 mykey.swear<-update_key(swears)
 
-
+# Importing hate databases, cleaning them, and making a sentiment key.
+# More code than before because there was more to clean
+hatewords<-fread("hatebase_dict1.csv",sep=",")
 hatewords<-unique(hatewords[,1:2])
 hatewords$words<-gsub(",","",hatewords$words)
 hatewords$words<-gsub("'"," ",hatewords$words)
-
 hatewords$words<-tolower(hatewords$words)
-hatewords
 colnames(hatewords)[1] <- "x"
 colnames(hatewords)[2]<-"y"
 hatewords<-unique(hatewords[,1:2])
 key.hatewords <- update_key(hatewords)
 
+# Removing stop words and some cleaning of the stopwords
 stopWords = c(stop_words$word, "of", "or", "on")
 stopWords=stopWords[!(stopWords %in% c("new","used","small","large","thanks","greetings","works"))]
 
+# Creating new data frames to train run sentiment analysis
 cmmnt = train$comment_text
 cmmnt = unlist(cmmnt)[!(unlist(cmmnt) %in% stopWords)]
 cmmnt = stri_replace_all_charclass(cmmnt, "[^[:alnum:]]", " ")
 id = rep(1:nrow(train))
 cmmnt_df = data.frame(id = id, comments = cmmnt)
 cmmnt_df$comments = as.character(cmmnt_df$comments)
-
 
 cmmnt.t = test$comment_text
 cmmnt.t = unlist(cmmnt.t)[!(unlist(cmmnt.t) %in% stopWords)]
@@ -176,54 +172,41 @@ id = rep(1:nrow(test))
 cmmnt_df.t = data.frame(id = id, comments = cmmnt.t)
 cmmnt_df.t$comments = as.character(cmmnt_df.t$comments)
 
-
+# Running swear sentiment analysis
 swear.sent.train<-sentiment_by(cmmnt_df$comments,list(id), polarity_dt=mykey.swear)
 swear.sent.test<-sentiment_by(cmmnt_df.t$comments,list(id),polarity_dt=mykey.swear)
-
 colnames(swear.sent.test)[4] <- "swear_sent"
 colnames(swear.sent.train)[4]<-"swear_sent"
-
-
-#cmmnt_df$comments<-na.omit(cmmnt_df$comments)
-#cmmnt_df.t$comments<-na.omit(cmmnt_df.t$comments)
-
-#hate.sent.train<-sentiment_by(cmmnt_df$comments,list(id), polarity_dt=key.hatewords)
-#hate.sent.test<-sentiment_by(cmmnt_df.t$comments,list(id),polarity_dt=key.hatewords)
-
-#colnames(hate.sent.test)[4] <- "hate_sent"
-#colnames(hate.sent.train)[4]<-"hate_sent"
-
 train<-cbind(train,swear.sent.train[,4])
 test<-cbind(test,swear.sent.test[,4])
-#train<-cbind(train,hate.sent.train[,4])
-#test<-cbind(test,hate.sent.test[,4])
-###positive sent- afinn
+
+# Running regular sentiment analysis with afinn lexicon
 pos.sent<-sentiment_by(cmmnt_df$comments, list(id), lexicon="afinn")
 pos.sent.t<-sentiment_by(cmmnt_df$comments, list(id), lexicon="afinn")
-
 colnames(pos.sent)[4] <- "afinn"
 colnames(pos.sent.t)[4]<-"afinn"
-
 train<-cbind(train,pos.sent[,4])
 test<-cbind(test,pos.sent.t[,4])
 
 
-## quanteda
+# Running corpus from quanteda, the first step to creating the document feature matrix
 ttcorp = corpus(traintest$comment_text)
 ttdfm = dfm(ttcorp, remove = stopwords("english"))
 ttdfm = dfm_trim(ttdfm, min_docfreq = 150, max_docfreq = 100000)
 ttdfm = dfm_sort(ttdfm)
 
-# sparse matrix
+# Converting the corpus to a sparse matrix
 sumttdfm = summary(ttdfm)
 sparsettdfm = sparseMatrix(i = sumttdfm$i, j = sumttdfm$j, x = sumttdfm$x)
 
+# Converting train and test to sparse and then binding on document feature matrix to each
 sparsetrain = Matrix(as.matrix(train[3:23]), sparse = TRUE)
 sparsetest = Matrix(as.matrix(test[3:23]), sparse = TRUE)
 train = cbind(sparsetrain, sparsettdfm[1:nrow(train),])
 test = cbind(sparsetest, sparsettdfm[(nrow(train)+1):(nrow(train) + nrow(test)),])
 rm(sparsetrain, sparsetest)
 
+# Running toxic model
 toxicglm = cv.glmnet(train[,8:dim(train)[2]], 
                      factor(train[,1]), 
                      alpha = 0, 
@@ -237,6 +220,7 @@ toxicpreds = predict(toxicglm, newx = test[,8:dim(test)[2]], type = "response", 
 toxicpreds = ifelse(toxicpreds > 0.27, 1 ,0)
 toxicconf = confusionMatrix(factor(toxicpreds), factor(test[,1]))
 
+# Running severe toxic model
 severe_toxicglm = cv.glmnet(train[,8:dim(train)[2]], 
                      factor(train[,2]), 
                      alpha = 0, 
@@ -250,6 +234,7 @@ severe_toxicpreds = predict(severe_toxicglm, newx = test[,8:dim(test)[2]], type 
 severe_toxicpreds = ifelse(severe_toxicpreds > 0.02, 1 ,0)
 severe_toxicconf = confusionMatrix(factor(severe_toxicpreds), factor(test[,2]))
 
+# Running obscene model
 obsceneglm = cv.glmnet(train[,8:dim(train)[2]], 
                      factor(train[,3]), 
                      alpha = 0, 
@@ -263,6 +248,7 @@ obscenepreds = predict(obsceneglm, newx = test[,8:dim(test)[2]], type = "respons
 obscenepreds = ifelse(obscenepreds > 0.22, 1 ,0)
 obsceneconf = confusionMatrix(factor(obscenepreds), factor(test[,3]))
 
+# Running threat model
 threatglm = cv.glmnet(train[,8:dim(train)[2]], 
                      factor(train[,4]), 
                      alpha = 0, 
@@ -276,6 +262,7 @@ threatpreds = predict(threatglm, newx = test[,8:dim(test)[2]], type = "response"
 threatpreds = ifelse(threatpreds > 1, 1 ,0)
 threatconf = confusionMatrix(factor(threatpreds), factor(test[,4]))
 
+# Running insult model
 insultglm = cv.glmnet(train[,8:dim(train)[2]], 
                      factor(train[,5]), 
                      alpha = 0, 
@@ -289,6 +276,7 @@ insultpreds = predict(insultglm, newx = test[,8:dim(test)[2]], type = "response"
 insultpreds = ifelse(insultpreds > 0.21, 1 ,0)
 insultconf = confusionMatrix(factor(insultpreds), factor(test[,5]))
 
+# Running identity hate model model
 identity_hateglm = cv.glmnet(train[,8:dim(train)[2]], 
                      factor(train[,6]), 
                      alpha = 0, 
@@ -322,13 +310,6 @@ identity_hateconf = confusionMatrix(factor(identity_hatepreds), factor(test[,6])
 > Insult: `r unname((insultconf$overall[1]-insultconf$overall[5])/(1-insultconf$overall[5]))*100`, 
 
 > Hate: `r unname((identity_hateconf$overall[1]-identity_hateconf$overall[5])/(1-identity_hateconf$overall[5]))*100`.
-
-Toxic = `r unname((toxicconf$overall[1]-toxicconf$overall[5])/(1-toxicconf$overall[5]))*100`
-Severe_Toxic = `r unname((severe_toxicconf$overall[1]-severe_toxicconf$overall[5])/(1-severe_toxicconf$overall[5]))*100`
-Obscene = `r unname((obsceneconf$overall[1]-obsceneconf$overall[5])/(1-obsceneconf$overall[5]))*100`
-Threat = `r unname((threatconf$overall[1]-threatconf$overall[5])/(1-threatconf$overall[5]))*100`
-Insult = `r unname((insultconf$overall[1]-insultconf$overall[5])/(1-insultconf$overall[5]))*100`
-Identity_Hate = `r unname((identity_hateconf$overall[1]-identity_hateconf$overall[5])/(1-identity_hateconf$overall[5]))*100`
 
 ### Discussion
 

@@ -1,3 +1,4 @@
-*.nb.html linguist-generated=true
+*.html linguist-generated=true
       
 *.Rmd linguist-language=R
+*.Rpres linguist-language=R
